@@ -1,6 +1,8 @@
 # Data_Structures_01
 Data Structures Project #01 <br>
-Asana Project Management link: https://app.asana.com/0/1201997364626931/list
+Asana Project Management link: https://app.asana.com/0/1201997364626931/list <br>
+Google Docs of code documentationn: https://docs.google.com/document/d/1wQgPpVVRZL0pPD66dUfO6-bR1FVZG6tOpz2uJZ_mOlk/edit
+
 
 
 # Code Review checklist
