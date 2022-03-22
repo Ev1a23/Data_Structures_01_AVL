@@ -22,7 +22,7 @@ class Test_Node_AVL(unittest.TestCase):
         node.setValue(5)
         self.assertEqual(5, node.getValue())
 
-    def test_getLeft_setRight(self):
+    def test_getLeft_setLeft(self):
         node = AVLNode("3")
         self.assertEqual(None, node.getLeft())
         lSon = AVLNode("2")
