@@ -112,7 +112,7 @@ class AVLNode(object):
 	@returns: False if self is a virtual node, True otherwise.
 	"""
 	def isRealNode(self):
-		return self.value == None
+		return self.height != -1
 
 
 
