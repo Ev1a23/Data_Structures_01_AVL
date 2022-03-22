@@ -9,7 +9,7 @@
 """A class represnting a node in an AVL tree"""
 
 class AVLNode(object):
-	"""Constructor, you are allowed to add more fields. 
+	"""Constructor, you are allowed to add more fields.
 
 	@type value: str
 	@param value: data of your node
@@ -20,7 +20,7 @@ class AVLNode(object):
 		self.right = None
 		self.parent = None
 		self.height = -1
-		
+
 
 	"""returns the left child
 	@rtype: AVLNode
@@ -128,7 +128,8 @@ class AVLTreeList(object):
 	"""
 	def __init__(self):
 		self.root = None
-		# add your fields here
+		self.first_node = None
+		self.last_node = None
 
 
 	"""returns whether the list is empty
@@ -137,8 +138,7 @@ class AVLTreeList(object):
 	@returns: True if the list is empty, False otherwise
 	"""
 	def empty(self):
-		return None
-
+		return self.root is None
 
 	"""retrieves the value of the i'th item in the list
 
@@ -183,7 +183,18 @@ class AVLTreeList(object):
 	@returns: the value of the first item, None if the list is empty
 	"""
 	def first(self):
+		if self.first_node is not None:
+			return self.first_node.getValue()
 		return None
+
+
+
+	"""sets the first item of the list to a given node
+	
+	@param node: a pointer to a node
+	"""
+	def set_First(self, node):
+		self.first_node = node
 
 	"""returns the value of the last item in the list
 
@@ -191,7 +202,16 @@ class AVLTreeList(object):
 	@returns: the value of the last item, None if the list is empty
 	"""
 	def last(self):
+		if self.last_node is not None:
+			return self.last_node.getValue()
 		return None
+
+	"""sets the last item of the list to a given node
+	
+	@param node: a pointer to a node
+	"""
+	def set_Last(self, node):
+		self.last_node = node
 
 	"""returns an array representing list 
 
@@ -249,6 +269,8 @@ class AVLTreeList(object):
 	@returns: the root, None if the list is empty
 	"""
 	def getRoot(self):
+		if self.root is not None:
+			return self.root
 		return None
 
 
