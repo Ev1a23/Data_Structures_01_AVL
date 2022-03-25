@@ -63,6 +63,14 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual("last", tree.last())
         self.assertEqual(right, tree.get_Last())
     def test_search(self):
+        """
+        not checking insertion here, creating an avl manually
+        draw of the checked tree
+                       d(3)
+            b(1)               e(4)
+        a(0)       c(2)               f(5)
+        """
+
         tree = AVLTreeList()
         self.assertEqual(-1, tree.search("check"))
         root = AVLNode("d")
