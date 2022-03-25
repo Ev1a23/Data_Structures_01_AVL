@@ -28,9 +28,40 @@ class Test_AVL_Tree_list(unittest.TestCase):
         root2 = AVLNode("3")
         tree.root = root2
         self.assertEqual(root2, tree.getRoot())
-        #root2 = None
-        #self.assertEqual(None, tree.getRoot())
+        root2 = None
+        self.assertNotEqual(None, tree.getRoot())
 
+    def test_first_getFirst_setFirst(self):
+        tree = AVLTreeList()
+        self.assertEqual(None, tree.get_First())
+        self.assertEqual(None, tree.first())
+        root = AVLNode("root")
+        root.setHeight(5)
+        tree.root = root
+        tree.set_First(root)
+        self.assertEqual("root", tree.first())
+        right = AVLNode("first")
+        right.setHeight(5)
+        root.setLeft(right)
+        tree.set_First(right)
+        self.assertEqual("first", tree.first())
+        self.assertEqual(right, tree.get_First())
+
+    def test_last_getLast_setLast(self):
+        tree = AVLTreeList()
+        self.assertEqual(None, tree.get_Last())
+        self.assertEqual(None, tree.last())
+        root = AVLNode("root")
+        root.setHeight(5)
+        tree.root = root
+        tree.set_Last(root)
+        self.assertEqual("root", tree.last())
+        right = AVLNode("last")
+        right.setHeight(5)
+        root.setRight(right)
+        tree.set_Last(right)
+        self.assertEqual("last", tree.last())
+        self.assertEqual(right, tree.get_Last())
 
 
     if __name__ == "__main__":

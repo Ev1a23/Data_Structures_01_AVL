@@ -187,11 +187,15 @@ class AVLTreeList(object):
 			return self.first_node.getValue()
 		return None
 
-
+	"""returns a pointer to the first node
+	@rtype: AVLNode
+	"""
+	def get_First(self):
+		return self.first_node
 
 	"""sets the first item of the list to a given node
 	
-	@param node: a pointer to a node
+	@param node: a pointer to a AVLNode
 	"""
 	def set_First(self, node):
 		self.first_node = node
@@ -206,12 +210,19 @@ class AVLTreeList(object):
 			return self.last_node.getValue()
 		return None
 
+	"""return a pointer to the last item in the list
+	@param node: a pointer to AVLNode
+	"""
+	def get_Last(self):
+		return self.last_node
+
 	"""sets the last item of the list to a given node
 	
 	@param node: a pointer to a node
 	"""
 	def set_Last(self, node):
 		self.last_node = node
+
 
 	"""returns an array representing list 
 
@@ -259,7 +270,23 @@ class AVLTreeList(object):
 	@returns: the first index that contains val, -1 if not found.
 	"""
 	def search(self, val):
-		return None
+		if(self.empty()):
+			return -1
+		if(self.getRoot().getValue() == val):
+			return self.getRoot().getLeft().getSize(); #need to implement size property and get size in AVLNode
+		if(self.first() == val):
+			return 0;
+		if(self.last() == val):
+			return self.root.getSize()-1;
+		lst = self.listToArray() #O(n), recitaion 04
+		i =0;
+		for x in lst:
+			if(x.getValue() == val):
+				return i
+			i+=1
+		return -1;
+
+
 
 
 
