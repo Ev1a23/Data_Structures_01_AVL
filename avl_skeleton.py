@@ -305,6 +305,8 @@ class AVLTreeList(object):
 	@return - AVLNode, the predecessor of the node. if it's the first node, return null 
 	"""
 	def predecessor(self, node):
+		if(self.empty()):
+			return None
 		if(node == self.getRoot()): #predecessor of the root
 			help = node.getLeft()
 			while(help.getRight().isRealNode()):
