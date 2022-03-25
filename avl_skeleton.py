@@ -278,7 +278,7 @@ class AVLTreeList(object):
 			return 0;
 		if(self.last() == val):
 			return self.root.getSize()-1;
-		lst = self.listToArray() #O(n), recitaion 04
+		lst = self.listToArray() #O(n), recitaion 04, waiting for implementaion by yoav
 		i =0;
 		for x in lst:
 			if(x.getValue() == val):
