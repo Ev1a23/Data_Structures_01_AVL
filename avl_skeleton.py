@@ -193,9 +193,28 @@ class AVLTreeList(object):
 	@param i: index in the list
 	@rtype: str
 	@returns: the the value of the i'th item in the list
+	
+	Time Complexity:
+	Recursion that in worst case goes every call goes one son left / one son right until the deepest leaf
+	Meaning that the maximum calls is the height of tree
+	In every recursion call there is O(1) work, and the height of the tree is O(logn)
+	That is why, in total, as we saw in the lecture, the time complexity is O(logn) in the worst case
 	"""
 	def retrieve(self, i):
-		return None
+
+		root = self.getRoot()
+
+		def retrieveRec(node, j):
+			loc = node.left.size + 1
+
+			if loc == j:
+				return node
+			elif j < loc:
+				return retrieveRec(node.left, j)
+			else:
+				return retrieveRec(node.right, j - loc)
+
+		return retrieveRec(root, i + 1)
 
 	"""inserts val at position i in the list
 
@@ -243,9 +262,26 @@ class AVLTreeList(object):
 
 	@rtype: list
 	@returns: a list of strings representing the data structure
+	
+	Time Complexity:
+	Initiliazing an empty list - O(1)
+	get_First() - returns an attribute of self, without any calculations - O(1)
+	
+	Conclusion from recitation 3 ex 3 - starting at the minimal element of a tree and calling n-1 times to successor
+	is O(n) work since we go through every edge (there are n-1 edges) at most 2 times.
+	Plus,
+		node is not None - O(1), n times -> O(n)
+		lst.append(node.getValue()) - O(1), n times -> O(n)
+		
+	Therefore, the entire while loop takes O(n) time in the worst case.
 	"""
 	def listToArray(self):
-		return None
+		lst = []
+		node = self.get_First()
+		while node is not None:
+			lst.append(node.getValue())
+			node = self.successor(node)
+		return lst
 
 	"""returns the size of the list 
 
@@ -253,7 +289,51 @@ class AVLTreeList(object):
 	@returns: the size of the list
 	"""
 	def length(self):
-		return None
+		if not self.empty():
+			return self.root.getSize()
+		# returns 0 if list is empty
+		return 0
+
+	"""returns the successor of a given node
+	
+	@type node: AVLNode
+	@param node: the node of which we will return its successor
+	@rtype: AVLNode
+	@returns: The successor of node, None if node is the last element in the list
+	
+	Time complexity:
+	As we saw in the lecture the time complexity analysis is in the worst case O(h) = O(logn).
+	"""
+	def successor(self, node):
+		x = node
+		if x.getRight().isRealNode():
+			return self.minimum(x.getRight())
+		y = x.getParent()
+		while y is not None and x == y.right:
+			x = y
+			y = x.parent
+		return y
+
+	"""returns the minimum of a given sub tree that node is its root
+	i.e. the deepest node that is on the `/` branch that starts from node
+	
+	@type node: AVLNode
+	@param node: the node of which we will return the minimum of his subtree
+	@rtype: AVLNode
+	@returns: The minimum of node's subtree 
+	
+	Time complexity:
+	minimum = node - O(1)
+	(*) minimum.getLeft() is not None && minimum = minimum.getLeft() are O(1) each
+	(*) is executed at most as many times as the height of the tree.
+	Therefore, the total time complexity is O(h) = O(logn).
+	"""
+	def minimum(self, node):
+		minimum = node
+		while minimum.getLeft() is not None:
+			minimum = minimum.getLeft()
+		return minimum
+
 
 	"""splits the list at the i'th index
 
@@ -295,6 +375,6 @@ class AVLTreeList(object):
 	@returns: the root, None if the list is empty
 	"""
 	def getRoot(self):
-		return None
+		return self.root
 
 
