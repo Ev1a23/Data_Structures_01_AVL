@@ -67,6 +67,15 @@ class AVLNode(object):
 			return self.height
 		return -1
 
+	"""returns the size
+
+	@rtype: int
+	@returns: the size of self, virtual node size is 0
+	"""
+
+	def getSize(self):
+		return self.size
+
 	"""returns the balance factor of a given node 
 
 	@rtype: int
@@ -135,6 +144,14 @@ class AVLNode(object):
 	def setHeight(self, h):
 		self.height = h
 
+	"""sets the size of the node
+
+	@type s: int
+	@param s: the size 
+	"""
+
+	def setSize(self, s):
+		self.size = s
 	"""returns whether self is not a virtual node 
 
 	@rtype: bool
