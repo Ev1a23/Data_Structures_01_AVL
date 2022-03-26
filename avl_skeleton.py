@@ -19,8 +19,9 @@ class AVLNode(object):
 		self.left = None
 		self.right = None
 		self.parent = None
+		self.size = 0
 		self.height = -1
-		
+
 
 	"""returns the left child
 	@rtype: AVLNode
@@ -65,6 +66,34 @@ class AVLNode(object):
 		if self.isRealNode():
 			return self.height
 		return -1
+
+	"""returns the balance factor of a given node 
+
+	@rtype: int
+	@returns: height of left child of self - height of right child of self, 0 if virtual node
+	"""
+
+	def getBalanceFactor(self):
+		if self.isRealNode():
+			return self.getLeft().height - self.getRight().height
+		return 0
+
+	"""recomputes the size of a Node inplace
+	
+	@returns: None
+	"""
+	def recomputeSize(self):
+		if self.isRealNode():
+			self.size = self.left.size + 1 + self.right.size
+
+	"""recomputes the height of a Node inplace
+
+	@returns: None
+	"""
+
+	def recomputeHeight(self):
+		if self.isRealNode():
+			self.height = max(self.left.height, self.right.height) + 1
 
 	"""sets left child
 

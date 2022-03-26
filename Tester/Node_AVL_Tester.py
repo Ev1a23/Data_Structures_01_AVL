@@ -101,6 +101,30 @@ class Test_Node_AVL(unittest.TestCase):
         node.setLeft(None)
         self.assertEqual(True, node.isRealNode())
 
+    def test_getBalanceFactor(self):
+        node = AVLNode("3")
+        node.setHeight(1) # just so it won't be considered as virtual node
+        lSon = AVLNode("2")
+        node.setLeft(lSon)
+        rSon = AVLNode("1")
+        node.setRight(rSon)
+        # Test Case 1: both sons are virtual. expected BF: 0.
+        self.assertEqual(0, node.getBalanceFactor())
+        # Test Case 2: left son is virtual & right son's height is 0. expected BF: -1.
+        rSon.setHeight(0)
+        self.assertEqual(-1, node.getBalanceFactor())
+        # Test Case 3: right son is virtual & left son's height is 0. expected BF: 1.
+        rSon.setHeight(-1)
+        lSon.setHeight(0)
+        self.assertEqual(1, node.getBalanceFactor())
+        # Test Case 4: left son is virtual & right son's height is 1. expected BF: -2.
+        lSon.setHeight(-1)
+        rSon.setHeight(1)
+        self.assertEqual(-2, node.getBalanceFactor())
+        # Test Case 5: right son is virtual & left son's height is 1. expected BF: 2.
+        rSon.setHeight(-1)
+        lSon.setHeight(1)
+        self.assertEqual(2, node.getBalanceFactor())
 
     if __name__ == "__main__":
         unittest.main()
