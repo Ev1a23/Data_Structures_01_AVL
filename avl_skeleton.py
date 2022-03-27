@@ -317,10 +317,11 @@ class AVLTreeList(object):
 	"""returns the minimum of a given sub tree that node is its root
 	i.e. the deepest node that is on the `/` branch that starts from node
 	
+	@pre: node.isRealNode() == True
 	@type node: AVLNode
 	@param node: the node of which we will return the minimum of his subtree
 	@rtype: AVLNode
-	@returns: The minimum of node's subtree 
+	@returns: The minimum of node's subtree, if it is a leaf, returns itself
 	
 	Time complexity:
 	minimum = node - O(1)
@@ -329,10 +330,10 @@ class AVLTreeList(object):
 	Therefore, the total time complexity is O(h) = O(logn).
 	"""
 	def minimum(self, node):
-		minimum = node
-		while minimum.getLeft() is not None:
-			minimum = minimum.getLeft()
-		return minimum
+		minNode = node
+		while minNode.getLeft().isRealNode():
+			minNode = minNode.getLeft()
+		return minNode
 
 
 	"""splits the list at the i'th index
