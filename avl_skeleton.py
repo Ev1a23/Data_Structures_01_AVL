@@ -296,6 +296,7 @@ class AVLTreeList(object):
 
 	"""returns the successor of a given node
 	
+	@pre: node.isRealNode() == True
 	@type node: AVLNode
 	@param node: the node of which we will return its successor
 	@rtype: AVLNode
