@@ -4,30 +4,30 @@ from avl_skeleton import AVLNode
 from avl_skeleton import AVLTreeList
 
 class Test_AVL_Tree_list(unittest.TestCase):
-    # def test_Empty(self):
-    #     tree = AVLTreeList()
-    #     self.assertEqual(True, tree.empty())
-    #     root = AVLNode("3")
-    #     tree.root = root
-    #     self.assertEqual(False, tree.empty())
-    #     root.height = 3
-    #     self.assertEqual(False, tree.empty())
-    #     root.setValue(5)
-    #     self.assertEqual(False, tree.empty())
-    #     tree.root = None
-    #     self.assertEqual(True, tree.empty())
-    #
-    # def test_length(self):
-    #     tree = AVLTreeList()
-    #
-    #     # Test Case 1: root is None. expected length: 0.
-    #     self.assertEqual(0, tree.length())
-    #
-    #     # Test Case 2: root is not None, size of root is 10. expected length: 10.
-    #     root = AVLNode("3")
-    #     root.setSize(10)
-    #     tree.root = root
-    #     self.assertEqual(10, tree.length())
+    def test_Empty(self):
+        tree = AVLTreeList()
+        self.assertEqual(True, tree.empty())
+        root = AVLNode("3")
+        tree.root = root
+        self.assertEqual(False, tree.empty())
+        root.height = 3
+        self.assertEqual(False, tree.empty())
+        root.setValue(5)
+        self.assertEqual(False, tree.empty())
+        tree.root = None
+        self.assertEqual(True, tree.empty())
+
+    def test_length(self):
+        tree = AVLTreeList()
+
+        # Test Case 1: root is None. expected length: 0.
+        self.assertEqual(0, tree.length())
+
+        # Test Case 2: root is not None, size of root is 10. expected length: 10.
+        root = AVLNode("3")
+        root.setSize(10)
+        tree.root = root
+        self.assertEqual(10, tree.length())
 
     def test_retrieve(self):
         tree = AVLTreeList()
@@ -278,6 +278,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         root.setLeft(lSon)
         root.setRight(rSon)
         tree.root = root
+        tree.set_First(root)
 
         # Test Case 1: tree has only 1 node - root. i = 0. expected: ["3"].
         #         root
@@ -301,6 +302,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         lSon.setLeft(llSon)
         lSon.setRight(virtualNode)
         root.setSize(2)
+        lSon.setParent(root)
+        tree.set_First(lSon)
         self.assertEqual(["2","3"], tree.listToArray())
 
         # Test Case 3: tree has a root and a right node which is a leaf.
@@ -316,6 +319,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         rSon.setSize(1)
         rSon.setLeft(virtualNode)
         rSon.setRight(virtualNode)
+        tree.set_First(root)
+        rSon.setParent(root)
         self.assertEqual(["3", "4"], tree.listToArray())
         rlSon = AVLNode("4")
         rSon.setLeft(rlSon)
@@ -335,8 +340,11 @@ class Test_AVL_Tree_list(unittest.TestCase):
         llSon.setHeight(0)
         llSon.setSize(1)
         lSon.setSize(2)
+        lSon.setHeight(1)
         root.setSize(3)
         rSon.setHeight(-1)
+        llSon.setParent(lSon)
+        tree.set_First(llSon)
         self.assertEqual(["3", "2", "3"], tree.listToArray())
 
         # Test Case 5: tree has a root and a right son that has a right son.
@@ -355,9 +363,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         rrSon.setHeight(0)
         rrSon.setSize(1)
         rSon.setSize(2)
+        rSon.setHeight(1)
         root.setSize(3)
         lSon.setHeight(-1)
         lSon.setSize(0)
+        rrSon.setParent(rSon)
+        rrSon.setRight(AVLNode("2"))
+        tree.set_First(root)
         self.assertEqual(["3", "4", "3"], tree.listToArray())
 
         # Test Case 6:
@@ -388,6 +400,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
 
         root.setHeight(2)
         root.setSize(4)
+        tree.set_First(lSon)
+        lrSon.setParent(lSon)
         self.assertEqual(["2","3","3","4"], tree.listToArray())
 
         # Test Case 7:
@@ -418,11 +432,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
 
         root.setHeight(2)
         root.setSize(4)
+        rlSon.setParent(rSon)
         self.assertEqual(["2", "3", "4", "5"], tree.listToArray())
 
         # Test Case 8: tree is empty.
         #          ---
         emptyTree = AVLTreeList()
+        tree.set_First(None)
         self.assertEqual([], emptyTree.listToArray())
 
 
@@ -554,6 +570,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         tree.set_Last(right)
         self.assertEqual("last", tree.last())
         self.assertEqual(right, tree.get_Last())
+
     def test_search(self):
 
         """
@@ -573,22 +590,51 @@ class Test_AVL_Tree_list(unittest.TestCase):
         node_b.setParent(root)
         node_a = AVLNode("a")
         node_a.setParent(node_b)
+        node_v1 = AVLNode("V1")
+        node_v1.setParent(node_a)
+        node_v2 = AVLNode("v2")
+        node_v2.setParent(node_a)
+        node_a.setRight(node_v2)
+        node_a.setLeft(node_v1)
         node_b.setLeft(node_a)
         node_c = AVLNode("c")
+        node_v3 = AVLNode("v3")
+        node_v3.setParent(node_c)
+        node_c.setLeft(node_v3)
+        node_v4 = AVLNode("v4")
+        node_v4.setParent(node_c)
+        node_c.setRight(node_v4)
         node_c.setParent(node_b)
         node_b.setRight(node_c)
         node_e = AVLNode("e")
         root.setRight(node_e)
         node_e.setParent(root)
+        node_v5 = AVLNode("v5")
+        node_v5.setParent(node_e)
+        node_e.setLeft(node_v5)
         node_f = AVLNode("f")
         node_f.setParent(node_e)
         node_e.setRight(node_f)
+        node_v6 = AVLNode("v6")
+        node_v6.setParent(node_f)
+        node_f.setLeft(node_v6)
+        node_v7 = AVLNode("v7")
+        node_v7.setParent(node_f)
+        node_f.setRight(node_v7)
         root.setHeight(2)
         node_b.setHeight(1)
         node_e.setHeight(1)
         node_f.setHeight(0)
         node_c.setHeight(0)
         node_a.setHeight(0)
+        tree.set_First(node_a)
+        tree.set_Last(node_f)
+        root.setSize(6)
+        node_b.setSize(3)
+        node_a.setSize(1)
+        node_c.setSize(1)
+        node_e.setSize(2)
+        node_f.setSize(1)
         self.assertEqual(0, tree.search("a"))
         self.assertEqual(1, tree.search("b"))
         self.assertEqual(2, tree.search("c"))
@@ -666,9 +712,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(node_f, tree.predecessor(node_5))
         self.assertEqual(node_5, tree.predecessor(node_g))
         self.assertEqual(node_g, tree.predecessor(node_6))
-
-    def test_first_SetFirst(self):
-        tree = AVLTreeList()
 
 
 

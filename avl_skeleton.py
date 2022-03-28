@@ -432,7 +432,7 @@ class AVLTreeList(object):
 		lst = self.listToArray() #O(n), recitaion 04, waiting for implementaion by yoav
 		i = 0
 		for x in lst:
-			if x.getValue() == val:
+			if x == val:
 				return i
 			i+=1
 		return -1
