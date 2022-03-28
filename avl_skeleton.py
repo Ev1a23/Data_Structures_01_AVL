@@ -377,6 +377,6 @@ class AVLTreeList(object):
 	@returns: the root, None if the list is empty
 	"""
 	def getRoot(self):
-		return self.root
+		return None
 
 
