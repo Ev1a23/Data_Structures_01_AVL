@@ -352,9 +352,13 @@ class AVLTreeList(object):
 	@returns: The successor of node, None if node is the last element in the list
 	
 	Time complexity:
-	As we saw in the lecture the time complexity analysis is in the worst case O(h) = O(logn).
+	As we saw in the lecture the time complexity analysis is in the worst case O(h) = O(logn)
+	In case that node == self.get_Last() then O(1)
 	"""
 	def successor(self, node):
+		if node == self.get_Last():
+			return None
+
 		x = node
 		if x.getRight().isRealNode():
 			return self.minimum(x.getRight())
