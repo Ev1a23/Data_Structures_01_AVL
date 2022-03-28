@@ -25,6 +25,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
     #
     #     # Test Case 2: root is not None, size of root is 10. expected length: 10.
     #     root = AVLNode("3")
+    #     root.setSize(10)
     #     tree.root = root
     #     self.assertEqual(10, tree.length())
 
