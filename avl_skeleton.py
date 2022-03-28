@@ -9,7 +9,7 @@
 """A class represnting a node in an AVL tree"""
 
 class AVLNode(object):
-	"""Constructor, you are allowed to add more fields. 
+	"""Constructor, you are allowed to add more fields.
 
 	@type value: str
 	@param value: data of your node
@@ -26,6 +26,7 @@ class AVLNode(object):
 	"""returns the left child
 	@rtype: AVLNode
 	@returns: the left child of self, None if there is no left child
+	@Time complexity: O(1)
 	"""
 	def getLeft(self):
 		return self.left
@@ -35,6 +36,7 @@ class AVLNode(object):
 
 	@rtype: AVLNode
 	@returns: the right child of self, None if there is no right child
+	@Time complexity: O(1)
 	"""
 	def getRight(self):
 		return self.right
@@ -43,6 +45,7 @@ class AVLNode(object):
 
 	@rtype: AVLNode
 	@returns: the parent of self, None if there is no parent
+	@Time complexity: O(1)
 	"""
 	def getParent(self):
 		return self.parent
@@ -51,6 +54,7 @@ class AVLNode(object):
 
 	@rtype: str
 	@returns: the value of self, None if the node is virtual
+	@Time complexity: O(1)
 	"""
 	def getValue(self):
 		if self.isRealNode():
@@ -61,6 +65,7 @@ class AVLNode(object):
 
 	@rtype: int
 	@returns: the height of self, -1 if the node is virtual
+	@Time complexity: O(1)
 	"""
 	def getHeight(self):
 		if self.isRealNode():
@@ -108,6 +113,7 @@ class AVLNode(object):
 
 	@type node: AVLNode
 	@param node: a node
+	@Time complexity: O(1)
 	"""
 	def setLeft(self, node):
 		self.left = node
@@ -116,6 +122,7 @@ class AVLNode(object):
 
 	@type node: AVLNode
 	@param node: a node
+	@Time complexity: O(1)
 	"""
 	def setRight(self, node):
 		self.right = node
@@ -124,6 +131,7 @@ class AVLNode(object):
 
 	@type node: AVLNode
 	@param node: a node
+	@Time complexity: O(1)
 	"""
 	def setParent(self, node):
 		self.parent = node
@@ -132,6 +140,7 @@ class AVLNode(object):
 
 	@type value: str
 	@param value: data
+	@Time complexity: O(1)
 	"""
 	def setValue(self, value):
 		self.value = value
@@ -140,6 +149,7 @@ class AVLNode(object):
 
 	@type h: int
 	@param h: the height
+	@Time complexity: O(1)
 	"""
 	def setHeight(self, h):
 		self.height = h
@@ -156,6 +166,7 @@ class AVLNode(object):
 
 	@rtype: bool
 	@returns: False if self is a virtual node, True otherwise.
+	@Time complexity: O(1)
 	"""
 	def isRealNode(self):
 		return self.height != -1
@@ -174,17 +185,18 @@ class AVLTreeList(object):
 	"""
 	def __init__(self):
 		self.root = None
-		# add your fields here
+		self.first_node = None
+		self.last_node = None
 
 
 	"""returns whether the list is empty
 
 	@rtype: bool
 	@returns: True if the list is empty, False otherwise
+	@Time complexity: O(1)
 	"""
 	def empty(self):
-		return None
-
+		return self.root is None
 
 	"""retrieves the value of the i'th item in the list
 
@@ -246,17 +258,54 @@ class AVLTreeList(object):
 
 	@rtype: str
 	@returns: the value of the first item, None if the list is empty
+	@Time complexity: O(1)
 	"""
 	def first(self):
+		if self.first_node is not None:
+			return self.first_node.getValue()
 		return None
+
+	"""returns a pointer to the first node
+	@rtype: AVLNode
+	@Time complexity: O(1)
+	"""
+	def get_First(self):
+		return self.first_node
+
+	"""sets the first item of the list to a given node
+	
+	@param node: a pointer to a AVLNode
+	@Time complexity: O(1)
+	"""
+	def set_First(self, node):
+		self.first_node = node
 
 	"""returns the value of the last item in the list
 
 	@rtype: str
 	@returns: the value of the last item, None if the list is empty
+	@Time complexity: O(1)
 	"""
 	def last(self):
+		if self.last_node is not None:
+			return self.last_node.getValue()
 		return None
+
+	"""return a pointer to the last item in the list
+	@param node: a pointer to AVLNode
+	@Time complexity: O(1)
+	"""
+	def get_Last(self):
+		return self.last_node
+
+	"""sets the last item of the list to a given node
+	
+	@param node: a pointer to a node
+	@Time complexity: O(1)
+	"""
+	def set_Last(self, node):
+		self.last_node = node
+
 
 	"""returns an array representing list 
 
@@ -365,9 +414,26 @@ class AVLTreeList(object):
 	@param val: a value to be searched
 	@rtype: int
 	@returns: the first index that contains val, -1 if not found.
+	@Time complexity: O(n) worst case (list to array(O(n), iterate through the array: O(n)) 
 	"""
 	def search(self, val):
-		return None
+		if self.empty():
+			return -1
+		if self.getRoot().getValue() == val:
+			return self.getRoot().getLeft().getSize() #need to implement size property and get size in AVLNode
+		if self.first() == val:
+			return 0
+		if self.last() == val:
+			return self.root.getSize()-1
+		lst = self.listToArray() #O(n), recitaion 04, waiting for implementaion by yoav
+		i = 0
+		for x in lst:
+			if x.getValue() == val:
+				return i
+			i+=1
+		return -1
+
+
 
 
 
@@ -375,8 +441,34 @@ class AVLTreeList(object):
 
 	@rtype: AVLNode
 	@returns: the root, None if the list is empty
+	@Time complexity: O(1)
 	"""
 	def getRoot(self):
+		if self.root is not None:
+			return self.root
 		return None
 
+	""" find the predecessor of a given node
+	@param - AVLNode
+	@return - AVLNode, the predecessor of the node. if it's the first node, return null
+	@Time complexity: O(logn) worst case, go through the height of the tree(logn), each move O(1) work(pointers switch)
+	if our node is the first node of the tree, O(1) time complexity 
+	"""
+	def predecessor(self, node):
+		if not node.isRealNode():
+			return None
+		if self.get_First() == node:
+			return None
+		if node.getLeft() is not None and node.getLeft().isRealNode():
+			help = node.getLeft()
+			while help.getRight() is not None and help.getRight().isRealNode():
+				help = help.getRight()
+			return help
 
+		help = node.getParent()
+		while help is not None and help.isRealNode():
+			if help.getRight() == node:
+				return help
+			node = help
+			help = help.getParent()
+		return None
