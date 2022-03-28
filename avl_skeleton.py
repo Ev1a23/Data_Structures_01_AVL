@@ -343,11 +343,3 @@ class AVLTreeList(object):
 			node = help
 			help = help.getParent()
 		return None
-
-
-
-
-
-
-
-
