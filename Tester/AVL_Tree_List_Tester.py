@@ -266,158 +266,158 @@ class Test_AVL_Tree_list(unittest.TestCase):
         root.setSize(4)
         self.assertEqual(lSon, tree.minimum(root))
 
-    # def test_listToArray(self):
-    #     tree = AVLTreeList()
-    #     root = AVLNode("3")
-    #     root.setSize(1)
-    #     root.setHeight(0)
-    #     lSon = AVLNode("2")
-    #     rSon = AVLNode("4")
-    #     virtualNode = AVLNode(None)
-    #     root.setLeft(lSon)
-    #     root.setRight(rSon)
-    #     tree.root = root
-    #
-    #     # Test Case 1: tree has only 1 node - root. i = 0. expected: ["3"].
-    #     #         root
-    #     #        /    \
-    #     #       ---   ---
-    #     self.assertEqual(["3"], tree.listToArray())
-    #     root.setValue("kk")
-    #     self.assertEqual(["kk"], tree.listToArray())
-    #     root.setValue("3")
-    #
-    #     # Test Case 2: tree has a root and a left node which is a leaf.
-    #     #              root
-    #     #           /        \
-    #     #          l         ---
-    #     #        /    \
-    #     #       ---  ---
-    #     # expected: ["2","3"].
-    #     lSon.setHeight(0)
-    #     lSon.setSize(1)
-    #     llSon = AVLNode("3")
-    #     lSon.setLeft(llSon)
-    #     lSon.setRight(virtualNode)
-    #     root.setSize(2)
-    #     self.assertEqual(["2","3"], tree.listToArray())
-    #
-    #     # Test Case 3: tree has a root and a right node which is a leaf.
-    #     #             root
-    #     #           /      \
-    #     #         ---        r
-    #     #                  /    \
-    #     #                 ---  ---
-    #     # expected: ["3", "4"]
-    #     lSon.setHeight(-1)
-    #     lSon.setSize(0)
-    #     rSon.setHeight(0)
-    #     rSon.setSize(1)
-    #     rSon.setLeft(virtualNode)
-    #     rSon.setRight(virtualNode)
-    #     self.assertEqual(["3", "4"], tree.listToArray())
-    #     rlSon = AVLNode("4")
-    #     rSon.setLeft(rlSon)
-    #
-    #     # Test Case 4: tree has a root and a left son that has a left son.
-    #     #                        root
-    #     #                     /       \
-    #     #                   l         ---
-    #     #                 /   \
-    #     #               ll     ---
-    #     #             /   \
-    #     #           ---   ---
-    #     # expected: ["3", "2", "3"]
-    #     lllSon = AVLNode("3")
-    #     llSon.setLeft(lllSon)
-    #     llSon.setRight(virtualNode)
-    #     llSon.setHeight(0)
-    #     llSon.setSize(1)
-    #     lSon.setSize(2)
-    #     root.setSize(3)
-    #     rSon.setHeight(-1)
-    #     self.assertEqual(["3", "2", "3"], tree.listToArray())
-    #
-    #     # Test Case 5: tree has a root and a right son that has a right son.
-    #     #                        root
-    #     #                     /       \
-    #     #                   ---         r
-    #     #                             /   \
-    #     #                            ---   rr
-    #     #                                /    \
-    #     #                              ---    ---
-    #     # expected: ["3", "4", "3"]
-    #     rrSon = AVLNode("3")
-    #     rSon.setRight(rrSon)
-    #     rrlSon = AVLNode("3")
-    #     rrSon.setLeft(rrlSon)
-    #     rrSon.setHeight(0)
-    #     rrSon.setSize(1)
-    #     rSon.setSize(2)
-    #     root.setSize(3)
-    #     lSon.setHeight(-1)
-    #     lSon.setSize(0)
-    #     self.assertEqual(["3", "4", "3"], tree.listToArray())
-    #
-    #     # Test Case 6:
-    #     #                        root
-    #     #                     /       \
-    #     #                   l           r
-    #     #                 /   \       /   \
-    #     #               ----   lr    -------
-    #     #                    /   \
-    #     #                   -------
-    #     # expected: ["2", "3", "3", "4"]
-    #     virtualNode = AVLNode("1")
-    #     rSon.setHeight(0)
-    #     rSon.setSize(1)
-    #     rSon.setLeft(virtualNode)
-    #     rSon.setRight(virtualNode)
-    #
-    #     lSon.setHeight(1)
-    #     lSon.setSize(2)
-    #     lSon.setLeft(virtualNode)
-    #
-    #     lrSon = AVLNode("3")
-    #     lrSon.setHeight(0)
-    #     lrSon.setSize(1)
-    #     lrSon.setLeft(virtualNode)
-    #     lrSon.setRight(virtualNode)
-    #     lSon.setRight(lrSon)
-    #
-    #     root.setHeight(2)
-    #     root.setSize(4)
-    #     self.assertEqual(["2","3","3","4"], tree.listToArray())
-    #
-    #     # Test Case 7:
-    #     #                        root
-    #     #                     /       \
-    #     #                   l           r
-    #     #                 /   \       /   \
-    #     #                -------    rl   ----
-    #     #                          /   \
-    #     #                         -------
-    #     # expected: ["2", "3", "4", "5"], changing r's value to "5"
-    #     lSon.setHeight(0)
-    #     lSon.setSize(1)
-    #     lSon.setLeft(virtualNode)
-    #     lSon.setRight(virtualNode)
-    #
-    #     rSon.setHeight(1)
-    #     rSon.setSize(2)
-    #     rSon.setRight(virtualNode)
-    #     rSon.setValue("5")
-    #
-    #     rlSon = AVLNode("4")
-    #     rlSon.setHeight(0)
-    #     rlSon.setSize(1)
-    #     rlSon.setLeft(virtualNode)
-    #     rlSon.setRight(virtualNode)
-    #     rSon.setLeft(rlSon)
-    #
-    #     root.setHeight(2)
-    #     root.setSize(4)
-    #     self.assertEqual(["2", "3", "4", "5"], tree.listToArray())
+    def test_listToArray(self):
+        tree = AVLTreeList()
+        root = AVLNode("3")
+        root.setSize(1)
+        root.setHeight(0)
+        lSon = AVLNode("2")
+        rSon = AVLNode("4")
+        virtualNode = AVLNode(None)
+        root.setLeft(lSon)
+        root.setRight(rSon)
+        tree.root = root
+
+        # Test Case 1: tree has only 1 node - root. i = 0. expected: ["3"].
+        #         root
+        #        /    \
+        #       ---   ---
+        self.assertEqual(["3"], tree.listToArray())
+        root.setValue("kk")
+        self.assertEqual(["kk"], tree.listToArray())
+        root.setValue("3")
+
+        # Test Case 2: tree has a root and a left node which is a leaf.
+        #              root
+        #           /        \
+        #          l         ---
+        #        /    \
+        #       ---  ---
+        # expected: ["2","3"].
+        lSon.setHeight(0)
+        lSon.setSize(1)
+        llSon = AVLNode("3")
+        lSon.setLeft(llSon)
+        lSon.setRight(virtualNode)
+        root.setSize(2)
+        self.assertEqual(["2","3"], tree.listToArray())
+
+        # Test Case 3: tree has a root and a right node which is a leaf.
+        #             root
+        #           /      \
+        #         ---        r
+        #                  /    \
+        #                 ---  ---
+        # expected: ["3", "4"]
+        lSon.setHeight(-1)
+        lSon.setSize(0)
+        rSon.setHeight(0)
+        rSon.setSize(1)
+        rSon.setLeft(virtualNode)
+        rSon.setRight(virtualNode)
+        self.assertEqual(["3", "4"], tree.listToArray())
+        rlSon = AVLNode("4")
+        rSon.setLeft(rlSon)
+
+        # Test Case 4: tree has a root and a left son that has a left son.
+        #                        root
+        #                     /       \
+        #                   l         ---
+        #                 /   \
+        #               ll     ---
+        #             /   \
+        #           ---   ---
+        # expected: ["3", "2", "3"]
+        lllSon = AVLNode("3")
+        llSon.setLeft(lllSon)
+        llSon.setRight(virtualNode)
+        llSon.setHeight(0)
+        llSon.setSize(1)
+        lSon.setSize(2)
+        root.setSize(3)
+        rSon.setHeight(-1)
+        self.assertEqual(["3", "2", "3"], tree.listToArray())
+
+        # Test Case 5: tree has a root and a right son that has a right son.
+        #                        root
+        #                     /       \
+        #                   ---         r
+        #                             /   \
+        #                            ---   rr
+        #                                /    \
+        #                              ---    ---
+        # expected: ["3", "4", "3"]
+        rrSon = AVLNode("3")
+        rSon.setRight(rrSon)
+        rrlSon = AVLNode("3")
+        rrSon.setLeft(rrlSon)
+        rrSon.setHeight(0)
+        rrSon.setSize(1)
+        rSon.setSize(2)
+        root.setSize(3)
+        lSon.setHeight(-1)
+        lSon.setSize(0)
+        self.assertEqual(["3", "4", "3"], tree.listToArray())
+
+        # Test Case 6:
+        #                        root
+        #                     /       \
+        #                   l           r
+        #                 /   \       /   \
+        #               ----   lr    -------
+        #                    /   \
+        #                   -------
+        # expected: ["2", "3", "3", "4"]
+        virtualNode = AVLNode("1")
+        rSon.setHeight(0)
+        rSon.setSize(1)
+        rSon.setLeft(virtualNode)
+        rSon.setRight(virtualNode)
+
+        lSon.setHeight(1)
+        lSon.setSize(2)
+        lSon.setLeft(virtualNode)
+
+        lrSon = AVLNode("3")
+        lrSon.setHeight(0)
+        lrSon.setSize(1)
+        lrSon.setLeft(virtualNode)
+        lrSon.setRight(virtualNode)
+        lSon.setRight(lrSon)
+
+        root.setHeight(2)
+        root.setSize(4)
+        self.assertEqual(["2","3","3","4"], tree.listToArray())
+
+        # Test Case 7:
+        #                        root
+        #                     /       \
+        #                   l           r
+        #                 /   \       /   \
+        #                -------    rl   ----
+        #                          /   \
+        #                         -------
+        # expected: ["2", "3", "4", "5"], changing r's value to "5"
+        lSon.setHeight(0)
+        lSon.setSize(1)
+        lSon.setLeft(virtualNode)
+        lSon.setRight(virtualNode)
+
+        rSon.setHeight(1)
+        rSon.setSize(2)
+        rSon.setRight(virtualNode)
+        rSon.setValue("5")
+
+        rlSon = AVLNode("4")
+        rlSon.setHeight(0)
+        rlSon.setSize(1)
+        rlSon.setLeft(virtualNode)
+        rlSon.setRight(virtualNode)
+        rSon.setLeft(rlSon)
+
+        root.setHeight(2)
+        root.setSize(4)
+        self.assertEqual(["2", "3", "4", "5"], tree.listToArray())
 
 
     def test_successor(self):
