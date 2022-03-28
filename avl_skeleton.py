@@ -289,18 +289,18 @@ class AVLTreeList(object):
 	@time complexity: O(n) worst case (list to array(O(n), iterate through the array: O(n)) 
 	"""
 	def search(self, val):
-		if(self.empty()):
+		if self.empty():
 			return -1
-		if(self.getRoot().getValue() == val):
+		if self.getRoot().getValue() == val:
 			return self.getRoot().getLeft().getSize() #need to implement size property and get size in AVLNode
-		if(self.first() == val):
+		if self.first() == val:
 			return 0
-		if(self.last() == val):
+		if self.last() == val:
 			return self.root.getSize()-1
 		lst = self.listToArray() #O(n), recitaion 04, waiting for implementaion by yoav
-		i =0
+		i = 0
 		for x in lst:
-			if(x.getValue() == val):
+			if x.getValue() == val:
 				return i
 			i+=1
 		return -1
@@ -326,21 +326,21 @@ class AVLTreeList(object):
 	@time complexity: O(logn) worst case, go through the height of the tree(logn), each move O(1) work(pointers switch) 
 	"""
 	def predecessor(self, node):
-		if node.isRealNode()== False:
+		if not node.isRealNode():
 			return None
-		if(self.get_First() == node):
+		if self.get_First() == node:
 			return None
-		if(node.getLeft()!= None and node.getLeft().isRealNode()):
+		if node.getLeft() is not None and node.getLeft().isRealNode():
 			help = node.getLeft()
-			while(help.getRight()!= None and help.getRight().isRealNode()):
+			while help.getRight() is not None and help.getRight().isRealNode():
 				help = help.getRight()
 			return help
 
-		if(node.getParent().getRight() !=None and node.getParent().getRight() == node):
+		if node.getParent().getRight() is not None and node.getParent().getRight() == node:
 			return node.getParent()
 		help = node.getParent()
-		while(help!=None and help.isRealNode()):
-			if(help.getRight() == node):
+		while help is not None and help.isRealNode():
+			if help.getRight() == node:
 				return help
 			node = help
 			help = help.getParent()
