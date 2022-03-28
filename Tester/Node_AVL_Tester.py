@@ -101,6 +101,104 @@ class Test_Node_AVL(unittest.TestCase):
         node.setLeft(None)
         self.assertEqual(True, node.isRealNode())
 
+    def test_getBalanceFactor(self):
+        node = AVLNode("3")
+        node.setHeight(1) # just so it won't be considered as virtual node
+        lSon = AVLNode("2")
+        node.setLeft(lSon)
+        rSon = AVLNode("1")
+        node.setRight(rSon)
+        # Test Case 1: both sons are virtual. expected BF: 0.
+        self.assertEqual(0, node.getBalanceFactor())
+        # Test Case 2: left son is virtual & right son's height is 0. expected BF: -1.
+        rSon.setHeight(0)
+        self.assertEqual(-1, node.getBalanceFactor())
+        # Test Case 3: right son is virtual & left son's height is 0. expected BF: 1.
+        rSon.setHeight(-1)
+        lSon.setHeight(0)
+        self.assertEqual(1, node.getBalanceFactor())
+        # Test Case 4: left son is virtual & right son's height is 1. expected BF: -2.
+        lSon.setHeight(-1)
+        rSon.setHeight(1)
+        self.assertEqual(-2, node.getBalanceFactor())
+        # Test Case 5: right son is virtual & left son's height is 1. expected BF: 2.
+        rSon.setHeight(-1)
+        lSon.setHeight(1)
+        self.assertEqual(2, node.getBalanceFactor())
+
+    def test_recomputeSize(self):
+        node = AVLNode("3")
+        # Test Case 1: size of a virtual node. expected size: 0.
+        self.assertEqual(0, node.getSize())
+
+        # Test Case 2: size of a leaf. expected size: 1.
+        node.setHeight(0)
+        rSon = AVLNode("2")
+        lSon = AVLNode("1")
+        node.setLeft(lSon)
+        node.setRight(rSon)
+        node.recomputeSize()
+        self.assertEqual(1, node.getSize())
+
+        # Test Case 3: size of a node when left son's size = 1 & right son's size = 0. expected size: 2
+        lSon.setSize(1)
+        node.recomputeSize()
+        self.assertEqual(2, node.getSize())
+
+        # Test Case 4: size of a node when left son's size = 0 & right son's size = 1. expected size: 2
+        lSon.setSize(0)
+        rSon.setSize(1)
+        node.recomputeSize()
+        self.assertEqual(2, node.getSize())
+
+        # Test Case 5: size of a node when left son's size = 1 & right son's size = 1. expected size: 3
+        lSon.setSize(1)
+        node.recomputeSize()
+        self.assertEqual(3, node.getSize())
+
+    def test_recomputeHeight(self):
+        node = AVLNode("3")
+        # Test Case 1: height of a virtual node after recomputing its height. expected height: -1.
+        node.recomputeHeight()
+        self.assertEqual(-1, node.getHeight())
+
+        # Test Case 2: height of a leaf. expected height: 0.
+        node.setHeight(3)
+        rSon = AVLNode("2")
+        lSon = AVLNode("1")
+        node.setLeft(lSon)
+        node.setRight(rSon)
+        node.recomputeHeight()
+        self.assertEqual(0, node.getHeight())
+
+        # Test Case 3: height of a node when left son's height = 0 & right son's height = -1. expected height: 1
+        lSon.setHeight(0)
+        node.recomputeHeight()
+        self.assertEqual(1, node.getHeight())
+
+        # Test Case 4: height of a node when left son's height = -1 & right son's height = 0. expected height: 1
+        lSon.setHeight(-1)
+        rSon.setHeight(0)
+        node.recomputeHeight()
+        self.assertEqual(1, node.getHeight())
+
+        # Test Case 5: height of a node when left son's height = 0 & right son's height = 0. expected height: 1
+        lSon.setHeight(0)
+        node.recomputeHeight()
+        self.assertEqual(1, node.getHeight())
+
+        # Test Case 6: height of a node when left son's height = 1 & right son's height = 0. expected height: 2
+        lSon.setHeight(1)
+        node.recomputeHeight()
+        self.assertEqual(2, node.getHeight())
+
+    def test_sizeAttr(self):
+        node = AVLNode("3")
+
+        # Test Case 1: virtual node has size of 0
+        self.assertEqual(0, node.getSize())
+        node.value = None
+        self.assertEqual(0, node.getSize())
 
     if __name__ == "__main__":
         unittest.main()
