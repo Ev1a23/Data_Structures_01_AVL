@@ -336,8 +336,6 @@ class AVLTreeList(object):
 				help = help.getRight()
 			return help
 
-		if node.getParent().getRight() is not None and node.getParent().getRight() == node:
-			return node.getParent()
 		help = node.getParent()
 		while help is not None and help.isRealNode():
 			if help.getRight() == node:
