@@ -175,6 +175,11 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(node_5, tree.predecessor(node_g))
         self.assertEqual(node_g, tree.predecessor(node_6))
 
+    def test_first_SetFirst(self):
+        tree = AVLTreeList()
+
+
+
 
     if __name__ == "__main__":
         unittest.main()
