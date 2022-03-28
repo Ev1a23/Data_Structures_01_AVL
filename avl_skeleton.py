@@ -423,18 +423,14 @@ class AVLTreeList(object):
 	def search(self, val):
 		if self.empty():
 			return -1
-		if self.getRoot().getValue() == val:
-			return self.getRoot().getLeft().getSize() #need to implement size property and get size in AVLNode
 		if self.first() == val:
 			return 0
-		if self.last() == val:
-			return self.root.getSize()-1
-		lst = self.listToArray() #O(n), recitaion 04, waiting for implementaion by yoav
+		lst = self.listToArray() #O(n), see listToArray time complexity
 		i = 0
 		for x in lst:
 			if x == val:
 				return i
-			i+=1
+			i += 1
 		return -1
 
 
