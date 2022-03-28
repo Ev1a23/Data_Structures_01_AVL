@@ -420,9 +420,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(["2", "3", "4", "5"], tree.listToArray())
 
         # Test Case 8: tree is empty.
-        #         root
-        #        /    \
-        #       ---   ---
+        #          ---
         emptyTree = AVLTreeList()
         self.assertEqual([], emptyTree.listToArray())
 
