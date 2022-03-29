@@ -200,5 +200,24 @@ class Test_Node_AVL(unittest.TestCase):
         node.value = None
         self.assertEqual(0, node.getSize())
 
+    def test_isLeaf(self):
+        node = AVLNode("main node")
+        self.assertEqual(False, node.isLeaf())
+        node.setHeight(0)
+        lson = AVLNode("v1")
+        rson = AVLNode("v2")
+        node.setLeft(lson)
+        lson.setParent(node)
+        node.setRight(rson)
+        rson.setParent(node)
+        self.assertEqual(True, node.isLeaf())
+        node.setHeight(1)
+        lson.setHeight(0)
+        self.assertEqual(True, lson.isLeaf())
+        self.assertEqual(False, node.isLeaf())
+        rson.setHeight(0)
+        self.assertEqual(False, node.isLeaf())
+        self.assertEqual(True, rson.isLeaf())
+
     if __name__ == "__main__":
         unittest.main()
