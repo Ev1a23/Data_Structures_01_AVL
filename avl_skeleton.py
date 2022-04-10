@@ -327,6 +327,8 @@ class AVLTreeList(object):
 			nodeToDeleteParent = nodeToDelete.getParent()
 			nodeToDeleteLeftSon = nodeToDelete.getLeft()
 			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
+			if nodeToDelete is self.get_Last():
+				self.set_Last(nodeToDeleteLeftSon.maximum())
 			nodeToDelete.setLeft(AVLNode(None))
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete: # i.e. nodeToDeleteParent is None
@@ -338,6 +340,8 @@ class AVLTreeList(object):
 			nodeToDeleteParent = nodeToDelete.getParent()
 			nodeToDeleteRightSon = nodeToDelete.getRight()
 			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
+			if nodeToDelete is self.get_First():
+				self.set_First(nodeToDeleteRightSon.minimum())
 			nodeToDelete.setRight(AVLNode(None))
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete: # i.e. nodeToDeleteParent is None
@@ -347,30 +351,20 @@ class AVLTreeList(object):
 			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 		else: # case 3 - lecture 2 slide 51
 			nodeToDeleteSuccessor = self.successor(nodeToDelete)
-			if not nodeToDeleteSuccessor.isLeaf(): # i.e. it has 1 child only (if 2 then it wasn't the successor)
+			if not nodeToDeleteSuccessor.isLeaf(): # i.e. it has 1 right child only (if 2 then it wasn't the successor)
 				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
-				if nodeToDelete.getLeft().isRealNode() and not nodeToDelete.getRight().isRealNode():  # case 2.1 - lecture 2 slide 51
-					nodeToDeleteParent = nodeToDelete.getParent()
-					nodeToDeleteLeftSon = nodeToDelete.getLeft()
-					nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
-					nodeToDelete.setLeft(AVLNode(None))
-					nodeToDelete.setParent(None)
-					if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
-						self.root = nodeToDeleteLeftSon
-					else:
-						nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
-					balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
-				elif nodeToDelete.getRight().isRealNode() and not nodeToDelete.getLeft().isRealNode():  # case 2.2 - lecture 2 slide 51
-					nodeToDeleteParent = nodeToDelete.getParent()
-					nodeToDeleteRightSon = nodeToDelete.getRight()
-					nodeToDeleteRightSon.setParent(nodeToDeleteParent)
-					nodeToDelete.setRight(AVLNode(None))
-					nodeToDelete.setParent(None)
-					if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
-						self.root = nodeToDeleteRightSon
-					else:
-						nodeToDeleteParent.setRight(nodeToDeleteRightSon)
-					balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+				nodeToDeleteParent = nodeToDelete.getParent()
+				nodeToDeleteRightSon = nodeToDelete.getRight()
+				nodeToDeleteRightSon.setParent(nodeToDeleteParent)
+				if nodeToDelete is self.get_First():
+					self.set_First(nodeToDeleteSuccessor)
+				nodeToDelete.setRight(AVLNode(None))
+				nodeToDelete.setParent(None)
+				if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
+					self.root = nodeToDeleteRightSon
+				else:
+					nodeToDeleteParent.setRight(nodeToDeleteRightSon)
+				balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 			else:
 				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
 				nodeToDeleteParent = nodeToDelete.getParent()
@@ -655,6 +649,28 @@ class AVLTreeList(object):
 		while minNode.getLeft().isRealNode():
 			minNode = minNode.getLeft()
 		return minNode
+
+	"""returns the maximum of a given sub tree that node is its root
+		i.e. the deepest node that is on the `\` branch that starts from node
+
+		@pre: node.isRealNode() == True
+		@type node: AVLNode
+		@param node: the node of which we will return the maximum of his subtree
+		@rtype: AVLNode
+		@returns: The maximum of node's subtree, if it is a leaf, returns itself
+
+		Time complexity:
+		maximum = node - O(1)
+		(*) maxNode.getRight() is not None && maxNode = maxNode.getRight() are O(1) each
+		(*) is executed at most as many times as the height of the tree.
+		Therefore, the total time complexity is O(h) = O(logn).
+		"""
+
+	def maximum(self, node):
+		maxNode = node
+		while maxNode.getRight().isRealNode():
+			maxNode = maxNode.getRight()
+		return maxNode
 
 
 	"""splits the list at the i'th index
