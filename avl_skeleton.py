@@ -738,6 +738,8 @@ class AVLTreeList(object):
 
 		if self.empty():
 			self.root = lst.getRoot()
+			self.set_First(lst.get_First())
+			self.set_Last(lst.get_Last())
 			return absHeightDiff
 
 		if lst.empty():
