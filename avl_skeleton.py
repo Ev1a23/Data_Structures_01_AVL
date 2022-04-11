@@ -344,28 +344,34 @@ class AVLTreeList(object):
 		if childSide == 'left':
 			nodeToDeleteParent = nodeToDelete.getParent()
 			nodeToDeleteLeftSon = nodeToDelete.getLeft()
-			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
 			if nodeToDelete is self.get_Last():
-				self.set_Last(nodeToDeleteLeftSon.maximum())
+				self.set_Last(self.predecessor(nodeToDelete))
+			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
 			nodeToDelete.setLeft(AVLNode(None))
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteLeftSon
 			else:
-				nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
+				if nodeToDeleteParent.getLeft() is nodeToDelete:
+					nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
+				elif nodeToDeleteParent.getRight() is nodeToDelete:
+					nodeToDeleteParent.setRight(nodeToDeleteLeftSon)
 			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 		elif childSide == 'right':
 			nodeToDeleteParent = nodeToDelete.getParent()
 			nodeToDeleteRightSon = nodeToDelete.getRight()
+			if nodeToDelete is self.get_First(): # irrelevant in case 3
+				self.set_First(self.successor(nodeToDelete))
 			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
-			if nodeToDelete is self.get_First():
-				self.set_First(nodeToDeleteRightSon.minimum())
 			nodeToDelete.setRight(AVLNode(None))
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteRightSon
 			else:
-				nodeToDeleteParent.setRight(nodeToDeleteRightSon)
+				if nodeToDeleteParent.getLeft() is nodeToDelete:
+					nodeToDeleteParent.setLeft(nodeToDeleteRightSon)
+				elif nodeToDeleteParent.getRight() is nodeToDelete:
+					nodeToDeleteParent.setRight(nodeToDeleteRightSon)
 			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 
 		return balanceOps
@@ -445,25 +451,37 @@ class AVLTreeList(object):
 		if node2Parent:
 			if node2Parent.getLeft() is node2:
 				node2Parent.setLeft(node1)
-			elif node2Parent.getRight() is node2:
+			elif node2Parent.getRight() is node2 and node2Parent is not node1:
 				node2Parent.setRight(node1)
 
 		node2.setLeft(node1Left)
+
 		node1Left.setParent(node2)
-		node2.setRight(node1Right)
-		node1Right.setParent(node2)
+
+		if node2 is not node1Right:
+			node2.setRight(node1Right)
+		else:
+			node2.setRight(node1)
+
+		if node1Right is not node2:
+			node1Right.setParent(node2)
+
 		node2.setParent(node1Parent)
 
 		node1.setLeft(node2Left)
 		node2Left.setParent(node1)
 		node1.setRight(node2Right)
 		node2Right.setParent(node1)
-		node1.setParent(node2Parent)
+
+		if node1 is not node2Parent:
+			node1.setParent(node2Parent)
+		else:
+			node1.setParent(node2)
 
 		node1.recomputeSize()
 		node1.recomputeHeight()
 		node2.recomputeSize()
-		node2.recomputeSize()
+		node2.recomputeHeight()
 
 	"""Re balancing the Tree inplace
 	
@@ -747,14 +765,16 @@ class AVLTreeList(object):
 
 		x = self.get_Last()
 
-		if self.getRoot() is x and self.length() == 1:
+		if self.getRoot() is x and self.length() == 1: # TODO: maybe omit this in case join handles empty lists
 			self.delete(self.getRoot().getSize() - 1)
 			lst.insert(0, x.getValue())
 			self.root = lst.getRoot()
+			self.set_First(lst.get_First())
+			self.set_Last(lst.get_Last())
 			return absHeightDiff
 
 		self.delete(self.getRoot().getSize() - 1)
-		self.join(self, x, lst)
+		self.join(self, x, lst) # TODO: understand how join works (changes self inplace / returns an AVLTree? Takes care about first & last?
 
 		return absHeightDiff
 
