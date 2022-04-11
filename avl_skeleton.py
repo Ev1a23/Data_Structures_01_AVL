@@ -297,17 +297,99 @@ class AVLTreeList(object):
 	@rtype: int
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	
-	@Time Complexity:
+	@Time Complexity worst case:
 	successor - called once - O(logn) [see successor]
 	swapNodes - O(1)
-	reBalance - called once - O(logn) [see reBalance]
+	deleteLeaf - called once - O(logn) [see deleteLeaf]
+	deleteOneChildedNode - called once - O(logn [see deleteOneChildedNode]
 	Others - O(1)
 	Total: O(logn)
 	"""
 	def delete(self, i):
 		nodeToDelete = self.retrieveNode(i)
 		if nodeToDelete.isLeaf(): # case 1 - lecture 2 slide 51
+			balanceOps = self.deleteLeaf(nodeToDelete, '1')
+		elif nodeToDelete.getLeft().isRealNode() and not nodeToDelete.getRight().isRealNode(): # case 2.1 - lecture 2 slide 51
+			balanceOps = self.deleteOneChildedNode(nodeToDelete, 'left')
+		elif nodeToDelete.getRight().isRealNode() and not nodeToDelete.getLeft().isRealNode(): # case 2.2 - lecture 2 slide 51
+			balanceOps = self.deleteOneChildedNode(nodeToDelete, 'right')
+		else: # case 3 - lecture 2 slide 51
+			nodeToDeleteSuccessor = self.successor(nodeToDelete)
+			if not nodeToDeleteSuccessor.isLeaf(): # i.e. it has 1 right child only (if 2 then it wasn't the successor)
+				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
+				balanceOps = self.deleteOneChildedNode(nodeToDelete, 'right')
+			else:
+				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
+				balanceOps = self.deleteLeaf(nodeToDelete, '3')
+		return balanceOps
+
+	""" deletes a node that has one child (bypass)
+	
+	@type nodeToDelete: AVLNode
+	@pre: nodeToDelete is not None and has only one real child
+	@param nodeToDelete: node to delete
+	
+	@type childSide: str
+	@param childSide: nodeToDelete's child side is real node, and the other child is virtual
+	
+	@rtype: int
+	@return: total balance operations that were required during the delete operation
+	@Time complexity worst case:
+	O(1) - getters & setters
+	reBalance - O(logn) [see reBalance]
+	maximum / minimum - O(logn)
+	total: O(logn)
+	"""
+	def deleteOneChildedNode(self, nodeToDelete, childSide):
+		if childSide == 'left':
 			nodeToDeleteParent = nodeToDelete.getParent()
+			nodeToDeleteLeftSon = nodeToDelete.getLeft()
+			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
+			if nodeToDelete is self.get_Last():
+				self.set_Last(nodeToDeleteLeftSon.maximum())
+			nodeToDelete.setLeft(AVLNode(None))
+			nodeToDelete.setParent(None)
+			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
+				self.root = nodeToDeleteLeftSon
+			else:
+				nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
+			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+		elif childSide == 'right':
+			nodeToDeleteParent = nodeToDelete.getParent()
+			nodeToDeleteRightSon = nodeToDelete.getRight()
+			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
+			if nodeToDelete is self.get_First():
+				self.set_First(nodeToDeleteRightSon.minimum())
+			nodeToDelete.setRight(AVLNode(None))
+			nodeToDelete.setParent(None)
+			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
+				self.root = nodeToDeleteRightSon
+			else:
+				nodeToDeleteParent.setRight(nodeToDeleteRightSon)
+			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+
+		return balanceOps
+
+	""" deletes a node that is a leaf
+
+		@type nodeToDelete: AVLNode
+		@pre: nodeToDelete is not None and has 2 virtual sons
+		@param nodeToDelete: node to delete
+
+		@type case: str
+		@param case: case 1 / 3 (original node is a leaf / successor is a leaf respectively)
+
+		@rtype: int
+		@return: total balance operations that were required during the delete operation
+		
+		@Time complexity:
+		O(1) - getters & setters
+		reBalance - O(logn) [see reBalance]
+		total: O(logn)
+		"""
+	def deleteLeaf(self, nodeToDelete, case):
+		nodeToDeleteParent = nodeToDelete.getParent()
+		if case == '1':
 			if nodeToDelete is self.getRoot():
 				self.root = None
 				self.set_Last(None)
@@ -317,65 +399,15 @@ class AVLTreeList(object):
 				self.set_First(nodeToDeleteParent)
 			if nodeToDelete is self.get_Last():
 				self.set_Last(nodeToDeleteParent)
-			nodeToDelete.setParent(None)
-			if nodeToDeleteParent.getLeft() is nodeToDelete:
-				nodeToDeleteParent.setLeft(AVLNode(None))
-			elif nodeToDeleteParent.getRight() is nodeToDelete:
-				nodeToDeleteParent.setRight(AVLNode(None))
-			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
-		elif nodeToDelete.getLeft().isRealNode() and not nodeToDelete.getRight().isRealNode(): # case 2.1 - lecture 2 slide 51
-			nodeToDeleteParent = nodeToDelete.getParent()
-			nodeToDeleteLeftSon = nodeToDelete.getLeft()
-			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
-			if nodeToDelete is self.get_Last():
-				self.set_Last(nodeToDeleteLeftSon.maximum())
-			nodeToDelete.setLeft(AVLNode(None))
-			nodeToDelete.setParent(None)
-			if self.getRoot() is nodeToDelete: # i.e. nodeToDeleteParent is None
-				self.root = nodeToDeleteLeftSon
-			else:
-				nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
-			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
-		elif nodeToDelete.getRight().isRealNode() and not nodeToDelete.getLeft().isRealNode(): # case 2.2 - lecture 2 slide 51
-			nodeToDeleteParent = nodeToDelete.getParent()
-			nodeToDeleteRightSon = nodeToDelete.getRight()
-			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
-			if nodeToDelete is self.get_First():
-				self.set_First(nodeToDeleteRightSon.minimum())
-			nodeToDelete.setRight(AVLNode(None))
-			nodeToDelete.setParent(None)
-			if self.getRoot() is nodeToDelete: # i.e. nodeToDeleteParent is None
-				self.root = nodeToDeleteRightSon
-			else:
-				nodeToDeleteParent.setRight(nodeToDeleteRightSon)
-			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
-		else: # case 3 - lecture 2 slide 51
-			nodeToDeleteSuccessor = self.successor(nodeToDelete)
-			if not nodeToDeleteSuccessor.isLeaf(): # i.e. it has 1 right child only (if 2 then it wasn't the successor)
-				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
-				nodeToDeleteParent = nodeToDelete.getParent()
-				nodeToDeleteRightSon = nodeToDelete.getRight()
-				nodeToDeleteRightSon.setParent(nodeToDeleteParent)
-				if nodeToDelete is self.get_First():
-					self.set_First(nodeToDeleteSuccessor)
-				nodeToDelete.setRight(AVLNode(None))
-				nodeToDelete.setParent(None)
-				if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
-					self.root = nodeToDeleteRightSon
-				else:
-					nodeToDeleteParent.setRight(nodeToDeleteRightSon)
-				balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
-			else:
-				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
-				nodeToDeleteParent = nodeToDelete.getParent()
-				nodeToDelete.setParent(None)
-				if nodeToDeleteParent.getLeft() is nodeToDelete:
-					nodeToDeleteParent.setLeft(AVLNode(None))
-				elif nodeToDeleteParent.getRight() is nodeToDelete:
-					nodeToDeleteParent.setRight(AVLNode(None))
-				balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 
+		nodeToDelete.setParent(None)
+		if nodeToDeleteParent.getLeft() is nodeToDelete:
+			nodeToDeleteParent.setLeft(AVLNode(None))
+		elif nodeToDeleteParent.getRight() is nodeToDelete:
+			nodeToDeleteParent.setRight(AVLNode(None))
+		balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 		return balanceOps
+
 
 	""" Swapping 2 nodes (changing pointers)
 	
@@ -697,6 +729,7 @@ class AVLTreeList(object):
 	delete - called once - O(logn)
 	insert - called once - O(logn)
 	join - called once - O(logn)
+	Total: O(logn)
 	"""
 	def concat(self, lst):
 		selfHeight = -1 if self.getRoot() is None else self.getRoot().getHeight()
