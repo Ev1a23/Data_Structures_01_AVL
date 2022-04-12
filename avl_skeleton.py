@@ -181,12 +181,6 @@ class AVLNode(object):
 	def isLeaf(self):
 		return self.getHeight() == 0
 
-	# Used for testing only
-	def __eq__(self, other):
-		if other is None:
-			return False
-		return self.getHeight() == other.getHeight() and self.getSize() == other.getSize() and self.getValue() == other.getValue()
-
 
 
 """
@@ -337,7 +331,7 @@ class AVLTreeList(object):
 	@Time complexity worst case:
 	O(1) - getters & setters
 	reBalance - O(logn) [see reBalance]
-	maximum / minimum - O(logn)
+	successor / predecessor - O(logn)
 	total: O(logn)
 	"""
 	def deleteOneChildedNode(self, nodeToDelete, childSide):
@@ -478,6 +472,11 @@ class AVLTreeList(object):
 		else:
 			node1.setParent(node2)
 
+		if self.getRoot() is node1:
+			self.root = node2
+		elif self.getRoot() is node2:
+			self.root = node1
+
 		node1.recomputeSize()
 		node1.recomputeHeight()
 		node2.recomputeSize()
@@ -548,18 +547,18 @@ class AVLTreeList(object):
 	def rotate(self, BFcriminal, balanceFactor):
 		balanceOps = 0
 		if balanceFactor == 2:
-			if BFcriminal.getLeft().getBalanceFactor in [0, 1]:
+			if BFcriminal.getLeft().getBalanceFactor() in [0, 1]:
 				self.rightRotation(BFcriminal)
 				balanceOps += 1
-			elif BFcriminal.getLeft().getBalanceFactor == -1:
+			elif BFcriminal.getLeft().getBalanceFactor() == -1:
 				self.leftThenRightRotation(BFcriminal)
 				balanceOps += 2
 
 		elif balanceFactor == -2:
-			if BFcriminal.getLeft().getBalanceFactor in [-1, 0]:
+			if BFcriminal.getLeft().getBalanceFactor() in [-1, 0]:
 				self.leftRotation(BFcriminal)
 				balanceOps += 1
-			elif BFcriminal.getLeft().getBalanceFactor == 1:
+			elif BFcriminal.getLeft().getBalanceFactor() == 1:
 				self.rightThenLeftRotation(BFcriminal)
 				balanceOps += 2
 		return balanceOps
@@ -765,7 +764,7 @@ class AVLTreeList(object):
 
 		x = self.get_Last()
 
-		if self.getRoot() is x and self.length() == 1: # TODO: maybe omit this in case join handles empty lists
+		if self.getRoot() is x and self.length() == 1: # TODO: omit this after join handles empty lists
 			self.delete(self.getRoot().getSize() - 1)
 			lst.insert(0, x.getValue())
 			self.root = lst.getRoot()
@@ -895,38 +894,3 @@ class AVLTreeList(object):
 			node = help
 			help = help.getParent()
 		return None
-
-	# Used for testing only
-	"""Checks if current AVLTreeList is equals to another AVLTreeList
-	Definition: AVLTreeList are considered equal if trees size are equal 
-	and recursively checking that currentTreeRoot == otherTreeRoot (by checking their values, size, and height) 
-	& currentTreeRoot.left equals otherTreeRoot.left
-	& currentTreeRoot.right equals otherTreeRoot.right
-	
-	@type other: AVLTreeList
-	@param other: an AVLTreeList to compare self to
-	@returns: True if trees are equal, False otherwise
-	@rtype: boolean
-	"""
-
-	def __eq__(self, other):
-		if (not isinstance(other, AVLTreeList)) or other.length() != self.length():
-			return False
-
-		currentRoot = self.getRoot()
-		otherRoot = other.getRoot()
-
-		if currentRoot is None and otherRoot is None:
-			return True
-
-		def equalsRec(currentRoot, otherRoot):
-			if currentRoot != otherRoot:
-				return False
-
-			if not currentRoot.isRealNode() and not otherRoot.isRealNode():
-				return True
-
-			return equalsRec(currentRoot.getLeft(), otherRoot.getLeft()) and equalsRec(currentRoot.getRight(), otherRoot.getRight())
-
-		return equalsRec(currentRoot, otherRoot)
-

@@ -154,3 +154,86 @@ def createAVLTreeFromList_rec(lst, i, power):
         node = AVLNode(None)
         node.setHeight(-2)
         return node
+
+
+""" comparing 2 nodes by:
+height
+size
+value
+parent's value
+leftSon's value
+rightSon's value
+
+@type node1: AVLNode
+@type node2: AVLNode
+"""
+
+
+def nodesEqual(node1, node2):
+    if node2 is None and node1 is not None:
+        return False
+    if node1 is None and node2 is not None:
+        return False
+    if node1 is None and node2 is None:
+        return True
+
+    heightIsEqual = node1.getHeight() == node2.getHeight()
+    sizeIsEqual = node1.getSize() == node2.getSize()
+    valueIsEqual = node1.getValue() == node2.getValue()
+
+    if node1.isRealNode() and not node2.isRealNode():
+        return False
+    if node2.isRealNode() and not node1.isRealNode():
+        return False
+    if not node1.isRealNode() and not node2.isRealNode():
+        return node1.getParent().getValue() == node2.getParent().getValue() # not real nodes - compare their parent's values
+
+    # by getting here we know that node1 and node2 are real nodes
+
+    parentIsEqual = node1.getParent().getValue() == node2.getParent().getValue() if node1.getParent() is not None and node2.getParent() is not None else node1.getParent() is None and node2.getParent() is None
+    leftSonIsEqual = node1.getLeft().getValue() == node2.getLeft().getValue() if node1.getLeft().isRealNode() and node2.getLeft().isRealNode() else node1.getLeft().isRealNode() == node2.getLeft().isRealNode()
+    rightSonIsEqual = node1.getRight().getValue() == node2.getRight().getValue() if node1.getRight().isRealNode() and node2.getRight().isRealNode() else node1.getRight().isRealNode() == node2.getRight().isRealNode()
+
+    return heightIsEqual and sizeIsEqual and valueIsEqual and parentIsEqual and leftSonIsEqual and rightSonIsEqual
+
+
+"""Checks if current AVLTreeList is equals to another AVLTreeList
+Definition: AVLTreeList are considered equal if trees size are equal 
+and recursively checking that currentTreeRoot == otherTreeRoot (by checking their values, size, and height) 
+& currentTreeRoot.left equals otherTreeRoot.left
+& currentTreeRoot.right equals otherTreeRoot.right
+
+@type other: AVLTreeList
+@param other: an AVLTreeList to compare self to
+@returns: True if trees are equal, False otherwise
+@rtype: boolean
+"""
+
+
+def treesEqual(tree1, tree2):
+    if (not isinstance(tree2, AVLTreeList)) or tree2.length() != tree1.length():
+        return False
+
+    currentRoot = tree1.getRoot()
+    otherRoot = tree2.getRoot()
+
+    if currentRoot is None and otherRoot is None:
+        return True
+
+    if not nodesEqual(tree1.get_First(), tree2.get_First()):
+        return False
+
+    if not nodesEqual(tree1.get_Last(), tree2.get_Last()):
+        return False
+
+    def equalsRec(currentNode, otherNode):
+        if not currentNode.isRealNode() and not otherNode.isRealNode():
+            return True
+
+        if not nodesEqual(currentRoot, otherRoot):
+            return False
+
+        return equalsRec(currentNode.getLeft(), otherNode.getLeft()) and equalsRec(currentNode.getRight(),
+                                                                                   otherNode.getRight())
+
+    return equalsRec(currentRoot, otherRoot)

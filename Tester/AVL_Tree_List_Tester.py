@@ -2,7 +2,7 @@ import sys
 import unittest
 from avl_skeleton import AVLNode
 from avl_skeleton import AVLTreeList
-from utils.tester_utils import createTreeFromList
+from utils.tester_utils import createTreeFromList, treesEqual
 from utils.print_tree import printTreeString
 import logging
 
@@ -757,7 +757,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.rightRotationFieldsCheck(nodesToCheck)
         # Undependent check
         expectedTree = createTreeFromList(["b", "c", "a", None, None, None, None])
-        self.assertEqual(rootCriminalTree, expectedTree)
+        self.assertTrue(treesEqual(rootCriminalTree, expectedTree))
 
         # Test case 2: right rotation when some node is the criminal (BF of criminal.left == 1)
         test2Tree = createTreeFromList(["a", "b", "c", "d", None, "e", "f", "g", None, None, None, "i", "j", "k", "l"])
@@ -775,7 +775,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.rightRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"]))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
 
         # Test case 3: right rotation when some node is the criminal (BF of criminal.left == 0)
         test2Tree = createTreeFromList(["a", "b", "c", "d", None, "e", "f", "g", "h", None, None, "i", "j", "k", "l"])
@@ -793,7 +793,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.rightRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, "h", None, "i", "j", "k", "l"]))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, "h", None, "i", "j", "k", "l"])))
 
     def rightRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalLeftSon"].getSize())
@@ -958,5 +958,530 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(test2Tree, createTreeFromList(["a", "g", "c", "d", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"]))
 
+    @unittest.skip("Waiting for insert & join implementation")
+    def test_concat(self):
+        # Case 1: concat 2 empty trees
+        case1tree1 = createTreeFromList([])
+        case1tree2 = createTreeFromList([])
+        case1tree1ltr = case1tree1.listToArray()
+        case1tree2ltr = case1tree2.listToArray()
+        logger.debug("concatDebug - case 1:")
+        logger.debug("tree1 as list:", case1tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case1tree1))
+        logger.debug("tree2 as list:", case1tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case1tree2))
+        absDiffHeight = case1tree1.concat(case1tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
+        logger.debug("new concatinated list:", case1tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case1tree1))
+        self.assertEqual(0, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case1tree1ltr + case1tree2ltr, case1tree1.listToArray())
+
+        # Case 2: self is empty tree, other is not
+        case2tree1 = createTreeFromList([])
+        case2tree2 = createTreeFromList(["a", "b", None])
+        case2tree1ltr = case2tree1.listToArray()
+        case2tree2ltr = case2tree2.listToArray()
+        logger.debug("concatDebug - case 2:")
+        logger.debug("tree1 as list:", case2tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case2tree1))
+        logger.debug("tree2 as list:", case2tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case2tree2))
+        absDiffHeight = case2tree1.concat(case2tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
+        logger.debug("new concatinated list:", case2tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case2tree1))
+        self.assertEqual(2, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case2tree1ltr + case2tree2ltr, case2tree1.listToArray())
+
+        # Case 3: self is not empty, other is empty
+        case3tree1 = createTreeFromList(["a", "b", None])
+        case3tree2 = createTreeFromList([])
+        case3tree1ltr = case3tree1.listToArray()
+        case3tree2ltr = case3tree2.listToArray()
+        logger.debug("concatDebug - case 3:")
+        logger.debug("tree1 as list:", case3tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case3tree1))
+        logger.debug("tree2 as list:", case3tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case3tree2))
+        absDiffHeight = case3tree1.concat(case3tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
+        logger.debug("new concatinated list:", case3tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case3tree1))
+        self.assertEqual(2, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case3tree1ltr + case3tree2ltr, case3tree1.listToArray())
+
+        # Case 4: self has only a root, other has only a root TODO: check after evia's insert
+        case4tree1 = createTreeFromList(["a"])
+        case4tree2 = createTreeFromList(["b"])
+        case4tree1ltr = case4tree1.listToArray()
+        case4tree2ltr = case4tree2.listToArray()
+        logger.debug("concatDebug - case 4:")
+        logger.debug("tree1 as list:", case4tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case4tree1))
+        logger.debug("tree2 as list:", case4tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case4tree2))
+        absDiffHeight = case4tree1.concat(case4tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
+        logger.debug("new concatinated list:", case4tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case4tree1))
+        self.assertEqual(0, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case4tree1ltr + case4tree2ltr, case4tree1.listToArray())
+
+        # Case 5: self has only a root, other is a larger tree TODO: check after evia's insert
+        case5tree1 = createTreeFromList(["a"])
+        case5tree2 = createTreeFromList(["b", "c", "d"])
+        case5tree1ltr = case5tree1.listToArray()
+        case5tree2ltr = case5tree2.listToArray()
+        logger.debug("concatDebug - case 5:")
+        logger.debug("tree1 as list:", case5tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case5tree1))
+        logger.debug("tree2 as list:", case5tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case5tree2))
+        absDiffHeight = case5tree1.concat(case5tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 1
+        logger.debug("new concatinated list:", case5tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case5tree1))
+        self.assertEqual(1, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case5tree1ltr + case5tree2ltr, case5tree1.listToArray())
+
+        # Case 6: self's size is larger than 1 and other is a larger tree TODO: check after evia's join
+        case6tree1 = createTreeFromList(["a", "b", "c"])
+        case6tree2 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
+        case6tree1ltr = case6tree1.listToArray()
+        case6tree2ltr = case6tree2.listToArray()
+        logger.debug("concatDebug - case 6:")
+        logger.debug("tree1 as list:", case6tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case6tree1))
+        logger.debug("tree2 as list:", case6tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case6tree2))
+        absDiffHeight = case6tree1.concat(case6tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
+        logger.debug("new concatinated list:", case6tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case6tree1))
+        self.assertEqual(2, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case6tree1ltr + case6tree2ltr, case6tree1.listToArray())
+
+        # Case 7: self's size is larger than 1 and other is a smaller tree TODO: check after evia's join
+        case7tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
+        case7tree2 = createTreeFromList(["a", "b", "c"])
+        case7tree1ltr = case7tree1.listToArray()
+        case7tree2ltr = case7tree2.listToArray()
+        logger.debug("concatDebug - case 7:")
+        logger.debug("tree1 as list:", case7tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case7tree1))
+        logger.debug("tree2 as list:", case7tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case7tree2))
+        absDiffHeight = case7tree1.concat(case7tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
+        logger.debug("new concatinated list:", case7tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case7tree1))
+        self.assertEqual(2, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case7tree1ltr + case7tree2ltr, case7tree1.listToArray())
+
+        # Case 8: self's size is larger than 1 and other has only a root TODO: check after evia's join
+        case8tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
+        case8tree2 = createTreeFromList(["a"])
+        case8tree1ltr = case8tree1.listToArray()
+        case8tree2ltr = case8tree2.listToArray()
+        logger.debug("concatDebug - case 8:")
+        logger.debug("tree1 as list:", case8tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case8tree1))
+        logger.debug("tree2 as list:", case8tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case8tree2))
+        absDiffHeight = case8tree1.concat(case8tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 3
+        logger.debug("new concatinated list:", case8tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case8tree1))
+        self.assertEqual(3, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case8tree1ltr + case8tree2ltr, case8tree1.listToArray())
+
+        # Case 9: self's size is larger than 1 and other is equal in size to self TODO: check after evia's join
+        case9tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
+        case9tree2 = createTreeFromList(
+            ["d'", "e'", "f'", "g'", "h'", "i'", "j'", "k'", "l'", "m'", "n'", "o'", "p'", "q'", "r'"])
+        case9tree1ltr = case9tree1.listToArray()
+        case9tree2ltr = case9tree2.listToArray()
+        logger.debug("concatDebug - case 9:")
+        logger.debug("tree1 as list:", case9tree1.listToArray())
+        logger.debug("tree1 as tree:\n" + printTreeString(case9tree1))
+        logger.debug("tree2 as list:", case9tree2.listToArray())
+        logger.debug("tree2 as tree:\n" + printTreeString(case9tree2))
+        absDiffHeight = case9tree1.concat(case9tree2)
+        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
+        logger.debug("new concatinated list:", case9tree1.listToArray())
+        logger.debug("new list as a tree:\n" + printTreeString(case9tree1))
+        self.assertEqual(0, absDiffHeight)
+        # Undependent check
+        self.assertEqual(case9tree1ltr + case9tree2ltr, case9tree1.listToArray())
+
+    @unittest.skip("Waiting for leftRotation and righThenLeftRotation")
+    def test_delete(self):
+        # Case 1: tree has only a root - delete root
+        case1tree = createTreeFromList(["a"])
+        logger.debug("deleteDebug - case 1:")
+        logger.debug("tree before delete:\n" + printTreeString(case1tree))
+        case1BalanceOps = case1tree.delete(0)
+        logger.debug("tree after delete:\n" + printTreeString(case1tree))
+        logger.debug("case1 balanceOps:", case1BalanceOps)  # should be 0
+        self.assertEqual(0, case1BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case1tree, createTreeFromList([])))
+
+        # Case 2: deleting a leaf
+        case2tree = createTreeFromList(["a", "b", "c", "d", "e", "f", "g"])
+        logger.debug("deleteDebug - case 2:")
+        logger.debug("tree before delete:\n" + printTreeString(case2tree))
+        case2BalanceOps = case2tree.delete(2)
+        logger.debug("tree after delete:\n" + printTreeString(case2tree))
+        logger.debug("case2 balanceOps:", case2BalanceOps)  # should be 0
+        self.assertEqual(0, case2BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case2tree, createTreeFromList(["a", "b", "c", "d", None, "f", "g"])))
+
+        # Case 3: deleting a leaf that was the minimum
+        case3tree = createTreeFromList(["a", "b", "c", "d", "e", "f", "g"])
+        logger.debug("deleteDebug - case 3:")
+        logger.debug("tree before delete:\n" + printTreeString(case3tree))
+        logger.debug("minimum before delete:\n" + case3tree.get_First().getValue())  # should be d
+        case3BalanceOps = case3tree.delete(0)
+        logger.debug("tree after delete:\n" + printTreeString(case3tree))
+        logger.debug("case3 balanceOps:", case3BalanceOps)  # should be 0
+        logger.debug("minimum after delete:\n" + case3tree.get_First().getValue())  # should be b
+        self.assertEqual(0, case3BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case3tree, createTreeFromList(["a", "b", "c", None, "e", "f", "g"])))
+
+        # Case 4: deleting a leaf that was the maximum
+        case4tree = createTreeFromList(["a", "b", "c", "d", "e", "f", "g"])
+        logger.debug("deleteDebug - case 4:")
+        logger.debug("tree before delete:\n" + printTreeString(case4tree))
+        logger.debug("maximum before delete:\n" + case4tree.get_Last().getValue())  # should be g
+        case4BalanceOps = case4tree.delete(6)
+        logger.debug("tree after delete:\n" + printTreeString(case4tree))
+        logger.debug("case4 balanceOps:", case4BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case4tree.get_Last().getValue())  # should be c
+        self.assertEqual(0, case4BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case4tree, createTreeFromList(["a", "b", "c", "d", "e", "f", None])))
+
+        # Case 5: deleting a one childed node (leftSon)
+        case5tree = createTreeFromList(["a", "b", "c", "d", "e", "f", None])
+        logger.debug("deleteDebug - case 5:")
+        logger.debug("tree before delete:\n" + printTreeString(case5tree))
+        logger.debug("maximum before delete:\n" + case5tree.get_Last().getValue())  # should be c
+        case5BalanceOps = case5tree.delete(5)
+        logger.debug("tree after delete:\n" + printTreeString(case5tree))
+        logger.debug("case5 balanceOps:", case5BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case5tree.get_Last().getValue())  # should be f
+        self.assertEqual(0, case5BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case5tree, createTreeFromList(["a", "b", "f", "d", "e", None, None])))
+
+        # Case 6: deleting a one childed node that is the root (leftSon)
+        case6tree = createTreeFromList(["a", "b", None])
+        logger.debug("deleteDebug - case 6:")
+        logger.debug("tree before delete:\n" + printTreeString(case6tree))
+        logger.debug("maximum before delete:\n" + case6tree.get_Last().getValue())  # should be a
+        case6BalanceOps = case6tree.delete(1)
+        logger.debug("tree after delete:\n" + printTreeString(case6tree))
+        logger.debug("case6 balanceOps:", case6BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case6tree.get_Last().getValue())  # should be b
+        self.assertEqual(0, case6BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case6tree, createTreeFromList(["b"])))
+
+        # Case 7: deleting a one childed node (rightSon)
+        case7tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f"])
+        logger.debug("deleteDebug - case 7:")
+        logger.debug("tree before delete:\n" + printTreeString(case7tree))
+        logger.debug("maximum before delete:\n" + case7tree.get_Last().getValue())  # should be f
+        case7BalanceOps = case7tree.delete(4)
+        logger.debug("tree after delete:\n" + printTreeString(case7tree))
+        logger.debug("case7 balanceOps:", case7BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case7tree.get_Last().getValue())  # should be f
+        self.assertEqual(0, case7BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case7tree, createTreeFromList(["a", "b", "f", "d", "e", None, None])))
+
+        # Case 8: deleting a one childed node that is the root (rightSon)
+        case8tree = createTreeFromList(["a", None, "b"])
+        logger.debug("deleteDebug - case 8:")
+        logger.debug("tree before delete:\n" + printTreeString(case8tree))
+        logger.debug("maximum before delete:\n" + case8tree.get_Last().getValue())  # should be b
+        logger.debug("minimum before delete:\n" + case8tree.get_First().getValue())  # should be a
+        case8BalanceOps = case8tree.delete(0)
+        logger.debug("tree after delete:\n" + printTreeString(case8tree))
+        logger.debug("case8 balanceOps:", case8BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case8tree.get_Last().getValue())  # should be b
+        logger.debug("minimum after delete:\n" + case8tree.get_First().getValue())  # should be b
+        self.assertEqual(0, case8BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case8tree, createTreeFromList(["b"])))
+
+        # Case 9: deleting a one childed node that was the minimum (rightSon)
+        case9tree = createTreeFromList(["a", "b", "c", None, "e", "f", "g"])
+        logger.debug("deleteDebug - case 9:")
+        logger.debug("tree before delete:\n" + printTreeString(case9tree))
+        logger.debug("maximum before delete:\n" + case9tree.get_Last().getValue())  # should be g
+        logger.debug("minimum before delete:\n" + case9tree.get_First().getValue())  # should be b
+        case9BalanceOps = case9tree.delete(0)
+        logger.debug("tree after delete:\n" + printTreeString(case9tree))
+        logger.debug("case9 balanceOps:", case9BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case9tree.get_Last().getValue())  # should be g
+        logger.debug("minimum after delete:\n" + case9tree.get_First().getValue())  # should be e
+        self.assertEqual(0, case9BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case9tree, createTreeFromList(["a", "e", "c", None, None, "f", "g"])))
+
+        # Case 10: deleting a two childed node that his successor is a leaf
+        case10tree = createTreeFromList(["a", "b", "c", "d", "e", "f", "g"])
+        logger.debug("deleteDebug - case 10:")
+        logger.debug("tree before delete:\n" + printTreeString(case10tree))
+        logger.debug("maximum before delete:\n" + case10tree.get_Last().getValue())  # should be g
+        logger.debug("minimum before delete:\n" + case10tree.get_First().getValue())  # should be d
+        logger.debug(case10tree.listToArray())
+        case10BalanceOps = case10tree.delete(1)
+        logger.debug(case10tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(case10tree))
+        logger.debug("case10 balanceOps:", case10BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case10tree.get_Last().getValue())  # should be g
+        logger.debug("minimum after delete:\n" + case10tree.get_First().getValue())  # should be d
+        self.assertEqual(0, case10BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case10tree, createTreeFromList(["a", "e", "c", "d", None, "f", "g"])))
+
+        # Case 11: deleting a two childed node that his successor is the maximum
+        case11tree = createTreeFromList(["a", "b", "c"])
+        logger.debug("deleteDebug - case 11:")
+        logger.debug("tree before delete:\n" + printTreeString(case11tree))
+        logger.debug("maximum before delete:\n" + case11tree.get_Last().getValue())  # should be c
+        logger.debug("minimum before delete:\n" + case11tree.get_First().getValue())  # should be b
+        logger.debug(case11tree.listToArray())
+        case11BalanceOps = case11tree.delete(1)
+        logger.debug(case11tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(case11tree))
+        logger.debug("case11 balanceOps:", case11BalanceOps)  # should be 0
+        logger.debug("maximum after delete:\n" + case11tree.get_Last().getValue())  # should be c
+        logger.debug("minimum after delete:\n" + case11tree.get_First().getValue())  # should be b
+        self.assertEqual(0, case11BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case11tree, createTreeFromList(["c", "b", None])))
+
+        # Case 12: deleting a two childed node that his successor has a right child
+        case12tree = createTreeFromList(["a", "b", "c", None, None, None, "d"])
+        logger.debug("deleteDebug - case 12:")
+        logger.debug("tree before delete:\n" + printTreeString(case12tree))
+        logger.debug("maximum before delete:\n" + case12tree.get_Last().getValue())  # should be d
+        logger.debug("minimum before delete:\n" + case12tree.get_First().getValue())  # should be b
+        logger.debug(case12tree.listToArray())
+        case12BalanceOps = case12tree.delete(1)
+        logger.debug(case12tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(case12tree))
+        logger.debug("case12 balanceOps:", case12BalanceOps)  # should be 1
+        logger.debug("maximum after delete:\n" + case12tree.get_Last().getValue())  # should be d
+        logger.debug("minimum after delete:\n" + case12tree.get_First().getValue())  # should be b
+        self.assertEqual(1, case12BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case12tree, createTreeFromList(["c", "b", "d"])))
+
+        # Case 13: deleting a two childed node that is the root - checked in case 11
+        # Cases 14-19 https://visualgo.net/en/bst?mode=AVL&create=16,8,22,4,11,20,24,2,5,9,14,18,21,25,3,10,12,15,17,13
+        # Case 14: delete 11 - 2 childed that successor has right child (14 height, 12 height, 8 height, 16 height - total 4)
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 14:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case14BalanceOps = cases14to19tree.delete(7)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case14 balanceOps:", case14BalanceOps)  # should be 4
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        self.assertEqual(4, case14BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "12", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "13", "15", "17", None, None, None, None, None, None, None
+        ])))
+
+        # Case 15: delete 25 - leaf + maximum (includes right rotation & left then right rotation, 3 ops + 24 changes height - total 4) # TODO: check after evia's rotations
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 15:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case15BalanceOps = cases14to19tree.delete(19)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case15 balanceOps:", case15BalanceOps)  # should be 4
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 24
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        self.assertEqual(4, case15BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "11",
+            "8", "16",
+            "4", "9", "14", "20",
+            "2", "5", None, "10", "12", "15", "18", "22",
+            None, "3", None, None, None, None, None, None, None, "13", None, None, "17", None, "21", "24"
+        ])))
+
+        # Case 16: delete 16 - 2 childed that successor is a leaf + root (18 height, 20 height, 22 height, + leftThenRight - total 5) #TODO: check after evia's rotations
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 16:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case16BalanceOps = cases14to19tree.delete(11)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case16 balanceOps:", case16BalanceOps)  # should be 5
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        self.assertEqual(5, case16BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "11",
+            "8", "17",
+            "4", "9", "14", "22",
+            "2", "5", None, "10", "12", "15", "20", "24",
+            None, "3", None, None, None, None, None, None, None, "13", None, None, "18", "21", None, "25"
+        ])))
+
+        # Case 17: delete 24 - one childed node rightSon (rightRotation, leftThenRight - total 3) # TODO: check after evia's rotations
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 17:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case17BalanceOps = cases14to19tree.delete(18)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case17 balanceOps:", case17BalanceOps)  # should be 3
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        self.assertEqual(3, case17BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "11",
+            "8", "16",
+            "4", "9", "14", "20",
+            "2", "5", None, "10", "12", "15", "18", "22",
+            None, "3", None, None, None, None, None, None, None, "13", None, None, "17", None, "21", "25"
+        ])))
+
+        # Case 18: delete 18 - one childed node leftSon (20 height, 22 height, leftThenRight - total 4) #TODO: check after evia's rotations
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 18:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case18BalanceOps = cases14to19tree.delete(14)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case18 balanceOps:", case18BalanceOps)  # should be 4
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        self.assertEqual(4, case18BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "11",
+            "8", "16",
+            "4", "9", "14", "22",
+            "2", "5", None, "10", "12", "15", "20", "24",
+            None, "3", None, None, None, None, None, None, None, "13", None, None, "17", "21", None, "25"
+        ])))
+
+        # Case 19: delete 2 - minimum (new minimum should be 3) (4 height, leftRotation, 16 height - total 3) #TODO: check after evia's rotations
+        cases14to19tree = createTreeFromList([
+            "16",
+            "8", "22",
+            "4", "11", "20", "24",
+            "2", "5", "9", "14", "18", "21", None, "25",
+            None, "3", None, None, None, "10", "12", "15", "17", None, None, None, None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, "13", None, None, None, None,
+            None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("deleteDebug - case 19:")
+        logger.debug("tree before delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
+        logger.debug(cases14to19tree.listToArray())
+        case19BalanceOps = cases14to19tree.delete(0)
+        logger.debug(cases14to19tree.listToArray())
+        logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
+        logger.debug("case18 balanceOps:", case19BalanceOps)  # should be 3
+        logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
+        logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 3
+        self.assertEqual(19, case19BalanceOps)
+        self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
+            "16",
+            "11", "22",
+            "8", "14", "20", "24",
+            "4", "9", "12", "15", "18", "21", None, "25",
+            "3", "5", None, "10", None, "13", None, None, "17", None, None, None, None, None, None, None
+        ])))
+
+    def test_swapNodes(self):
+        return
+        
     if __name__ == "__main__":
         unittest.main()
