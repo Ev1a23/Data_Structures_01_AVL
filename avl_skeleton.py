@@ -422,16 +422,6 @@ class AVLTreeList(object):
 	@rtype: None
 	"""
 	def swapNodes(self, node1, node2):
-		# tempNode1 = AVLNode(None)
-		# tempNode1.setLeft(node1.getLeft())
-		# tempNode1.setRight(node1.getRight())
-		# tempNode1.setParent(node1.getParent())
-		#
-		# tempNode1Parent = AVLNode(None)
-		# tempNode1Parent.setLeft(node1.getLeft())
-		# tempNode1Parent.setRight(node1.getRight())
-		# tempNode1Parent.setParent(node1.getParent())
-
 		node1Parent = node1.getParent()
 		node1Left = node1.getLeft()
 		node1Right = node1.getRight()
@@ -607,7 +597,6 @@ class AVLTreeList(object):
 	def reBalance(self, nodeToCheckBF, treeOp):
 		balanceOps = 0
 		if treeOp == 'insert':
-			# TODO: eviatar decide if after insert we go all the way to the top in order to update sizes, as for now it goes all the way up, we can delete treeOp if so.
 			while nodeToCheckBF is not None:
 				balanceFactor = nodeToCheckBF.getBalanceFactor()
 				height = nodeToCheckBF.getHeight()
