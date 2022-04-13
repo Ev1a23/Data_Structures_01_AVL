@@ -804,28 +804,6 @@ class AVLTreeList(object):
 			minNode = minNode.getLeft()
 		return minNode
 
-	"""returns the maximum of a given sub tree that node is its root
-		i.e. the deepest node that is on the `\` branch that starts from node
-
-		@pre: node.isRealNode() == True
-		@type node: AVLNode
-		@param node: the node of which we will return the maximum of his subtree
-		@rtype: AVLNode
-		@returns: The maximum of node's subtree, if it is a leaf, returns itself
-
-		Time complexity:
-		maximum = node - O(1)
-		(*) maxNode.getRight() is not None && maxNode = maxNode.getRight() are O(1) each
-		(*) is executed at most as many times as the height of the tree.
-		Therefore, the total time complexity is O(h) = O(logn).
-		"""
-
-	def maximum(self, node):
-		maxNode = node
-		while maxNode.getRight().isRealNode():
-			maxNode = maxNode.getRight()
-		return maxNode
-
 
 	"""splits the list at the i'th index
 
