@@ -171,14 +171,6 @@ class AVLNode(object):
 	def isRealNode(self):
 		return self.height != -1
 
-	""" retruns wheather self is a leaf
-	@rtype: bool
-	@returns: False if self is not a leaf(has a right/left son such that they are not virtual nodes), True otherwise
-	@Time complexity: O(1)
-	"""
-	def isLeaf(self):
-		return self.height == 0
-
 
 
 """
