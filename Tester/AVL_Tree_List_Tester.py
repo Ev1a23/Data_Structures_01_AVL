@@ -2,7 +2,7 @@ import sys
 import unittest
 from avl_skeleton import AVLNode
 from avl_skeleton import AVLTreeList
-from utils.tester_utils import createTreeFromList, treesEqual
+from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields
 from utils.print_tree import printTreeString
 import logging
 
@@ -1481,7 +1481,44 @@ class Test_AVL_Tree_list(unittest.TestCase):
         ])))
 
     def test_swapNodes(self):
-        return
+        # Case 1: swapping a root "a" with its successor "b"
+        case1tree = createTreeFromList(["a", None, "b"])
+        logger.debug(f"Case 1 - tree before swap:\n{printTreeString(case1tree)}")
+        node1beforeSwap = case1tree.getRoot()
+        node2beforeSwap = case1tree.getRoot().getRight()
+        case1tree.swapNodes(node1beforeSwap, node2beforeSwap)
+        logger.debug(f"Case 1 - tree after swap:\n{printTreeString(case1tree)}")
+        self.assertEqual(case1tree.getRoot(), node2beforeSwap)
+
+        # Case 2: swapping a node "a" with its rightSon "b" (which is the maximum)
+        case2tree = createTreeFromList(["a", None, "b"])
+        logger.debug(f"Case 2 - tree before swap:\n{printTreeString(case2tree)}")
+        node1beforeSwap = case2tree.getRoot()
+        node2beforeSwap = case2tree.getRoot().getRight()
+        case2tree.swapNodes(node1beforeSwap, node2beforeSwap)
+        logger.debug(f"Case 2 - tree after swap:\n{printTreeString(case2tree)}")
+        self.assertEqual(case2tree.getRoot(), node2beforeSwap)
+        self.assertEqual(case2tree.get_Last(), node1beforeSwap)
+
+        self.assertEqual(case2tree.get_First(), node2beforeSwap)
+
+        # Case 3: swapping a node "a" with its leftSon "b" (which is the minimum)
+        case3tree = createTreeFromList(["a", "b", None])
+        logger.debug(f"Case 3 - tree before swap:\n{printTreeString(case3tree)}")
+        node1beforeSwap = case3tree.getRoot()
+        node2beforeSwap = case3tree.getRoot().getLeft()
+        case3tree.swapNodes(node1beforeSwap, node2beforeSwap)
+        logger.debug(f"Case 3 - tree after swap:\n{printTreeString(case3tree)}")
+        self.assertEqual(case3tree.getRoot(), node2beforeSwap)
+        self.assertEqual(case3tree.get_First(), node1beforeSwap)
+
+        # Case 4: swapping random 2 nodes "b" and "c"
+        case4tree = createTreeFromList(["a", "b", "c", "d", "e", "f", "g"])
+        logger.debug(f"Case 4 - tree before swap:\n{printTreeString(case4tree)}")
+        node1beforeSwap = case4tree.getRoot().getLeft()
+        node2beforeSwap = case4tree.getRoot().getRight()
+        case4tree.swapNodes(node1beforeSwap, node2beforeSwap)
+        logger.debug(f"Case 4 - tree after swap:\n{printTreeString(case4tree)}")
         
     if __name__ == "__main__":
         unittest.main()

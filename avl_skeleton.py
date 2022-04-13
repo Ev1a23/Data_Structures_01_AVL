@@ -411,71 +411,176 @@ class AVLTreeList(object):
 
 	""" Swapping 2 nodes (changing pointers)
 	
+	@pre: boths node1, node2 are AVLNodes
+	
 	@type node1: AVLNode
 	@param node1: an AVLNode
-	@post node1: node1.getParent() == @prevnode2.getParent(),
-	node1.getLeft() == @prevnode2.getLeft(),
-	node1.getRight() == @prevnode2.getRight()
-	node1.getSize() == @prevnode2.getSize()
-	node1.getHeight() == @prevnode2.getHeight()
 	
 	@type node2: AVLNode
 	@param node2: an AVLNode
-	@post node2: node2.getParent() == @prevnode1.getParent(),
-	node2.getLeft() == @prevnode1.getLeft(),
-	node2.getRight() == @prevnode1.getRight()
-	node2.getSize() == @prevnode1.getSize()
-	node2.getHeight() == @prevnode1.getHeight() 
 	
 	@rtype: None
 	"""
 	def swapNodes(self, node1, node2):
+		# tempNode1 = AVLNode(None)
+		# tempNode1.setLeft(node1.getLeft())
+		# tempNode1.setRight(node1.getRight())
+		# tempNode1.setParent(node1.getParent())
+		#
+		# tempNode1Parent = AVLNode(None)
+		# tempNode1Parent.setLeft(node1.getLeft())
+		# tempNode1Parent.setRight(node1.getRight())
+		# tempNode1Parent.setParent(node1.getParent())
+
 		node1Parent = node1.getParent()
 		node1Left = node1.getLeft()
 		node1Right = node1.getRight()
-		if node1Parent:
-			if node1Parent.getLeft() is node1:
-				node1Parent.setLeft(node2)
-			elif node1Parent.getRight() is node1:
-				node1Parent.setRight(node2)
 
 		node2Parent = node2.getParent()
 		node2Left = node2.getLeft()
 		node2Right = node2.getRight()
-		if node2Parent:
-			if node2Parent.getLeft() is node2:
-				node2Parent.setLeft(node1)
-			elif node2Parent.getRight() is node2 and node2Parent is not node1:
-				node2Parent.setRight(node1)
 
-		node2.setLeft(node1Left)
-
-		node1Left.setParent(node2)
-
-		if node2 is not node1Right:
+		done = False
+		# case node1Parent == node2Parent
+		# do not switch node1, node2 parents, just switch left and right of parent & sons
+		if node1Parent and node2Parent and node1Parent is node2Parent:
+			if node1Parent.getLeft() is node1:
+				node1Parent.setLeft(node2)
+				node1Parent.setRight(node1)
+			elif node1Parent.getRight() is node1:
+				node1Parent.setRight(node2)
+				node1Parent.setLeft(node1)
+			node1.setLeft(node2Left)
+			node2Left.setParent(node1)
+			node1.setRight(node2Right)
+			node2Right.setParent(node1)
+			node2.setLeft(node1Left)
+			node1Left.setParent(node2)
 			node2.setRight(node1Right)
-		else:
-			node2.setRight(node1)
-
-		if node1Right is not node2:
 			node1Right.setParent(node2)
+			done = True
 
-		node2.setParent(node1Parent)
-
-		node1.setLeft(node2Left)
-		node2Left.setParent(node1)
-		node1.setRight(node2Right)
-		node2Right.setParent(node1)
-
-		if node1 is not node2Parent:
-			node1.setParent(node2Parent)
+		# if we get here then node1Parent is not node2Parent
 		else:
-			node1.setParent(node2)
+			if node1Parent:
+				if node1Parent.getLeft() is node1:
+					if node1Parent is not node2:
+						node1Parent.setLeft(node2)
+					else:
+						if node2Parent:
+							if node2Parent.getLeft() is node2:
+								node2Parent.setLeft(node1)
+							elif node2Parent.getRight() is node2:
+								node2Parent.setRight(node1)
+						node1.setParent(node2Parent)
+						node1.setLeft(node2)
+						node1.setRight(node2Right)
+						node2Right.setParent(node1)
+
+						node2.setLeft(node1Left)
+						node1Left.setParent(node2)
+						node2.setRight(node1Right)
+						node1Right.setParent(node2)
+						node2.setParent(node1)
+
+						done = True
+
+				elif node1Parent.getRight() is node1:
+					if node1Parent is not node2:
+						node1Parent.setRight(node2)
+					else:
+						if node2Parent:
+							if node2Parent.getLeft() is node2:
+								node2Parent.setLeft(node1)
+							elif node2Parent.getRight() is node2:
+								node2Parent.setRight(node1)
+						node1.setParent(node2Parent)
+						node1.setRight(node2)
+						node1.setLeft(node2Left)
+						node2Left.setParent(node1)
+
+						node2.setLeft(node1Left)
+						node1Left.setParent(node2)
+						node2.setRight(node1Right)
+						node1Right.setParent(node2)
+						node2.setParent(node1)
+
+						done = True
+
+			if node2Parent:
+				if node2Parent.getLeft() is node2:
+					if node2Parent is not node1:
+						node2Parent.setLeft(node1)
+					else:
+						if node1Parent:
+							if node1Parent.getLeft() is node1:
+								node1Parent.setLeft(node2)
+							elif node1Parent.getRight() is node1:
+								node1Parent.setRight(node2)
+						node2.setParent(node1Parent)
+						node2.setLeft(node1)
+						node2.setRight(node1Right)
+						node1Right.setParent(node2)
+
+						node1.setLeft(node2Left)
+						node2Left.setParent(node1)
+						node1.setRight(node2Right)
+						node2Right.setParent(node1)
+						node1.setParent(node2)
+
+						done = True
+
+				elif node2Parent.getRight() is node2:
+					if node2Parent is not node1:
+						node2Parent.setRight(node1)
+					else:
+						if node1Parent:
+							if node1Parent.getLeft() is node1:
+								node1Parent.setLeft(node2)
+							elif node1Parent.getRight() is node1:
+								node1Parent.setRight(node2)
+
+						node2.setParent(node1Parent)
+						node2.setRight(node1)
+						node2.setLeft(node1Left)
+						node1Left.setParent(node2)
+
+						node1.setLeft(node2Left)
+						node2Left.setParent(node1)
+						node1.setRight(node2Right)
+						node2Right.setParent(node1)
+
+						node1.setParent(node2)
+
+						done = True
+
+		if not done:
+			node1.setParent(node2Parent)
+			node1.setLeft(node2Left)
+			node1.setRight(node2Right)
+			node2Left.setParent(node1)
+			node2Right.setParent(node1)
+
+			node2.setParent(node1Parent)
+			node2.setLeft(node1Left)
+			node2.setRight(node1Right)
+			node1Left.setParent(node2)
+			node1Right.setParent(node2)
 
 		if self.getRoot() is node1:
 			self.root = node2
 		elif self.getRoot() is node2:
 			self.root = node1
+
+		if self.get_First() is node1:
+			self.set_First(node2)
+		elif self.get_First() is node2:
+			self.set_First(node1)
+
+		if self.get_Last() is node1:
+			self.set_Last(node2)
+		elif self.get_Last() is node2:
+			self.set_Last(node1)
 
 		node1.recomputeSize()
 		node1.recomputeHeight()
