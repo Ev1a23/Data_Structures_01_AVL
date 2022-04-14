@@ -882,11 +882,11 @@ class Test_AVL_Tree_list(unittest.TestCase):
 
         self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminalLeftSonRightSon"].getLeft())
         self.assertEqual(nodesToCheck["criminalLeftSonRightSon"], nodesToCheck["criminalLeftSon"].getParent())
-    #Evia section
+
     def test_leftRotation(self):
         afterLeftRotationMsg = "after left rotation"
 
-        # Test case 1: right rotation when the root is the criminal
+        # Test case 1: left rotation when the root is the criminal
         rootCriminalTree = createTreeFromList(["a", None, "b", None, None, None, "c"])
         logger.debug(f"Test case 1 - root 'a' is BF criminal\n{printTreeString(rootCriminalTree)}")
         criminal = rootCriminalTree.getRoot()
@@ -905,9 +905,9 @@ class Test_AVL_Tree_list(unittest.TestCase):
         expectedTree = createTreeFromList(["b", "a", "c", None, None, None, None])
         self.assertTrue(treesEqual(rootCriminalTree, expectedTree))
 
-        # Test case 2: right rotation when some node is the criminal (BF of criminal.left == 1)
+        # Test case 2: left rotation when some node is the criminal (BF of criminal.right == -1)
         test2Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g", "h", "i", "j", "k", None, None, "k"])
-        logger.debug(f"Test case 2 - node 'b' is BF criminal\n{printTreeString(test2Tree)}")
+        logger.debug(f"Test case 2 - node 'c' is BF criminal\n{printTreeString(test2Tree)}")
         criminal = test2Tree.getRoot().getRight()
         parentSon = self.determineParentSon(criminal)
         nodesToCheck = self.getAboutToChangeNodes(criminal, 'left')
@@ -923,23 +923,23 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "b", "f", "d", "e", "c", "k", "g", "h", "i", "j",None, None, None, None])))
 
-        # Test case 3: right rotation when some node is the criminal (BF of criminal.left == 0)
-        test2Tree = createTreeFromList(["a", "b", "c", "d", None, "e", "f", "g", "h", None, None, "i", "j", "k", "l"])
-        logger.debug(f"Test case 3 - node 'b' is BF criminal\n{printTreeString(test2Tree)}")
-        criminal = test2Tree.getRoot().getLeft()
+        # Test case 3: left rotation when some node is the criminal (BF of criminal.right == 0)
+        test3Tree = createTreeFromList(["a", "b", "c", "d", "e", None , "f" , "g", "h", "i", "j",None, None, "k", "l"])
+        logger.debug(f"Test case 3 - node 'b' is BF criminal\n{printTreeString(test3Tree)}")
+        criminal = test3Tree.getRoot().getRight()
         parentSon = self.determineParentSon(criminal)
-        nodesToCheck = self.getAboutToChangeNodes(criminal, 'right')
+        nodesToCheck = self.getAboutToChangeNodes(criminal, 'left')
 
-        test2Tree.rightRotation(criminal)
+        test3Tree.leftRotation(criminal)
 
         # Visual check
-        logger.debug(f"Test case 3 - {afterLeftRotationMsg}:\n{printTreeString(test2Tree)}")
+        logger.debug(f"Test case 3 - {afterLeftRotationMsg}:\n{printTreeString(test3Tree)}")
         # Pointers check
-        self.rightRotationPointersCheck(parentSon, nodesToCheck)
+        self.leftRotationPointersCheck(parentSon, nodesToCheck)
         # Fields check
-        self.rightRotationFieldsCheck(nodesToCheck)
+        self.leftRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, "h", None, "i", "j", "k", "l"])))
+        self.assertTrue(treesEqual(test3Tree, createTreeFromList(["a", "b", "f", "d", "e", "c", "l", "g", "h", "i", "j", None, "k", None, None])))
 
     def leftRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSon"].getSize())
@@ -971,8 +971,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSon"].getLeft())
 
 
-
-    #End of evia section
     @staticmethod
     def getAboutToChangeNodes(criminal, rotation):
         if rotation == 'right':
