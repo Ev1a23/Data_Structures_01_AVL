@@ -915,6 +915,50 @@ class AVLTreeList(object):
 		BFcriminalLeftSon.recomputeSize() # A.size <- B.size
 		BFcriminalLeftSon.recomputeHeight()
 
+	"""performs a left rotation inplace
+
+	@pre: called from reBalance function (due to a tree operation)
+
+	@type BFcriminal: AVLNode
+	@pre: BFcriminal has a right son (performed on nodes that their BF is at least 1)
+	@param BFcriminal: node that violates the balance rules of an AVL tree
+	@post BFcriminal: node won't violate the balance rules of an AVL tree anymore
+
+	@rtype: None
+	"""
+	def leftRotation(self, BFcriminal):
+		BFcriminalRightSon = BFcriminal.getRight()
+
+		#B.right <- A.left
+		BFcriminal.setRight(BFcriminalRightSon.getLeft())
+
+		#B.right.parent <- B
+		BFcriminal.getRight().setParent(BFcriminal)
+
+		#A.left <- B
+		BFcriminalRightSon.setLeft(BFcriminal)
+
+		#A.parent <- B.parent
+		BFcriminalRightSon.setParent(BFcriminal.getParent())
+
+		#A.parent.left/right <- A
+		if BFcriminal.getParent() is None:
+			self.root = BFcriminalRightSon
+		elif BFcriminal.getParent().getRight() == BFcriminal:
+			BFcriminal.getParent().setRight(BFcriminalRightSon)
+		elif BFcriminal.getParent().getLeft() == BFcriminal:
+			BFcriminal.getParent().setLeft(BFcriminalRightSon)
+
+		#B.parent <-A
+		BFcriminal.setParent(BFcriminalRightSon)
+
+		#Recomputes size & height
+		BFcriminal.recomputeSize()
+		BFcriminal.recomputeHeight()
+		BFcriminalRightSon.recomputeSize() #A.size <- B.size
+		BFcriminalRightSon.recomputeHeight()
+
+
 	"""performs a left then right rotation inplace
 	
 	@pre: called from reBalance function (due to a tree operation)
@@ -930,6 +974,22 @@ class AVLTreeList(object):
 	def leftThenRightRotation(self, BFcriminal):
 		self.leftRotation(BFcriminal.getLeft())
 		self.rightRotation(BFcriminal)
+
+	"""performs a right then left rotation inplace
+
+	@pre: called from reBalance function (due to a tree operation)
+
+	@type BFcriminal: AVLNode
+	@pre: BFcriminal's BF is -2 (i.e. it has a real right son) and right son BF is +1 (i.e. it has a real left son)
+	@param BFcriminal: node that violates the balance rules of an AVL tree
+	@post BFcriminal: node won't violate the balance rules of an AVL tree anymore
+	
+	@rtype: None
+	"""
+
+	def rightThenLeftRotation(self, BFcriminal):
+		self.rightRotation(BFcriminal.getRight())
+		self.leftRotation(BFcriminal)
 
 	"""returns the root of the tree representing the list
 
