@@ -1333,6 +1333,80 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case9tree1ltr + case9tree2ltr, case9tree1.listToArray())
 
+    def test_insert(self):
+        #case 1: tree is empty
+        case1tree = createTreeFromList([])
+        logger.debug("insertDebug - case 1:")
+        logger.debug("tree before insert:\n" + printTreeString(case1tree))
+        case1BalanceOps = case1tree.insert(0,"A")
+        logger.debug("tree after insertion:\n" + printTreeString(case1tree))
+        logger.debug(f"case1 balanceOps: {case1BalanceOps}")  # should be 1
+        self.assertEqual(1, case1BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case1tree, createTreeFromList(["A"])))
+
+        #case 2: balanced tree, insert First
+        case2tree = createTreeFromList(["c", "b", "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case2tree))
+        case2BalanceOps = case2tree.insert(0, "a")
+        logger.debug("tree after insertion:\n" + printTreeString(case2tree))
+        logger.debug(f"case2 balanceOps: {case2BalanceOps}")  # should be 2
+        self.assertEqual(2, case2BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case2tree, createTreeFromList(["c", "b", "d", "a", None, None, None])))
+
+        #case 3: balanced tree, insert Last
+        case3tree = createTreeFromList(["c", "b", "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case3tree))
+        case3BalanceOps = case3tree.insert(3, "e")
+        logger.debug("tree after insertion:\n" + printTreeString(case3tree))
+        logger.debug(f"case3 balanceOps: {case3BalanceOps}")  # should be 2
+        self.assertEqual(2, case3BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case3tree, createTreeFromList(["c", "b", "d", None, None, None,"e"])))
+
+        #case 4: tree has only root, insert as leftson
+        case4tree = createTreeFromList(["b"])
+        logger.debug("tree before insert:\n"+ printTreeString(case4tree))
+        case4BalanceOps = case4tree.insert(0,"a")
+        logger.debug("tree after insertion:\n" + printTreeString(case4tree))
+        logger.debug(f"case4 balanceOps: {case4BalanceOps}")  # should be 1
+        self.assertEqual(1, case4BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case4tree, createTreeFromList(["b", "a", None])))
+
+        # case 5: tree has only root, insert as rightson
+        case5tree = createTreeFromList(["a"])
+        logger.debug("tree before insert:\n" + printTreeString(case5tree))
+        case5BalanceOps = case5tree.insert(1, "b")
+        logger.debug("tree after insertion:\n" + printTreeString(case5tree))
+        logger.debug(f"case5 balanceOps: {case5BalanceOps}")  # should be 1
+        self.assertEqual(1, case5BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case5tree, createTreeFromList(["a", None, "b"])))
+
+        #case 6: insertion that causes right rotation
+        case6tree = createTreeFromList(["b", "a", "c", None, None, None, "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case6tree))
+        case6BalanceOps = case6tree.insert(4, "e")
+        logger.debug("tree after insertion:\n" + printTreeString(case6tree))
+        logger.debug(f"case6 balanceOps: {case6BalanceOps}")  # should be 2
+        self.assertEqual(2, case6BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case6tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
+
+        #case 7: insertion that causes right then left rotation
+        case7tree = createTreeFromList(["b", "a", "c", None, None, None, "e"])
+        logger.debug("tree before insert:\n" + printTreeString(case7tree))
+        case7BalanceOps = case7tree.insert(3, "d")
+        logger.debug("tree after insertion:\n" + printTreeString(case7tree))
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 2
+        self.assertEqual(4, case7BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case7tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
+
+
+
     def test_delete(self):
         # Case 1: tree has only a root - delete root
         case1tree = createTreeFromList(["a"])
