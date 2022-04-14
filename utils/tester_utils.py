@@ -156,6 +156,20 @@ def createAVLTreeFromList_rec(lst, i, power):
         return node
 
 
+
+"""
+Create a tree from a list using insert operations, from the first to the last item
+Only from testing
+"""
+
+def createTreeFromListInsert(lst):
+    tree = AVLTreeList()
+    for x in lst:
+        tree.insert(x)
+    return tree
+
+
+
 """ comparing 2 nodes by:
 height
 size
