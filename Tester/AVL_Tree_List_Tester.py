@@ -803,7 +803,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(nodesToCheck["criminalRightSon"].getSize() + nodesToCheck["criminalLeftSonRightSon"].getSize() + 1, nodesToCheck["criminal"].getSize())
         self.assertTrue(abs(nodesToCheck["criminalLeftSon"].getBalanceFactor()) < 2)
 
-
+    def leftRotationFieldsCheck(self, nodesToCheck):
+        self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSon"].getSize())
+        self.assertEqual(-2, nodesToCheck["criminalOrigBF"])
+        self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1, nodesToCheck["criminal"].getHeight())
+        self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(), nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1, nodesToCheck["criminalRightSon"].getHeight())
+        self.assertEqual(nodesToCheck["criminalLeftSon"].getSize() + nodesToCheck["criminalRightSonLeftSon"].getSize() + 1, nodesToCheck["criminal"].getSize())
+        self.assertTrue(abs(nodesToCheck["criminalRightSon"].getBalanceFactor()) < 2)
 
     def leftThenRightRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalLeftSonRightSon"].getSize())
@@ -837,6 +843,38 @@ class Test_AVL_Tree_list(unittest.TestCase):
             self.assertEqual(nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft().getSize() + nodesToCheck[
                 "criminalLeftSonRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSonLeftSon"].getSize())
 
+    def rightThenLeftRotationFieldsCheck(self, nodesToCheck):
+        self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSonLeftSon"].getSize())
+        self.assertEqual(-2, nodesToCheck["criminalOrigBF"])
+        self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(),
+                             nodesToCheck["criminal"].getRight().getHeight()) + 1,
+                         nodesToCheck["criminal"].getHeight())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"].getLeft().getSize() + nodesToCheck["criminalRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSon"].getSize())
+        self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(),
+                             nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1,
+                         nodesToCheck["criminalRightSon"].getHeight())
+        self.assertEqual(nodesToCheck["criminalRightSon"].getLeft().getSize() + nodesToCheck[
+            "criminalRightSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSon"].getSize())
+        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight():
+            self.assertEqual(max(nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft().getHeight(),
+                                 nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight().getHeight()) + 1,
+                             nodesToCheck["criminalRightSonLeftSonLeftSon"].getHeight())
+        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight():
+            self.assertEqual(nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft().getSize() + nodesToCheck[
+                "criminalRightSonLeftSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSonLeftSon"].getSize())
+        self.assertEqual(max(nodesToCheck["criminalRightSonLeftSon"].getLeft().getHeight(),
+                             nodesToCheck["criminalRightSonLeftSon"].getRight().getHeight()) + 1,
+                         nodesToCheck["criminalRightSonLeftSon"].getHeight())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"].getLeft().getSize() + nodesToCheck[
+            "criminalRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSon"].getSize())
+        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonRightSon"].getRight():
+            self.assertEqual(max(nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft().getHeight(),
+                                 nodesToCheck["criminalRightSonLeftSonRightSon"].getRight().getHeight()) + 1,
+                             nodesToCheck["criminalRightSonLeftSonRightSon"].getHeight())
+        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonRightSon"].getRight():
+            self.assertEqual(nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft().getSize() + nodesToCheck[
+                "criminalRightSonLeftSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSonRightSon"].getSize())
+
     def rightRotationPointersCheck(self, parentSon, nodesToCheck):
         self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSonRightSon"].getParent())
         self.assertEqual(nodesToCheck["criminalLeftSonRightSon"], nodesToCheck["criminal"].getLeft())
@@ -857,6 +895,27 @@ class Test_AVL_Tree_list(unittest.TestCase):
 
         self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminal"].getParent())
         self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSon"].getRight())
+
+    def leftRotationPointersCheck(self, parentSon, nodesToCheck):
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSonLeftSon"].getParent())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminal"].getRight())
+
+        self.assertEqual(nodesToCheck["criminalParent"], nodesToCheck["criminalRightSon"].getParent())
+        if parentSon == 'left':
+            self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck['criminalParent'].getLeft())
+        elif parentSon == 'right':
+            self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck['criminalParent'].getRight())
+        else:
+            self.assertEqual(None, nodesToCheck["criminalRightSon"].getParent())
+
+        self.assertEqual(nodesToCheck["criminalRightSonRightSon"], nodesToCheck["criminalRightSon"].getRight())
+        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminalRightSonRightSon"].getParent())
+
+        self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminal"].getLeft())
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSon"].getParent())
+
+        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminal"].getParent())
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSon"].getLeft())
 
     def leftThenRightRotationPointersCheck(self, parentSon, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalLeftSonRightSon"], nodesToCheck["criminal"].getParent())
@@ -885,6 +944,33 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminalLeftSonRightSon"].getLeft())
         self.assertEqual(nodesToCheck["criminalLeftSonRightSon"], nodesToCheck["criminalLeftSon"].getParent())
 
+    def rightThenLeftRotationPointersCheck(self, parentSon, nodesToCheck):
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminal"].getParent())
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSonLeftSon"].getLeft())
+
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSonLeftSon"], nodesToCheck["criminal"].getRight())
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSonLeftSonLeftSon"].getParent())
+
+        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSon"].getParent())
+        self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminal"].getLeft())
+
+        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminalRightSonRightSon"].getParent())
+        self.assertEqual(nodesToCheck["criminalRightSonRightSon"], nodesToCheck["criminalRightSon"].getRight())
+
+        self.assertEqual(nodesToCheck["criminalParent"], nodesToCheck["criminalRightSonLeftSon"].getParent())
+        if parentSon == 'left':
+            self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminalParent"].getLeft())
+        elif parentSon == 'right':
+            self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminalParent"].getRight())
+        else:
+            self.assertEqual(None, nodesToCheck["criminalRightSonLeftSon"].getParent())
+
+        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminalRightSonLeftSonRightSon"].getParent())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSonRightSon"], nodesToCheck["criminalRightSon"].getLeft())
+
+        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminalRightSonLeftSon"].getRight())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminalRightSon"].getParent())
+
     def test_leftRotation(self):
         afterLeftRotationMsg = "after left rotation"
 
@@ -904,7 +990,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.leftRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        expectedTree = createTreeFromList(["b", "a", "c", None, None, None, None])
+        expectedTree = createTreeFromList(["b", "a", "c"])
         self.assertTrue(treesEqual(rootCriminalTree, expectedTree))
 
         # Test case 2: left rotation when some node is the criminal (BF of criminal.right == -1)
@@ -942,36 +1028,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.leftRotationFieldsCheck(nodesToCheck)
         # Undependent check
         self.assertTrue(treesEqual(test3Tree, createTreeFromList(["a", "b", "f", "d", "e", "c", "l", "g", "h", "i", "j", None, "k", None, None])))
-
-    def leftRotationFieldsCheck(self, nodesToCheck):
-        self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSon"].getSize())
-        self.assertEqual(-2, nodesToCheck["criminalOrigBF"])
-        self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1, nodesToCheck["criminal"].getHeight())
-        self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(), nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1, nodesToCheck["criminalRightSon"].getHeight())
-        self.assertEqual(nodesToCheck["criminalLeftSon"].getSize() + nodesToCheck["criminalRightSonLeftSon"].getSize() + 1, nodesToCheck["criminal"].getSize())
-        self.assertTrue(abs(nodesToCheck["criminalRightSon"].getBalanceFactor()) < 2)
-
-    def leftRotationPointersCheck(self, parentSon, nodesToCheck):
-        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSonLeftSon"].getParent())
-        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"], nodesToCheck["criminal"].getRight())
-
-        self.assertEqual(nodesToCheck["criminalParent"], nodesToCheck["criminalRightSon"].getParent())
-        if parentSon == 'left':
-            self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck['criminalParent'].getLeft())
-        elif parentSon == 'right':
-            self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck['criminalParent'].getRight())
-        else:
-            self.assertEqual(None, nodesToCheck["criminalRightSon"].getParent())
-
-        self.assertEqual(nodesToCheck["criminalRightSonRightSon"], nodesToCheck["criminalRightSon"].getRight())
-        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminalRightSonRightSon"].getParent())
-
-        self.assertEqual(nodesToCheck["criminalLeftSon"], nodesToCheck["criminal"].getLeft())
-        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSon"].getParent())
-
-        self.assertEqual(nodesToCheck["criminalRightSon"], nodesToCheck["criminal"].getParent())
-        self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalRightSon"].getLeft())
-
 
     @staticmethod
     def getAboutToChangeNodes(criminal, rotation):
@@ -1072,6 +1128,45 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.leftThenRightRotationFieldsCheck(nodesToCheck)
         # Undependent check
         self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "g", "c", "d", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
+
+    def test_rightThenLeftRotation(self):
+        afterRightThenLeftRotationMsg = "after right then left rotation"
+
+        # Test case 1: left then right rotation when the root is the criminal
+        rootCriminalTree = createTreeFromList(["a", None, "c", None, None, "b", None])
+        logger.debug(f"Test case 1 - root 'a' is BF criminal\n{printTreeString(rootCriminalTree)}")
+        criminal = rootCriminalTree.getRoot()
+        parentSon = self.determineParentSon(criminal)
+        rightThenLeftRotationNodesToCheck = self.getAboutToChangeNodes(criminal, 'rightThenLeft')
+
+        rootCriminalTree.rightThenLeftRotation(criminal)
+
+        # Final Visual Check
+        logger.debug(f"Test case 1 - {afterRightThenLeftRotationMsg}:\n{printTreeString(rootCriminalTree)}")
+        # Final Pointers Check
+        self.rightThenLeftRotationPointersCheck(parentSon, rightThenLeftRotationNodesToCheck)
+        # Final Fields Check
+        self.rightThenLeftRotationFieldsCheck(rightThenLeftRotationNodesToCheck)
+        # Undependent check
+        self.assertTrue(treesEqual(rootCriminalTree, createTreeFromList(["b","a","c"])))
+
+        # Test case 2: left then right rotation when some node is the criminal
+        test2Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g","i","j", "k", None, None, "l",None])
+        logger.debug(f"Test case 2 - node 'c' is BF criminal\n{printTreeString(test2Tree)}")
+        criminal = test2Tree.getRoot().getRight()
+        parentSon = self.determineParentSon(criminal)
+        nodesToCheck = self.getAboutToChangeNodes(criminal, 'rightThenLeft')
+
+        test2Tree.rightThenLeftRotation(criminal)
+
+        # Visual check
+        logger.debug(f"Test case 2 - {afterRightThenLeftRotationMsg}:\n{printTreeString(test2Tree)}")
+        # Pointers check
+        self.rightThenLeftRotationPointersCheck(parentSon, nodesToCheck)
+        # Fields check
+        self.rightThenLeftRotationFieldsCheck(nodesToCheck)
+        # Undependent check
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "b", "l", "d", "e", "c", "f", "g", "i", "j", "k" ,None, None, None, None])))
 
     @unittest.skip("Waiting for insert & join implementation")
     def test_concat(self):
