@@ -279,9 +279,48 @@ class AVLTreeList(object):
 	@rtype: list
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
-	def insert(self, i, val):
-		return -1
 
+	def insert(self, i, val):
+		inserted = AVLNode(val)
+		virtualL = AVLNode()
+		virtualR = AVLNode()
+		inserted.setLeft(virtualL)
+		inserted.setRight(virtualR)
+		virtualL.setParent(inserted)
+		virtualR.setParent(inserted)
+		if(self.Empty()):
+			self.setRoot(inserted)
+			self.set_First(inserted)
+			self.set_Last(inserted)
+			inserted.recomputeHeight()
+			inserted.recomputeSize()
+			return 1
+
+		if i == 0:
+			node = self.get_First()
+			node.setLeft(inserted)
+			inserted.setParent(node)
+			self.set_First(inserted)
+			return self.reBalance(node, 'insert')
+
+		elif i == self.length():
+			node = self.get_Last()
+			node.setRight(inserted)
+			inserted.setParent(node)
+			self.set_Last(inserted)
+			return self.reBalance(node, 'insert')
+
+		node = self.retrieveNode(i)
+		if node.getLeft().isRealNode():
+			node = self.predecessor(node)
+			node.setRight(inserted)
+			inserted.setParent(node)
+			return self.reBalance(node, 'insert')
+
+		else:
+			node.setLeft(inserted)
+			inserted.setParent(node)
+			return self.reBalance(node, 'insert')
 
 	"""deletes the i'th item in the list
 
