@@ -1333,7 +1333,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case9tree1ltr + case9tree2ltr, case9tree1.listToArray())
 
-    @unittest.skip("Waiting for leftRotation and righThenLeftRotation")
     def test_delete(self):
         # Case 1: tree has only a root - delete root
         case1tree = createTreeFromList(["a"])
@@ -1341,7 +1340,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("tree before delete:\n" + printTreeString(case1tree))
         case1BalanceOps = case1tree.delete(0)
         logger.debug("tree after delete:\n" + printTreeString(case1tree))
-        logger.debug("case1 balanceOps:", case1BalanceOps)  # should be 0
+        logger.debug(f"case1 balanceOps: {case1BalanceOps}")  # should be 0
         self.assertEqual(0, case1BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case1tree, createTreeFromList([])))
@@ -1352,7 +1351,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("tree before delete:\n" + printTreeString(case2tree))
         case2BalanceOps = case2tree.delete(2)
         logger.debug("tree after delete:\n" + printTreeString(case2tree))
-        logger.debug("case2 balanceOps:", case2BalanceOps)  # should be 0
+        logger.debug(f"case2 balanceOps: {case2BalanceOps}")  # should be 0
         self.assertEqual(0, case2BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case2tree, createTreeFromList(["a", "b", "c", "d", None, "f", "g"])))
@@ -1364,7 +1363,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("minimum before delete:\n" + case3tree.get_First().getValue())  # should be d
         case3BalanceOps = case3tree.delete(0)
         logger.debug("tree after delete:\n" + printTreeString(case3tree))
-        logger.debug("case3 balanceOps:", case3BalanceOps)  # should be 0
+        logger.debug(f"case3 balanceOps: {case3BalanceOps}")  # should be 0
         logger.debug("minimum after delete:\n" + case3tree.get_First().getValue())  # should be b
         self.assertEqual(0, case3BalanceOps)
         # Undependent check
@@ -1377,7 +1376,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("maximum before delete:\n" + case4tree.get_Last().getValue())  # should be g
         case4BalanceOps = case4tree.delete(6)
         logger.debug("tree after delete:\n" + printTreeString(case4tree))
-        logger.debug("case4 balanceOps:", case4BalanceOps)  # should be 0
+        logger.debug(f"case4 balanceOps: {case4BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case4tree.get_Last().getValue())  # should be c
         self.assertEqual(0, case4BalanceOps)
         # Undependent check
@@ -1390,7 +1389,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("maximum before delete:\n" + case5tree.get_Last().getValue())  # should be c
         case5BalanceOps = case5tree.delete(5)
         logger.debug("tree after delete:\n" + printTreeString(case5tree))
-        logger.debug("case5 balanceOps:", case5BalanceOps)  # should be 0
+        logger.debug(f"case5 balanceOps: {case5BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case5tree.get_Last().getValue())  # should be f
         self.assertEqual(0, case5BalanceOps)
         # Undependent check
@@ -1403,7 +1402,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("maximum before delete:\n" + case6tree.get_Last().getValue())  # should be a
         case6BalanceOps = case6tree.delete(1)
         logger.debug("tree after delete:\n" + printTreeString(case6tree))
-        logger.debug("case6 balanceOps:", case6BalanceOps)  # should be 0
+        logger.debug(f"case6 balanceOps: {case6BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case6tree.get_Last().getValue())  # should be b
         self.assertEqual(0, case6BalanceOps)
         # Undependent check
@@ -1416,7 +1415,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("maximum before delete:\n" + case7tree.get_Last().getValue())  # should be f
         case7BalanceOps = case7tree.delete(4)
         logger.debug("tree after delete:\n" + printTreeString(case7tree))
-        logger.debug("case7 balanceOps:", case7BalanceOps)  # should be 0
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case7tree.get_Last().getValue())  # should be f
         self.assertEqual(0, case7BalanceOps)
         # Undependent check
@@ -1430,7 +1429,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("minimum before delete:\n" + case8tree.get_First().getValue())  # should be a
         case8BalanceOps = case8tree.delete(0)
         logger.debug("tree after delete:\n" + printTreeString(case8tree))
-        logger.debug("case8 balanceOps:", case8BalanceOps)  # should be 0
+        logger.debug(f"case8 balanceOps: {case8BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case8tree.get_Last().getValue())  # should be b
         logger.debug("minimum after delete:\n" + case8tree.get_First().getValue())  # should be b
         self.assertEqual(0, case8BalanceOps)
@@ -1445,7 +1444,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("minimum before delete:\n" + case9tree.get_First().getValue())  # should be b
         case9BalanceOps = case9tree.delete(0)
         logger.debug("tree after delete:\n" + printTreeString(case9tree))
-        logger.debug("case9 balanceOps:", case9BalanceOps)  # should be 0
+        logger.debug(f"case9 balanceOps: {case9BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case9tree.get_Last().getValue())  # should be g
         logger.debug("minimum after delete:\n" + case9tree.get_First().getValue())  # should be e
         self.assertEqual(0, case9BalanceOps)
@@ -1462,7 +1461,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case10BalanceOps = case10tree.delete(1)
         logger.debug(case10tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(case10tree))
-        logger.debug("case10 balanceOps:", case10BalanceOps)  # should be 0
+        logger.debug(f"case10 balanceOps: {case10BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case10tree.get_Last().getValue())  # should be g
         logger.debug("minimum after delete:\n" + case10tree.get_First().getValue())  # should be d
         self.assertEqual(0, case10BalanceOps)
@@ -1479,7 +1478,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case11BalanceOps = case11tree.delete(1)
         logger.debug(case11tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(case11tree))
-        logger.debug("case11 balanceOps:", case11BalanceOps)  # should be 0
+        logger.debug(f"case11 balanceOps: {case11BalanceOps}")  # should be 0
         logger.debug("maximum after delete:\n" + case11tree.get_Last().getValue())  # should be c
         logger.debug("minimum after delete:\n" + case11tree.get_First().getValue())  # should be b
         self.assertEqual(0, case11BalanceOps)
@@ -1496,7 +1495,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case12BalanceOps = case12tree.delete(1)
         logger.debug(case12tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(case12tree))
-        logger.debug("case12 balanceOps:", case12BalanceOps)  # should be 1
+        logger.debug(f"case12 balanceOps: {case12BalanceOps}")  # should be 1
         logger.debug("maximum after delete:\n" + case12tree.get_Last().getValue())  # should be d
         logger.debug("minimum after delete:\n" + case12tree.get_First().getValue())  # should be b
         self.assertEqual(1, case12BalanceOps)
@@ -1523,7 +1522,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case14BalanceOps = cases14to19tree.delete(7)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case14 balanceOps:", case14BalanceOps)  # should be 4
+        logger.debug(f"case14 balanceOps: {case14BalanceOps}")  # should be 4
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         self.assertEqual(4, case14BalanceOps)
@@ -1554,7 +1553,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case15BalanceOps = cases14to19tree.delete(19)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case15 balanceOps:", case15BalanceOps)  # should be 4
+        logger.debug(f"case15 balanceOps: {case15BalanceOps}")  # should be 4
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 24
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         self.assertEqual(4, case15BalanceOps)
@@ -1582,10 +1581,10 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("maximum before delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum before delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         logger.debug(cases14to19tree.listToArray())
-        case16BalanceOps = cases14to19tree.delete(11)
+        case16BalanceOps = cases14to19tree.delete(12)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case16 balanceOps:", case16BalanceOps)  # should be 5
+        logger.debug(f"case16 balanceOps: {case16BalanceOps}")  # should be 5
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         self.assertEqual(5, case16BalanceOps)
@@ -1616,7 +1615,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case17BalanceOps = cases14to19tree.delete(18)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case17 balanceOps:", case17BalanceOps)  # should be 3
+        logger.debug(f"case17 balanceOps: {case17BalanceOps}")  # should be 3
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         self.assertEqual(3, case17BalanceOps)
@@ -1647,7 +1646,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case18BalanceOps = cases14to19tree.delete(14)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case18 balanceOps:", case18BalanceOps)  # should be 4
+        logger.debug(f"case18 balanceOps: {case18BalanceOps}")  # should be 4
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 2
         self.assertEqual(4, case18BalanceOps)
@@ -1678,10 +1677,10 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case19BalanceOps = cases14to19tree.delete(0)
         logger.debug(cases14to19tree.listToArray())
         logger.debug("tree after delete:\n" + printTreeString(cases14to19tree))
-        logger.debug("case18 balanceOps:", case19BalanceOps)  # should be 3
+        logger.debug(f"case19 balanceOps: {case19BalanceOps}")  # should be 3
         logger.debug("maximum after delete:\n" + cases14to19tree.get_Last().getValue())  # should be 25
         logger.debug("minimum after delete:\n" + cases14to19tree.get_First().getValue())  # should be 3
-        self.assertEqual(19, case19BalanceOps)
+        self.assertEqual(3, case19BalanceOps)
         self.assertTrue(treesEqual(cases14to19tree, createTreeFromList([
             "16",
             "11", "22",
