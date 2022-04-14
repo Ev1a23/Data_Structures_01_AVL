@@ -944,8 +944,10 @@ class AVLTreeList(object):
 		#A.parent.left/right <- A
 		if BFcriminal.getParent() is None:
 			self.root = BFcriminalRightSon
+
 		elif BFcriminal.getParent().getRight() == BFcriminal:
 			BFcriminal.getParent().setRight(BFcriminalRightSon)
+
 		elif BFcriminal.getParent().getLeft() == BFcriminal:
 			BFcriminal.getParent().setLeft(BFcriminalRightSon)
 
