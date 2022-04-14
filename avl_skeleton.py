@@ -385,6 +385,8 @@ class AVLTreeList(object):
 		@Time complexity:
 		O(1) - getters & setters
 		reBalance - O(logn) [see reBalance]
+		predecessor - O(logn)
+		successor - O(logn)
 		total: O(logn)
 		"""
 	def deleteLeaf(self, nodeToDelete, case):
@@ -395,10 +397,11 @@ class AVLTreeList(object):
 				self.set_Last(None)
 				self.set_First(None)
 				return 0
-			if nodeToDelete is self.get_First():
-				self.set_First(nodeToDeleteParent)
-			if nodeToDelete is self.get_Last():
-				self.set_Last(nodeToDeleteParent)
+
+		if nodeToDelete is self.get_First():
+			self.set_First(self.successor(nodeToDelete))
+		if nodeToDelete is self.get_Last():
+			self.set_Last(self.predecessor(nodeToDelete))
 
 		nodeToDelete.setParent(None)
 		if nodeToDeleteParent.getLeft() is nodeToDelete:
