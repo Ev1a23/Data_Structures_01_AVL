@@ -282,14 +282,17 @@ class AVLTreeList(object):
 
 	def insert(self, i, val):
 		inserted = AVLNode(val)
-		virtualL = AVLNode()
-		virtualR = AVLNode()
+		inserted.setHeight(0)
+		inserted.setSize(1)
+		virtualL = AVLNode("")
+		virtualR = AVLNode("")
 		inserted.setLeft(virtualL)
 		inserted.setRight(virtualR)
 		virtualL.setParent(inserted)
 		virtualR.setParent(inserted)
-		if(self.Empty()):
-			self.setRoot(inserted)
+
+		if(self.empty()):
+			self.root = inserted
 			self.set_First(inserted)
 			self.set_Last(inserted)
 			inserted.recomputeHeight()
