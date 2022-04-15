@@ -1433,7 +1433,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("tree before insert:\n" + printTreeString(case7tree))
         case7BalanceOps = case7tree.insert(3, "d")
         logger.debug("tree after insertion:\n" + printTreeString(case7tree))
-        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 4
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3
         self.assertEqual(4, case7BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case7tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
@@ -1560,6 +1560,43 @@ class Test_AVL_Tree_list(unittest.TestCase):
         tree = createTreeFromListInsert(["1","2","4","5","6","7","8","10", "11", "12", "15", "18", "20", "22", "24"])
         logger.debug("Actual: \n"+ printTreeString(tree))
         self.assertTrue(treesEqual(expected,tree))
+
+
+    def test_join(self):
+        #case1 2 trees with equal height
+        T1 = createTreeFromList(["1"])
+        T2 = createTreeFromList(["3"])
+        node_x = AVLNode("2")
+        node_x.setHeight(0)
+        node_x.setSize(1)
+        T = AVLTreeList.join(T1, node_x, T2)[0]
+        num = AVLTreeList.join(T1, node_x, T2)[1]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3"])))
+        self.assertEqual(num, 1)
+
+        #case2,  left subtree height is bigger than the right one
+        T3 = createTreeFromList(["2", "1", "3"])
+        T4 = createTreeFromList(["8", "6", "10", "5", "7", "9", "11"])
+        logger.debug("T1: \n"+printTreeString(T3))
+        logger.debug("T2: \n" + printTreeString(T4))
+        node_x = AVLNode("4")
+        node_x.setHeight(0)
+        node_x.setSize(1)
+        T = AVLTreeList.join(T3, node_x,T4)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["8", "4", "10", "2", "6", "9", "11", "1", "3", "5", "7", None, None, None, None])))
+
+        #case3, right subtree height is bigger than the left one
+        T5 = createTreeFromListInsert(["1", "2", "3", "4", "5", "6", "7", "8","9","10","11","12","13","14","15"])
+        T6 = createTreeFromListInsert(["17","18","19"])
+        logger.debug("T5: \n"+printTreeString(T5))
+        logger.debug("T6: \n"+printTreeString(T6))
+        node_x = AVLNode("16")
+        node_x.setHeight(0)
+        node_x.setSize(1)
+        T = AVLTreeList.join(T5, node_x, T6)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
 
     def test_delete(self):
         # Case 1: tree has only a root - delete root
