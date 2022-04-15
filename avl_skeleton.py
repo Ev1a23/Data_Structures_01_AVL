@@ -841,7 +841,7 @@ class AVLTreeList(object):
 	find left subtree with height h or height h-1
 	@pre - h>=0
 	@rtype: AVLNode
-	Time complexity: O(logn)
+	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
 	def find_left_subtree_heightH(self, h):
 		if self.getRoot().getHeight() == h:
@@ -859,7 +859,7 @@ class AVLTreeList(object):
 	find right subtree with height h or height h-1
 	@pre - h>=0
 	@rtype: AVLNode
-	Time complexity: O(logn)
+	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
 	def find_right_subtree_heightH(self, h):
 		if self.getRoot().getHeight() == h:
