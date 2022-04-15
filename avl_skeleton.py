@@ -880,7 +880,7 @@ class AVLTreeList(object):
 	@pre: x.isRealNode() == True
 	@pre: T1.empty() == False
 	@pre: T2.empty() == False
-	Time complexity: O(logn)
+	Time complexity: O(abs(height(T2)-Height(T1)+1)
 	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
 	"""
 	@staticmethod
