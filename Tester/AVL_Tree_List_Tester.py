@@ -1599,7 +1599,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("Joined tree: \n"+printTreeString(T))
         expected = createTreeFromList(
             ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
-        logger.debug(expected.search("14"))
         expected.insert(12,"13")
         expected.insert(14,"15")
         expected.insert(16, "17")
