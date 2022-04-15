@@ -1597,6 +1597,14 @@ class Test_AVL_Tree_list(unittest.TestCase):
         node_x.setSize(1)
         T = AVLTreeList.join(T5, node_x, T6)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
+        expected = createTreeFromList(
+            ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
+        logger.debug(expected.search("14"))
+        expected.insert(12,"13")
+        expected.insert(14,"15")
+        expected.insert(16, "17")
+        expected.insert(18, "19")
+        self.assertTrue(treesEqual(T, expected))
 
     def test_delete(self):
         # Case 1: tree has only a root - delete root
