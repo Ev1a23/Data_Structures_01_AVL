@@ -2,7 +2,7 @@ import sys
 import unittest
 from avl_skeleton import AVLNode
 from avl_skeleton import AVLTreeList
-from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields
+from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields, createTreeFromListInsert
 from utils.print_tree import printTreeString
 import logging
 
@@ -1549,6 +1549,17 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(True, tree1.getRoot().getHeight() == 3)
         self.assertEqual(True, tree1.getRoot().right.getHeight() == 2)
 
+
+    def test_createTreeFromListInsert(self):
+        expected = createTreeFromList([
+            "10",
+            "5", "18",
+            "2", "7", "12", "22",
+            "1", "4", "6", "8", "11", "15", "20", "24"
+        ])
+        tree = createTreeFromListInsert(["1","2","4","5","6","7","8","10", "11", "12", "15", "18", "20", "22", "24"])
+        logger.debug("Actual: \n"+ printTreeString(tree))
+        self.assertTrue(treesEqual(expected,tree))
 
     def test_delete(self):
         # Case 1: tree has only a root - delete root
