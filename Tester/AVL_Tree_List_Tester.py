@@ -1372,7 +1372,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case1BalanceOps = case1tree.insert(0, "A")
         logger.debug("tree after insertion:\n" + printTreeString(case1tree))
         logger.debug(f"case1 balanceOps: {case1BalanceOps}")  # should be 1
-        self.assertEqual(1, case1BalanceOps)
+        self.assertEqual(0, case1BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case1tree, createTreeFromList(["A"])))
         self.assertTrue(case1tree.getRoot(),case1tree.get_First())
@@ -1532,7 +1532,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(True, root1.getHeight() == root2.getHeight() and root3.getHeight() == root4.getHeight())
         self.assertEqual(True, root1.getHeight() == root3.getHeight() and root2.getHeight() == root4.getHeight())
         tree1 = AVLTreeList()
-        self.assertEqual(True, tree1.insert(0, None) == 1) # was 0, why?
+        self.assertEqual(True, tree1.insert(0, None) == 0)
         self.assertEqual(True, tree1.insert(1, None) == 1)
         self.assertEqual(True, tree1.insert(0, None) == 0)
         self.assertEqual(True, tree1.insert(0, None) == 2)

@@ -297,7 +297,7 @@ class AVLTreeList(object):
 			self.set_Last(inserted)
 			inserted.recomputeHeight()
 			inserted.recomputeSize()
-			return 1
+			return 0
 
 		if i == 0:
 			node = self.get_First()
