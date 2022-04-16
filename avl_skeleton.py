@@ -878,17 +878,30 @@ class AVLTreeList(object):
 	Join 2 trees T1,T2 with a connector node x
 	@pre: T1<x<T2
 	@pre: x.isRealNode() == True
-	@pre: T1.empty() == False
-	@pre: T2.empty() == False
 	Time complexity: O(abs(height(T2)-Height(T1)+1)
 	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
 	"""
 	@staticmethod
 	def join(T1, x, T2):
-		t1h = T1.getRoot().getHeight()
-		t2h = T2.getRoot().getHeight()
 		new_tree = AVLTreeList()
 		new_tree.root = x
+		new_tree.set_First(x)
+		new_tree.set_Last(x)
+		x.recomputeHeight()
+		x.recomputeSize()
+		#if one of the trees is an empty tree
+		if T1.empty() and T2.empty():
+			return new_tree, 0
+		elif T1.empty() or T2.empty():
+			if T1.empty():
+				balances = T2.insert(0, x.getValue())
+				return T2, balances
+			else:
+				balances = T1.insert(T1.length(), x.getValue())
+				return T1, balances
+		t1h = T1.getRoot().getHeight()
+		t2h = T2.getRoot().getHeight()
+
 		if t1h == t2h:
 			x.setLeft(T1.getRoot())
 			x.setRight(T2.getRoot())
@@ -898,7 +911,7 @@ class AVLTreeList(object):
 			x.recomputeSize()
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
-			return (new_tree,1)
+			return new_tree, 1
 		elif t1h<t2h:
 			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
@@ -914,7 +927,7 @@ class AVLTreeList(object):
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T2.getRoot()
 			rebalances = new_tree.reBalance(help, 'delete')
-			return (new_tree,rebalances)
+			return new_tree, rebalances
 		else:
 			node = T1.find_right_subtree_heightH(t2h)
 			x.setLeft(node)
@@ -929,8 +942,8 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T1.getRoot()
-			rebalances = new_tree.reBalance(help ,'delete')
-			return (new_tree,rebalances)
+			rebalances = new_tree.reBalance(help, 'delete')
+			return new_tree, rebalances
 
 	"""splits the list at the i'th index
 

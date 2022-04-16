@@ -1566,9 +1566,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         #case1 2 trees with equal height
         T1 = createTreeFromList(["1"])
         T2 = createTreeFromList(["3"])
-        node_x = AVLNode("2")
-        node_x.setHeight(0)
-        node_x.setSize(1)
+        tst = createTreeFromList(["2"])
+        node_x = tst.getRoot()
         T = AVLTreeList.join(T1, node_x, T2)[0]
         num = AVLTreeList.join(T1, node_x, T2)[1]
         logger.debug("Joined tree: \n"+printTreeString(T))
@@ -1580,10 +1579,9 @@ class Test_AVL_Tree_list(unittest.TestCase):
         T4 = createTreeFromList(["8", "6", "10", "5", "7", "9", "11"])
         logger.debug("T1: \n"+printTreeString(T3))
         logger.debug("T2: \n" + printTreeString(T4))
-        node_x = AVLNode("4")
-        node_x.setHeight(0)
-        node_x.setSize(1)
-        T = AVLTreeList.join(T3, node_x,T4)[0]
+        tst = createTreeFromList(["4"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(T3, node_x, T4)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["8", "4", "10", "2", "6", "9", "11", "1", "3", "5", "7", None, None, None, None])))
 
@@ -1592,18 +1590,49 @@ class Test_AVL_Tree_list(unittest.TestCase):
         T6 = createTreeFromListInsert(["17","18","19"])
         logger.debug("T5: \n"+printTreeString(T5))
         logger.debug("T6: \n"+printTreeString(T6))
-        node_x = AVLNode("16")
-        node_x.setHeight(0)
-        node_x.setSize(1)
+        tst = createTreeFromList(["16"])
+        node_x = tst.getRoot()
         T = AVLTreeList.join(T5, node_x, T6)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         expected = createTreeFromList(
             ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
-        expected.insert(12,"13")
-        expected.insert(14,"15")
+        expected.insert(12, "13")
+        expected.insert(14, "15")
         expected.insert(16, "17")
         expected.insert(18, "19")
         self.assertTrue(treesEqual(T, expected))
+
+        #case4, right subtree is empty
+        Tl = createTreeFromListInsert(["1", "2", "3"])
+        Tr = AVLTreeList()
+        tst = createTreeFromList(["4"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        logger.debug("Joined tree: \n" + printTreeString(T))
+        expected = createTreeFromList(["2", "1", "3", None, None, None, "4"])
+        logger.debug("Expected: \n"+printTreeString(expected)+"\n")
+        self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3", None, None, None, "4"])))
+
+        #case5, left subtree is empty
+        Tl = AVLTreeList()
+        Tr = createTreeFromListInsert(["2", "3", "4"])
+        tst = createTreeFromList(["1"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        logger.debug("Joined tree: \n" + printTreeString(T))
+        expected = createTreeFromList(["3", "2", "4", "1", None, None, None])
+        logger.debug("Expected: \n"+printTreeString(expected))
+        self.assertTrue(treesEqual(T, expected))
+
+        #case 6, both trees are empty
+        TlE = AVLTreeList()
+        TrE = AVLTreeList()
+        tst = createTreeFromList(["1"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(TlE, node_x, TrE)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["1"])))
+
 
     def test_delete(self):
         # Case 1: tree has only a root - delete root
