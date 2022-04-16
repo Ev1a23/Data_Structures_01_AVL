@@ -164,7 +164,7 @@ Only from testing
 
 def createTreeFromListInsert(lst):
     tree = AVLTreeList()
-    for i in range(lst.length):
+    for i in range(len(lst)):
         tree.insert(i, lst[i])
     return tree
 

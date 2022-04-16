@@ -279,9 +279,51 @@ class AVLTreeList(object):
 	@rtype: list
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
-	def insert(self, i, val):
-		return -1
 
+	def insert(self, i, val):
+		inserted = AVLNode(val)
+		inserted.setHeight(0)
+		inserted.setSize(1)
+		virtualL = AVLNode("")
+		virtualR = AVLNode("")
+		inserted.setLeft(virtualL)
+		inserted.setRight(virtualR)
+		virtualL.setParent(inserted)
+		virtualR.setParent(inserted)
+
+		if(self.empty()):
+			self.root = inserted
+			self.set_First(inserted)
+			self.set_Last(inserted)
+			inserted.recomputeHeight()
+			inserted.recomputeSize()
+			return 0
+
+		if i == 0:
+			node = self.get_First()
+			node.setLeft(inserted)
+			inserted.setParent(node)
+			self.set_First(inserted)
+			return self.reBalance(node, 'insert')
+
+		elif i == self.length():
+			node = self.get_Last()
+			node.setRight(inserted)
+			inserted.setParent(node)
+			self.set_Last(inserted)
+			return self.reBalance(node, 'insert')
+
+		node = self.retrieveNode(i)
+		if node.getLeft().isRealNode():
+			node = self.predecessor(node)
+			node.setRight(inserted)
+			inserted.setParent(node)
+			return self.reBalance(node, 'insert')
+
+		else:
+			node.setLeft(inserted)
+			inserted.setParent(node)
+			return self.reBalance(node, 'insert')
 
 	"""deletes the i'th item in the list
 
@@ -795,7 +837,113 @@ class AVLTreeList(object):
 		while minNode.getLeft().isRealNode():
 			minNode = minNode.getLeft()
 		return minNode
+	"""
+	find left subtree with height h or height h-1
+	@pre - h>=0
+	@rtype: AVLNode
+	Time complexity: O(self.getRoot().getHeight()-h)
+	"""
+	def find_left_subtree_heightH(self, h):
+		if self.getRoot().getHeight() == h:
+			return self.getRoot()
+		node = self.getRoot()
+		help = node
+		while h-1<help.getHeight(): #TODO
+			node = help
+			if help.getLeft().isRealNode():
+				help = help.getLeft()
+			else:
+				help = help.getRight()
+		return help
+	"""
+	find right subtree with height h or height h-1
+	@pre - h>=0
+	@rtype: AVLNode
+	Time complexity: O(self.getRoot().getHeight()-h)
+	"""
+	def find_right_subtree_heightH(self, h):
+		if self.getRoot().getHeight() == h:
+			return self
+		node = self.getRoot()
+		help = node
+		while h-1<help.getHeight(): #TODO
+			node = help
+			if help.getRight().isRealNode():
+				help = help.getRight()
+			else:
+				help = help.getLeft()
+		return help
 
+	"""
+	Join 2 trees T1,T2 with a connector node x
+	@pre: T1<x<T2
+	@pre: x.isRealNode() == True
+	Time complexity: O(abs(height(T2)-Height(T1)+1)
+	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
+	"""
+	@staticmethod
+	def join(T1, x, T2):
+		new_tree = AVLTreeList()
+		new_tree.root = x
+		new_tree.set_First(x)
+		new_tree.set_Last(x)
+		x.recomputeHeight()
+		x.recomputeSize()
+		#if one of the trees is an empty tree
+		if T1.empty() and T2.empty():
+			return new_tree, 0
+		elif T1.empty() or T2.empty():
+			if T1.empty():
+				balances = T2.insert(0, x.getValue())
+				return T2, balances
+			else:
+				balances = T1.insert(T1.length(), x.getValue())
+				return T1, balances
+		t1h = T1.getRoot().getHeight()
+		t2h = T2.getRoot().getHeight()
+
+		if t1h == t2h:
+			x.setLeft(T1.getRoot())
+			x.setRight(T2.getRoot())
+			T1.getRoot().setParent(x)
+			T2.getRoot().setParent(x)
+			x.recomputeHeight()
+			x.recomputeSize()
+			new_tree.set_First(T1.get_First())
+			new_tree.set_Last(T2.get_Last())
+			return new_tree, 1 #TODO
+		elif t1h<t2h:
+			node = T2.find_left_subtree_heightH(t1h)
+			x.setLeft(T1.getRoot())
+			x.setRight(node)
+			help = node.getParent()
+			T1.getRoot().setParent(x)
+			node.setParent(x)
+			x.setParent(help)
+			help.setLeft(x)
+			x.recomputeHeight()
+			x.recomputeSize()
+			new_tree.set_First(T1.get_First())
+			new_tree.set_Last(T2.get_Last())
+			new_tree.root = T2.getRoot()
+			rebalances = new_tree.reBalance(help, 'delete') #TODO
+			return new_tree, rebalances
+		else:
+			node = T1.find_right_subtree_heightH(t2h)
+			x.setLeft(node)
+			x.setRight(T2.getRoot())
+			help = node.getParent()
+			T2.getRoot().setParent(x)
+			node.setParent(x)
+			x.setParent(help)
+			help.setRight(x)
+			x.recomputeHeight()
+			x.recomputeSize()
+			new_tree.set_First(T1.get_First())
+			new_tree.set_Last(T2.get_Last())
+			new_tree.root = T1.getRoot()
+			rebalances = new_tree.reBalance(help, 'delete') #TODO
+			return new_tree, rebalances
 
 	"""splits the list at the i'th index
 

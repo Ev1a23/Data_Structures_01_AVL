@@ -2,7 +2,7 @@ import sys
 import unittest
 from avl_skeleton import AVLNode
 from avl_skeleton import AVLTreeList
-from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields
+from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields, createTreeFromListInsert
 from utils.print_tree import printTreeString
 import logging
 
@@ -12,6 +12,7 @@ formatter = logging.Formatter('[%(funcName)s - line %(lineno)s: %(levelname)s] %
 stream_handler = logging.StreamHandler()
 stream_handler.setFormatter(formatter)
 logger.addHandler(stream_handler)
+
 
 class Test_AVL_Tree_list(unittest.TestCase):
     def test_Empty(self):
@@ -328,7 +329,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         root.setSize(2)
         lSon.setParent(root)
         tree.set_First(lSon)
-        self.assertEqual(["2","3"], tree.listToArray())
+        self.assertEqual(["2", "3"], tree.listToArray())
 
         # Test Case 3: tree has a root and a right node which is a leaf.
         #             root
@@ -426,7 +427,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         root.setSize(4)
         tree.set_First(lSon)
         lrSon.setParent(lSon)
-        self.assertEqual(["2","3","3","4"], tree.listToArray())
+        self.assertEqual(["2", "3", "3", "4"], tree.listToArray())
 
         # Test Case 7:
         #                        root
@@ -464,7 +465,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         emptyTree = AVLTreeList()
         tree.set_First(None)
         self.assertEqual([], emptyTree.listToArray())
-
 
     def test_successor(self):
         tree = AVLTreeList()
@@ -547,7 +547,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(node_5, tree.successor(node_f))
         self.assertEqual(node_g, tree.successor(node_5))
         self.assertEqual(node_6, tree.successor(node_g))
-
 
     def test_GetRoot(self):
         tree = AVLTreeList()
@@ -775,7 +774,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.rightRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(
+            ["a", "d", "c", "g", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
 
         # Test case 3: right rotation when some node is the criminal (BF of criminal.left == 0)
         test2Tree = createTreeFromList(["a", "b", "c", "d", None, "e", "f", "g", "h", None, None, "i", "j", "k", "l"])
@@ -793,22 +793,35 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.rightRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "d", "c", "g", "b", "e", "f", None, None, "h", None, "i", "j", "k", "l"])))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(
+            ["a", "d", "c", "g", "b", "e", "f", None, None, "h", None, "i", "j", "k", "l"])))
 
     def rightRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalLeftSon"].getSize())
         self.assertEqual(2, nodesToCheck["criminalOrigBF"])
-        self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1, nodesToCheck["criminal"].getHeight())
-        self.assertEqual(max(nodesToCheck["criminalLeftSon"].getLeft().getHeight(), nodesToCheck["criminalLeftSon"].getRight().getHeight()) + 1, nodesToCheck["criminalLeftSon"].getHeight())
-        self.assertEqual(nodesToCheck["criminalRightSon"].getSize() + nodesToCheck["criminalLeftSonRightSon"].getSize() + 1, nodesToCheck["criminal"].getSize())
+        self.assertEqual(
+            max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1,
+            nodesToCheck["criminal"].getHeight())
+        self.assertEqual(max(nodesToCheck["criminalLeftSon"].getLeft().getHeight(),
+                             nodesToCheck["criminalLeftSon"].getRight().getHeight()) + 1,
+                         nodesToCheck["criminalLeftSon"].getHeight())
+        self.assertEqual(
+            nodesToCheck["criminalRightSon"].getSize() + nodesToCheck["criminalLeftSonRightSon"].getSize() + 1,
+            nodesToCheck["criminal"].getSize())
         self.assertTrue(abs(nodesToCheck["criminalLeftSon"].getBalanceFactor()) < 2)
 
     def leftRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSon"].getSize())
         self.assertEqual(-2, nodesToCheck["criminalOrigBF"])
-        self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1, nodesToCheck["criminal"].getHeight())
-        self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(), nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1, nodesToCheck["criminalRightSon"].getHeight())
-        self.assertEqual(nodesToCheck["criminalLeftSon"].getSize() + nodesToCheck["criminalRightSonLeftSon"].getSize() + 1, nodesToCheck["criminal"].getSize())
+        self.assertEqual(
+            max(nodesToCheck["criminal"].getLeft().getHeight(), nodesToCheck["criminal"].getRight().getHeight()) + 1,
+            nodesToCheck["criminal"].getHeight())
+        self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(),
+                             nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1,
+                         nodesToCheck["criminalRightSon"].getHeight())
+        self.assertEqual(
+            nodesToCheck["criminalLeftSon"].getSize() + nodesToCheck["criminalRightSonLeftSon"].getSize() + 1,
+            nodesToCheck["criminal"].getSize())
         self.assertTrue(abs(nodesToCheck["criminalRightSon"].getBalanceFactor()) < 2)
 
     def leftThenRightRotationFieldsCheck(self, nodesToCheck):
@@ -817,31 +830,38 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(),
                              nodesToCheck["criminal"].getRight().getHeight()) + 1,
                          nodesToCheck["criminal"].getHeight())
-        self.assertEqual(nodesToCheck["criminalLeftSonRightSon"].getLeft().getSize() + nodesToCheck["criminalLeftSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSon"].getSize())
+        self.assertEqual(nodesToCheck["criminalLeftSonRightSon"].getLeft().getSize() + nodesToCheck[
+            "criminalLeftSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSon"].getSize())
         self.assertEqual(max(nodesToCheck["criminalLeftSon"].getLeft().getHeight(),
                              nodesToCheck["criminalLeftSon"].getRight().getHeight()) + 1,
                          nodesToCheck["criminalLeftSon"].getHeight())
         self.assertEqual(nodesToCheck["criminalLeftSon"].getLeft().getSize() + nodesToCheck[
             "criminalLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSon"].getSize())
-        if nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft() and nodesToCheck["criminalLeftSonRightSonRightSon"].getRight():
+        if nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft() and nodesToCheck[
+            "criminalLeftSonRightSonRightSon"].getRight():
             self.assertEqual(max(nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft().getHeight(),
                                  nodesToCheck["criminalLeftSonRightSonRightSon"].getRight().getHeight()) + 1,
                              nodesToCheck["criminalLeftSonRightSonRightSon"].getHeight())
-        if nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft() and nodesToCheck["criminalLeftSonRightSonRightSon"].getRight():
+        if nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft() and nodesToCheck[
+            "criminalLeftSonRightSonRightSon"].getRight():
             self.assertEqual(nodesToCheck["criminalLeftSonRightSonRightSon"].getLeft().getSize() + nodesToCheck[
-                "criminalLeftSonRightSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSonRightSon"].getSize())
+                "criminalLeftSonRightSonRightSon"].getRight().getSize() + 1,
+                             nodesToCheck["criminalLeftSonRightSonRightSon"].getSize())
         self.assertEqual(max(nodesToCheck["criminalLeftSonRightSon"].getLeft().getHeight(),
                              nodesToCheck["criminalLeftSonRightSon"].getRight().getHeight()) + 1,
                          nodesToCheck["criminalLeftSonRightSon"].getHeight())
         self.assertEqual(nodesToCheck["criminalLeftSonRightSon"].getLeft().getSize() + nodesToCheck[
             "criminalLeftSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSon"].getSize())
-        if nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft() and nodesToCheck["criminalLeftSonRightSonLeftSon"].getRight():
+        if nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft() and nodesToCheck[
+            "criminalLeftSonRightSonLeftSon"].getRight():
             self.assertEqual(max(nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft().getHeight(),
                                  nodesToCheck["criminalLeftSonRightSonLeftSon"].getRight().getHeight()) + 1,
                              nodesToCheck["criminalLeftSonRightSonLeftSon"].getHeight())
-        if nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft() and nodesToCheck["criminalLeftSonRightSonLeftSon"].getRight():
+        if nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft() and nodesToCheck[
+            "criminalLeftSonRightSonLeftSon"].getRight():
             self.assertEqual(nodesToCheck["criminalLeftSonRightSonLeftSon"].getLeft().getSize() + nodesToCheck[
-                "criminalLeftSonRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalLeftSonRightSonLeftSon"].getSize())
+                "criminalLeftSonRightSonLeftSon"].getRight().getSize() + 1,
+                             nodesToCheck["criminalLeftSonRightSonLeftSon"].getSize())
 
     def rightThenLeftRotationFieldsCheck(self, nodesToCheck):
         self.assertEqual(nodesToCheck["criminalOrigSize"], nodesToCheck["criminalRightSonLeftSon"].getSize())
@@ -849,31 +869,38 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(max(nodesToCheck["criminal"].getLeft().getHeight(),
                              nodesToCheck["criminal"].getRight().getHeight()) + 1,
                          nodesToCheck["criminal"].getHeight())
-        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"].getLeft().getSize() + nodesToCheck["criminalRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSon"].getSize())
+        self.assertEqual(nodesToCheck["criminalRightSonLeftSon"].getLeft().getSize() + nodesToCheck[
+            "criminalRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSon"].getSize())
         self.assertEqual(max(nodesToCheck["criminalRightSon"].getLeft().getHeight(),
                              nodesToCheck["criminalRightSon"].getRight().getHeight()) + 1,
                          nodesToCheck["criminalRightSon"].getHeight())
         self.assertEqual(nodesToCheck["criminalRightSon"].getLeft().getSize() + nodesToCheck[
             "criminalRightSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSon"].getSize())
-        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight():
+        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck[
+            "criminalRightSonLeftSonLeftSon"].getRight():
             self.assertEqual(max(nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft().getHeight(),
                                  nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight().getHeight()) + 1,
                              nodesToCheck["criminalRightSonLeftSonLeftSon"].getHeight())
-        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonLeftSon"].getRight():
+        if nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft() and nodesToCheck[
+            "criminalRightSonLeftSonLeftSon"].getRight():
             self.assertEqual(nodesToCheck["criminalRightSonLeftSonLeftSon"].getLeft().getSize() + nodesToCheck[
-                "criminalRightSonLeftSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSonLeftSon"].getSize())
+                "criminalRightSonLeftSonLeftSon"].getRight().getSize() + 1,
+                             nodesToCheck["criminalRightSonLeftSonLeftSon"].getSize())
         self.assertEqual(max(nodesToCheck["criminalRightSonLeftSon"].getLeft().getHeight(),
                              nodesToCheck["criminalRightSonLeftSon"].getRight().getHeight()) + 1,
                          nodesToCheck["criminalRightSonLeftSon"].getHeight())
         self.assertEqual(nodesToCheck["criminalRightSonLeftSon"].getLeft().getSize() + nodesToCheck[
             "criminalRightSonLeftSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSon"].getSize())
-        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonRightSon"].getRight():
+        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck[
+            "criminalRightSonLeftSonRightSon"].getRight():
             self.assertEqual(max(nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft().getHeight(),
                                  nodesToCheck["criminalRightSonLeftSonRightSon"].getRight().getHeight()) + 1,
                              nodesToCheck["criminalRightSonLeftSonRightSon"].getHeight())
-        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck["criminalRightSonLeftSonRightSon"].getRight():
+        if nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft() and nodesToCheck[
+            "criminalRightSonLeftSonRightSon"].getRight():
             self.assertEqual(nodesToCheck["criminalRightSonLeftSonRightSon"].getLeft().getSize() + nodesToCheck[
-                "criminalRightSonLeftSonRightSon"].getRight().getSize() + 1, nodesToCheck["criminalRightSonLeftSonRightSon"].getSize())
+                "criminalRightSonLeftSonRightSon"].getRight().getSize() + 1,
+                             nodesToCheck["criminalRightSonLeftSonRightSon"].getSize())
 
     def rightRotationPointersCheck(self, parentSon, nodesToCheck):
         self.assertEqual(nodesToCheck["criminal"], nodesToCheck["criminalLeftSonRightSon"].getParent())
@@ -1009,10 +1036,11 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.leftRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "b", "f", "d", "e", "c", "k", "g", "h", "i", "j",None, None, None, None])))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(
+            ["a", "b", "f", "d", "e", "c", "k", "g", "h", "i", "j", None, None, None, None])))
 
         # Test case 3: left rotation when some node is the criminal (BF of criminal.right == 0)
-        test3Tree = createTreeFromList(["a", "b", "c", "d", "e", None , "f" , "g", "h", "i", "j",None, None, "k", "l"])
+        test3Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g", "h", "i", "j", None, None, "k", "l"])
         logger.debug(f"Test case 3 - node 'b' is BF criminal\n{printTreeString(test3Tree)}")
         criminal = test3Tree.getRoot().getRight()
         parentSon = self.determineParentSon(criminal)
@@ -1027,7 +1055,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.leftRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test3Tree, createTreeFromList(["a", "b", "f", "d", "e", "c", "l", "g", "h", "i", "j", None, "k", None, None])))
+        self.assertTrue(treesEqual(test3Tree, createTreeFromList(
+            ["a", "b", "f", "d", "e", "c", "l", "g", "h", "i", "j", None, "k", None, None])))
 
     @staticmethod
     def getAboutToChangeNodes(criminal, rotation):
@@ -1109,7 +1138,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Final Fields Check
         self.leftThenRightRotationFieldsCheck(leftThenRightRotationNodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(rootCriminalTree, createTreeFromList(["c","b","a"])))
+        self.assertTrue(treesEqual(rootCriminalTree, createTreeFromList(["c", "b", "a"])))
 
         # Test case 2: left then right rotation when some node is the criminal
         test2Tree = createTreeFromList(["a", "b", "c", "d", None, "e", "f", None, "g", None, None, "i", "j", "k", "l"])
@@ -1127,7 +1156,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.leftThenRightRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "g", "c", "d", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(
+            ["a", "g", "c", "d", "b", "e", "f", None, None, None, None, "i", "j", "k", "l"])))
 
     def test_rightThenLeftRotation(self):
         afterRightThenLeftRotationMsg = "after right then left rotation"
@@ -1148,10 +1178,10 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Final Fields Check
         self.rightThenLeftRotationFieldsCheck(rightThenLeftRotationNodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(rootCriminalTree, createTreeFromList(["b","a","c"])))
+        self.assertTrue(treesEqual(rootCriminalTree, createTreeFromList(["b", "a", "c"])))
 
         # Test case 2: left then right rotation when some node is the criminal
-        test2Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g","i","j", "k", None, None, "l",None])
+        test2Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g", "i", "j", "k", None, None, "l", None])
         logger.debug(f"Test case 2 - node 'c' is BF criminal\n{printTreeString(test2Tree)}")
         criminal = test2Tree.getRoot().getRight()
         parentSon = self.determineParentSon(criminal)
@@ -1166,7 +1196,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Fields check
         self.rightThenLeftRotationFieldsCheck(nodesToCheck)
         # Undependent check
-        self.assertTrue(treesEqual(test2Tree, createTreeFromList(["a", "b", "l", "d", "e", "c", "f", "g", "i", "j", "k" ,None, None, None, None])))
+        self.assertTrue(treesEqual(test2Tree, createTreeFromList(
+            ["a", "b", "l", "d", "e", "c", "f", "g", "i", "j", "k", None, None, None, None])))
 
     @unittest.skip("Waiting for insert & join implementation")
     def test_concat(self):
@@ -1332,6 +1363,275 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertEqual(0, absDiffHeight)
         # Undependent check
         self.assertEqual(case9tree1ltr + case9tree2ltr, case9tree1.listToArray())
+
+    def test_insert(self):
+        # case 1: tree is empty
+        case1tree = createTreeFromList([])
+        logger.debug("insertDebug - case 1:")
+        logger.debug("tree before insert:\n" + printTreeString(case1tree))
+        case1BalanceOps = case1tree.insert(0, "A")
+        logger.debug("tree after insertion:\n" + printTreeString(case1tree))
+        logger.debug(f"case1 balanceOps: {case1BalanceOps}")  # should be 1
+        self.assertEqual(0, case1BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case1tree, createTreeFromList(["A"])))
+        self.assertTrue(case1tree.getRoot(),case1tree.get_First())
+        self.assertTrue(case1tree.get_First(), case1tree.get_Last())
+
+        # case 2: balanced tree, insert First
+        case2tree = createTreeFromList(["c", "b", "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case2tree))
+        case2BalanceOps = case2tree.insert(0, "a")
+        logger.debug("tree after insertion:\n" + printTreeString(case2tree))
+        logger.debug(f"case2 balanceOps: {case2BalanceOps}")  # should be 2
+        self.assertEqual(2, case2BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case2tree, createTreeFromList(["c", "b", "d", "a", None, None, None])))
+
+        # case 3: balanced tree, insert Last
+        case3tree = createTreeFromList(["c", "b", "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case3tree))
+        case3BalanceOps = case3tree.insert(3, "e")
+        logger.debug("tree after insertion:\n" + printTreeString(case3tree))
+        logger.debug(f"case3 balanceOps: {case3BalanceOps}")  # should be 2
+        self.assertEqual(2, case3BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case3tree, createTreeFromList(["c", "b", "d", None, None, None, "e"])))
+
+        # case 4: tree has only root, insert as leftson
+        case4tree = createTreeFromList(["b"])
+        logger.debug("tree before insert:\n" + printTreeString(case4tree))
+        case4BalanceOps = case4tree.insert(0, "a")
+        logger.debug("tree after insertion:\n" + printTreeString(case4tree))
+        logger.debug(f"case4 balanceOps: {case4BalanceOps}")  # should be 1
+        self.assertEqual(1, case4BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case4tree, createTreeFromList(["b", "a", None])))
+
+        # case 5: tree has only root, insert as rightson
+        case5tree = createTreeFromList(["a"])
+        logger.debug("tree before insert:\n" + printTreeString(case5tree))
+        case5BalanceOps = case5tree.insert(1, "b")
+        logger.debug("tree after insertion:\n" + printTreeString(case5tree))
+        logger.debug(f"case5 balanceOps: {case5BalanceOps}")  # should be 1
+        self.assertEqual(1, case5BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case5tree, createTreeFromList(["a", None, "b"])))
+
+        # case 6: insertion that causes right rotation
+        case6tree = createTreeFromList(["b", "a", "c", None, None, None, "d"])
+        logger.debug("tree before insert:\n" + printTreeString(case6tree))
+        case6BalanceOps = case6tree.insert(4, "e")
+        logger.debug("tree after insertion:\n" + printTreeString(case6tree))
+        logger.debug(f"case6 balanceOps: {case6BalanceOps}")  # should be 2
+        self.assertEqual(2, case6BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case6tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
+
+        # case 7: insertion that causes right then left rotation
+        case7tree = createTreeFromList(["b", "a", "c", None, None, None, "e"])
+        logger.debug("tree before insert:\n" + printTreeString(case7tree))
+        case7BalanceOps = case7tree.insert(3, "d")
+        logger.debug("tree after insertion:\n" + printTreeString(case7tree))
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3 TODO
+        self.assertEqual(4, case7BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case7tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
+
+        #case 8: first tree from lecture, slide 50, insert 18: https://visualgo.net/en/bst?mode=AVL&create=12,8,15,6,10,11,14,13,24,20,19,29
+        case8tree = createTreeFromList([
+            "12",
+            "8", "15",
+            "6", "10", "14", "24",
+            None, None, None, "11", "13", None, "20", "29",
+            None, None, None, None, None, None, None, None, None, None, None, None, "19", None, None, None
+        ])
+        logger.debug("tree before insert:\n" + printTreeString(case8tree))
+        case8BalanceOps = case8tree.insert(8, "18")
+        logger.debug("tree after insertion:\n" + printTreeString(case8tree))
+        logger.debug(f"case8 balanceOps: {case8BalanceOps}")  # should be 2
+        self.assertEqual(2, case8BalanceOps)
+        # Undependent check
+        self.assertTrue(treesEqual(case8tree, createTreeFromList([
+            "12",
+            "8", "15",
+            "6", "10", "14", "24",
+            None, None, None, "11", "13", None, "19", "29",
+            None, None, None, None, None, None, None, None, None, None, None, None, "18", "20", None, None
+        ])))
+
+        #case 9: second tree from lecture, slide 63, insert 5: https://visualgo.net/en/bst?mode=AVL&create=15,10,22,4,11,20,24,2,7,12,18,1,6,8
+        case9tree = createTreeFromList([
+            "15",
+            "10", "22",
+            "4", "11", "20", "24",
+            "2", "7", None, "12", "18", None, None, None,
+            "1", None, "6", "8", None, None, None, None, None, None, None, None, None, None, None, None
+        ])
+        logger.debug("tree before insert:\n" + printTreeString(case9tree))
+        case9BalanceOps = case9tree.insert(3, "5")
+        logger.debug("tree after insertion:\n" + printTreeString(case9tree))
+        logger.debug(f"case9 balanceOps: {case9BalanceOps}")  # should be 2
+        self.assertEqual(5, case9BalanceOps)
+        # Undependent check
+        expected = createTreeFromList([
+            "15",
+            "7", "22",
+            "4", "10", "20", "24",
+            "2", "6", "8", "11", "18", None, None, None,
+            "1", None, "5", None, None, None, None, "12", None, None, None, None, None, None, None, None
+        ])
+        self.assertTrue(treesEqual(case9tree, expected))
+
+        #dvir & or tester for insert
+        tree1 = AVLTreeList()
+        tree2 = AVLTreeList()
+        tree3 = AVLTreeList()
+        tree4 = AVLTreeList()
+        tree1.insert(0, "2")
+        tree1.insert(0, "1")
+        tree1.insert(0, "0")
+        tree2.insert(0, "0")
+        tree2.insert(1, "1")
+        tree2.insert(2, "2")
+        tree3.insert(0, "0")
+        tree3.insert(1, "2")
+        tree3.insert(1, "1")
+        tree4.insert(0, "2")
+        tree4.insert(0, "0")
+        tree4.insert(1, "1")
+
+        root1 = tree1.getRoot()
+        root2 = tree2.getRoot()
+        root3 = tree3.getRoot()
+        root4 = tree4.getRoot()
+        self.assertEqual(True, root1.getValue() == root2.getValue() and root3.getValue() == root4.getValue())
+        self.assertEqual(True, root1.getValue() == root3.getValue() and root2.getValue() == root4.getValue())
+        self.assertEqual(True,
+                         root1.left.getValue() == root2.left.getValue() and root3.left.getValue() == root4.left.getValue())
+        self.assertEqual(True,
+                         root1.left.getValue() == root3.left.getValue() and root2.left.getValue() == root4.left.getValue())
+        self.assertEqual(True,
+                         root1.right.getValue() == root2.right.getValue() and root3.right.getValue() == root4.right.getValue())
+        self.assertEqual(True,
+                         root1.right.getValue() == root3.right.getValue() and root2.right.getValue() == root4.right.getValue())
+        self.assertEqual(True, tree1.first() == tree2.first() and tree3.first() == tree4.first())
+        self.assertEqual(True, tree1.first() == tree3.first() and tree2.first() == tree4.first())
+        self.assertEqual(True, tree1.last() == tree2.last() and tree3.last() == tree4.last())
+        self.assertEqual(True, tree1.last() == tree3.last() and tree2.last() == tree4.last())
+        self.assertEqual(True,
+                         tree1.listToArray() == tree2.listToArray() and tree3.listToArray() == tree4.listToArray())
+        self.assertEqual(True,
+                         tree1.listToArray() == tree3.listToArray() and tree2.listToArray() == tree4.listToArray())
+        self.assertEqual(True, tree1.length() == tree2.length() and tree3.length() == tree4.length())
+        self.assertEqual(True, tree1.length() == tree3.length() and tree2.length() == tree4.length())
+        a = root4.left.getHeight()
+        c = root3.left.getHeight()
+
+        self.assertEqual(True, root1.getHeight() == root2.getHeight() and root3.getHeight() == root4.getHeight())
+        self.assertEqual(True, root1.getHeight() == root3.getHeight() and root2.getHeight() == root4.getHeight())
+        tree1 = AVLTreeList()
+        self.assertEqual(True, tree1.insert(0, None) == 0)
+        self.assertEqual(True, tree1.insert(1, None) == 1)
+        self.assertEqual(True, tree1.insert(0, None) == 0)
+        self.assertEqual(True, tree1.insert(0, None) == 2)
+        self.assertEqual(True, tree1.insert(2, None) == 0)
+        self.assertEqual(True, tree1.insert(0, None) == 3)
+        self.assertEqual(True, tree1.insert(0, None) == 2)
+        self.assertEqual(True, tree1.listToArray() == [None for i in range(7)])
+        self.assertEqual(True, tree1.insert(4, None) == 3)
+        self.assertEqual(True, tree1.insert(5, None) == 3)
+        self.assertEqual(True, tree1.length() == 9)
+        self.assertEqual(True, tree1.getRoot().left.getSize() == 3)
+        self.assertEqual(True, tree1.getRoot().right.getSize() == 5)
+        self.assertEqual(True, tree1.getRoot().left.getHeight() == 1)
+        self.assertEqual(True, tree1.getRoot().getHeight() == 3)
+        self.assertEqual(True, tree1.getRoot().right.getHeight() == 2)
+
+
+    def test_createTreeFromListInsert(self):
+        expected = createTreeFromList([
+            "10",
+            "5", "18",
+            "2", "7", "12", "22",
+            "1", "4", "6", "8", "11", "15", "20", "24"
+        ])
+        tree = createTreeFromListInsert(["1","2","4","5","6","7","8","10", "11", "12", "15", "18", "20", "22", "24"])
+        logger.debug("Actual: \n"+ printTreeString(tree))
+        self.assertTrue(treesEqual(expected,tree))
+
+
+    def test_join(self):
+        #case1 2 trees with equal height
+        T1 = createTreeFromList(["1"])
+        T2 = createTreeFromList(["3"])
+        tst = createTreeFromList(["2"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(T1, node_x, T2)[0]
+        num = AVLTreeList.join(T1, node_x, T2)[1]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3"])))
+        self.assertEqual(num, 1)
+
+        #case2,  left subtree height is bigger than the right one
+        T3 = createTreeFromList(["2", "1", "3"])
+        T4 = createTreeFromList(["8", "6", "10", "5", "7", "9", "11"])
+        logger.debug("T1: \n"+printTreeString(T3))
+        logger.debug("T2: \n" + printTreeString(T4))
+        tst = createTreeFromList(["4"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(T3, node_x, T4)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["8", "4", "10", "2", "6", "9", "11", "1", "3", "5", "7", None, None, None, None])))
+
+        #case3, right subtree height is bigger than the left one
+        T5 = createTreeFromListInsert(["1", "2", "3", "4", "5", "6", "7", "8","9","10","11","12","13","14","15"])
+        T6 = createTreeFromListInsert(["17","18","19"])
+        logger.debug("T5: \n"+printTreeString(T5))
+        logger.debug("T6: \n"+printTreeString(T6))
+        tst = createTreeFromList(["16"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(T5, node_x, T6)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        expected = createTreeFromList(
+            ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
+        expected.insert(12, "13")
+        expected.insert(14, "15")
+        expected.insert(16, "17")
+        expected.insert(18, "19")
+        self.assertTrue(treesEqual(T, expected))
+
+        #case4, right subtree is empty
+        Tl = createTreeFromListInsert(["1", "2", "3"])
+        Tr = AVLTreeList()
+        tst = createTreeFromList(["4"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        logger.debug("Joined tree: \n" + printTreeString(T))
+        expected = createTreeFromList(["2", "1", "3", None, None, None, "4"])
+        logger.debug("Expected: \n"+printTreeString(expected)+"\n")
+        self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3", None, None, None, "4"])))
+
+        #case5, left subtree is empty
+        Tl = AVLTreeList()
+        Tr = createTreeFromListInsert(["2", "3", "4"])
+        tst = createTreeFromList(["1"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        logger.debug("Joined tree: \n" + printTreeString(T))
+        expected = createTreeFromList(["3", "2", "4", "1", None, None, None])
+        logger.debug("Expected: \n"+printTreeString(expected))
+        self.assertTrue(treesEqual(T, expected))
+
+        #case 6, both trees are empty
+        TlE = AVLTreeList()
+        TrE = AVLTreeList()
+        tst = createTreeFromList(["1"])
+        node_x = tst.getRoot()
+        T = AVLTreeList.join(TlE, node_x, TrE)[0]
+        logger.debug("Joined tree: \n"+printTreeString(T))
+        self.assertTrue(treesEqual(T, createTreeFromList(["1"])))
+
 
     def test_delete(self):
         # Case 1: tree has only a root - delete root
@@ -1728,6 +2028,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         node2beforeSwap = case4tree.getRoot().getRight()
         case4tree.swapNodes(node1beforeSwap, node2beforeSwap)
         logger.debug(f"Case 4 - tree after swap:\n{printTreeString(case4tree)}")
-        
+
     if __name__ == "__main__":
         unittest.main()
