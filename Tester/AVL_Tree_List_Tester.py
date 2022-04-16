@@ -1199,7 +1199,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertTrue(treesEqual(test2Tree, createTreeFromList(
             ["a", "b", "l", "d", "e", "c", "f", "g", "i", "j", "k", None, None, None, None])))
 
-    @unittest.skip("Waiting for insert & join implementation")
     def test_concat(self):
         # Case 1: concat 2 empty trees
         case1tree1 = createTreeFromList([])
@@ -1207,13 +1206,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case1tree1ltr = case1tree1.listToArray()
         case1tree2ltr = case1tree2.listToArray()
         logger.debug("concatDebug - case 1:")
-        logger.debug("tree1 as list:", case1tree1.listToArray())
+        logger.debug(f"tree1 as list: {case1tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case1tree1))
-        logger.debug("tree2 as list:", case1tree2.listToArray())
+        logger.debug(f"tree2 as list: {case1tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case1tree2))
         absDiffHeight = case1tree1.concat(case1tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
-        logger.debug("new concatinated list:", case1tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 0
+        logger.debug(f"new concatinated list: {case1tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case1tree1))
         self.assertEqual(0, absDiffHeight)
         # Undependent check
@@ -1225,13 +1224,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case2tree1ltr = case2tree1.listToArray()
         case2tree2ltr = case2tree2.listToArray()
         logger.debug("concatDebug - case 2:")
-        logger.debug("tree1 as list:", case2tree1.listToArray())
+        logger.debug(f"tree1 as list: {case2tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case2tree1))
-        logger.debug("tree2 as list:", case2tree2.listToArray())
+        logger.debug(f"tree2 as list: {case2tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case2tree2))
         absDiffHeight = case2tree1.concat(case2tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
-        logger.debug("new concatinated list:", case2tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 2
+        logger.debug(f"new concatinated list: {case2tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case2tree1))
         self.assertEqual(2, absDiffHeight)
         # Undependent check
@@ -1243,13 +1242,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case3tree1ltr = case3tree1.listToArray()
         case3tree2ltr = case3tree2.listToArray()
         logger.debug("concatDebug - case 3:")
-        logger.debug("tree1 as list:", case3tree1.listToArray())
+        logger.debug(f"tree1 as list: {case3tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case3tree1))
-        logger.debug("tree2 as list:", case3tree2.listToArray())
+        logger.debug(f"tree2 as list: {case3tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case3tree2))
         absDiffHeight = case3tree1.concat(case3tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
-        logger.debug("new concatinated list:", case3tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 2
+        logger.debug(f"new concatinated list: {case3tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case3tree1))
         self.assertEqual(2, absDiffHeight)
         # Undependent check
@@ -1261,13 +1260,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case4tree1ltr = case4tree1.listToArray()
         case4tree2ltr = case4tree2.listToArray()
         logger.debug("concatDebug - case 4:")
-        logger.debug("tree1 as list:", case4tree1.listToArray())
+        logger.debug(f"tree1 as list: {case4tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case4tree1))
-        logger.debug("tree2 as list:", case4tree2.listToArray())
+        logger.debug(f"tree2 as list: {case4tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case4tree2))
         absDiffHeight = case4tree1.concat(case4tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
-        logger.debug("new concatinated list:", case4tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 0
+        logger.debug(f"new concatinated list: {case4tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case4tree1))
         self.assertEqual(0, absDiffHeight)
         # Undependent check
@@ -1279,13 +1278,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case5tree1ltr = case5tree1.listToArray()
         case5tree2ltr = case5tree2.listToArray()
         logger.debug("concatDebug - case 5:")
-        logger.debug("tree1 as list:", case5tree1.listToArray())
+        logger.debug(f"tree1 as list: {case5tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case5tree1))
-        logger.debug("tree2 as list:", case5tree2.listToArray())
+        logger.debug(f"tree2 as list: {case5tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case5tree2))
         absDiffHeight = case5tree1.concat(case5tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 1
-        logger.debug("new concatinated list:", case5tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 1
+        logger.debug(f"new concatinated list: {case5tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case5tree1))
         self.assertEqual(1, absDiffHeight)
         # Undependent check
@@ -1297,13 +1296,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case6tree1ltr = case6tree1.listToArray()
         case6tree2ltr = case6tree2.listToArray()
         logger.debug("concatDebug - case 6:")
-        logger.debug("tree1 as list:", case6tree1.listToArray())
+        logger.debug(f"tree1 as list: {case6tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case6tree1))
-        logger.debug("tree2 as list:", case6tree2.listToArray())
+        logger.debug(f"tree2 as list: {case6tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case6tree2))
         absDiffHeight = case6tree1.concat(case6tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
-        logger.debug("new concatinated list:", case6tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 2
+        logger.debug(f"new concatinated list: {case6tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case6tree1))
         self.assertEqual(2, absDiffHeight)
         # Undependent check
@@ -1315,13 +1314,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case7tree1ltr = case7tree1.listToArray()
         case7tree2ltr = case7tree2.listToArray()
         logger.debug("concatDebug - case 7:")
-        logger.debug("tree1 as list:", case7tree1.listToArray())
+        logger.debug(f"tree1 as list: {case7tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case7tree1))
-        logger.debug("tree2 as list:", case7tree2.listToArray())
+        logger.debug(f"tree2 as list: {case7tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case7tree2))
         absDiffHeight = case7tree1.concat(case7tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 2
-        logger.debug("new concatinated list:", case7tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 2
+        logger.debug(f"new concatinated list: {case7tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case7tree1))
         self.assertEqual(2, absDiffHeight)
         # Undependent check
@@ -1333,13 +1332,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case8tree1ltr = case8tree1.listToArray()
         case8tree2ltr = case8tree2.listToArray()
         logger.debug("concatDebug - case 8:")
-        logger.debug("tree1 as list:", case8tree1.listToArray())
+        logger.debug(f"tree1 as list: {case8tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case8tree1))
-        logger.debug("tree2 as list:", case8tree2.listToArray())
+        logger.debug(f"tree2 as list: {case8tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case8tree2))
         absDiffHeight = case8tree1.concat(case8tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 3
-        logger.debug("new concatinated list:", case8tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 3
+        logger.debug(f"new concatinated list: {case8tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case8tree1))
         self.assertEqual(3, absDiffHeight)
         # Undependent check
@@ -1352,13 +1351,13 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case9tree1ltr = case9tree1.listToArray()
         case9tree2ltr = case9tree2.listToArray()
         logger.debug("concatDebug - case 9:")
-        logger.debug("tree1 as list:", case9tree1.listToArray())
+        logger.debug(f"tree1 as list: {case9tree1.listToArray()}")
         logger.debug("tree1 as tree:\n" + printTreeString(case9tree1))
-        logger.debug("tree2 as list:", case9tree2.listToArray())
+        logger.debug(f"tree2 as list: {case9tree2.listToArray()}")
         logger.debug("tree2 as tree:\n" + printTreeString(case9tree2))
         absDiffHeight = case9tree1.concat(case9tree2)
-        logger.debug("absDiffHeight:", absDiffHeight)  # should be 0
-        logger.debug("new concatinated list:", case9tree1.listToArray())
+        logger.debug(f"absDiffHeight: {absDiffHeight}")  # should be 0
+        logger.debug(f"new concatinated list: {case9tree1.listToArray()}")
         logger.debug("new list as a tree:\n" + printTreeString(case9tree1))
         self.assertEqual(0, absDiffHeight)
         # Undependent check
