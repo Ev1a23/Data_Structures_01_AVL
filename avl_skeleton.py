@@ -384,6 +384,7 @@ class AVLTreeList(object):
 				self.set_Last(self.predecessor(nodeToDelete))
 			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
 			nodeToDelete.setLeft(AVLNode(None))
+			nodeToDelete.getLeft().setParent(nodeToDelete)
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteLeftSon
@@ -400,6 +401,7 @@ class AVLTreeList(object):
 				self.set_First(self.successor(nodeToDelete))
 			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
 			nodeToDelete.setRight(AVLNode(None))
+			nodeToDelete.getRight().setParent(nodeToDelete)
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteRightSon
@@ -448,8 +450,10 @@ class AVLTreeList(object):
 		nodeToDelete.setParent(None)
 		if nodeToDeleteParent.getLeft() is nodeToDelete:
 			nodeToDeleteParent.setLeft(AVLNode(None))
+			nodeToDeleteParent.getLeft().setParent(nodeToDeleteParent)
 		elif nodeToDeleteParent.getRight() is nodeToDelete:
 			nodeToDeleteParent.setRight(AVLNode(None))
+			nodeToDeleteParent.getRight().setParent(nodeToDeleteParent)
 		balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
 		return balanceOps
 
