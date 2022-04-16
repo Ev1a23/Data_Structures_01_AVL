@@ -848,8 +848,7 @@ class AVLTreeList(object):
 			return self.getRoot()
 		node = self.getRoot()
 		help = node
-		while h-1<help.getHeight(): #TODO
-			node = help
+		while h<help.getHeight():
 			if help.getLeft().isRealNode():
 				help = help.getLeft()
 			else:
@@ -866,8 +865,7 @@ class AVLTreeList(object):
 			return self
 		node = self.getRoot()
 		help = node
-		while h-1<help.getHeight(): #TODO
-			node = help
+		while h<help.getHeight():
 			if help.getRight().isRealNode():
 				help = help.getRight()
 			else:
@@ -987,16 +985,22 @@ class AVLTreeList(object):
 
 		x = self.get_Last()
 
-		if self.getRoot() is x and self.length() == 1: # TODO: omit this after join handles empty lists
-			self.delete(self.getRoot().getSize() - 1)
-			lst.insert(0, x.getValue())
-			self.root = lst.getRoot()
-			self.set_First(lst.get_First())
-			self.set_Last(lst.get_Last())
-			return absHeightDiff
+		# if self.getRoot() is x and self.length() == 1: # TODO: omit this after join handles empty lists
+		# 	self.delete(self.getRoot().getSize() - 1)
+		# 	lst.insert(0, x.getValue())
+		# 	self.root = lst.getRoot()
+		# 	self.set_First(lst.get_First())
+		# 	self.set_Last(lst.get_Last())
+		# 	return absHeightDiff
+
+		# TODO - check with Or regarding the treatment of previous lists, etc.
 
 		self.delete(self.getRoot().getSize() - 1)
-		self.join(self, x, lst) # TODO: understand how join works (changes self inplace / returns an AVLTree? Takes care about first & last?
+		joinedTree = AVLTreeList.join(self, x, lst)[0]
+
+		self.root = joinedTree.getRoot()
+		self.set_First(joinedTree.get_First())
+		self.set_Last(joinedTree.get_Last())
 
 		return absHeightDiff
 
