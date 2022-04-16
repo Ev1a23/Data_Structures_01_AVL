@@ -848,9 +848,9 @@ class AVLTreeList(object):
 			return self.getRoot()
 		node = self.getRoot()
 		help = node
-		while(h<help.getHeight()):
+		while h-1<help.getHeight(): #TODO
 			node = help
-			if(help.getLeft().isRealNode()):
+			if help.getLeft().isRealNode():
 				help = help.getLeft()
 			else:
 				help = help.getRight()
@@ -866,9 +866,9 @@ class AVLTreeList(object):
 			return self
 		node = self.getRoot()
 		help = node
-		while(h<help.getHeight()):
+		while h-1<help.getHeight(): #TODO
 			node = help
-			if(help.getRight().isRealNode()):
+			if help.getRight().isRealNode():
 				help = help.getRight()
 			else:
 				help = help.getLeft()

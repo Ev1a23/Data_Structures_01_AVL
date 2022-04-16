@@ -1433,7 +1433,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("tree before insert:\n" + printTreeString(case7tree))
         case7BalanceOps = case7tree.insert(3, "d")
         logger.debug("tree after insertion:\n" + printTreeString(case7tree))
-        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3 TODO
         self.assertEqual(4, case7BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case7tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
@@ -1447,7 +1447,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, None, None, None, None, None, None, None, None, None, None, None, "19", None, None, None
         ])
         logger.debug("tree before insert:\n" + printTreeString(case8tree))
-        logger.debug(case8tree.search("19"))
         case8BalanceOps = case8tree.insert(8, "18")
         logger.debug("tree after insertion:\n" + printTreeString(case8tree))
         logger.debug(f"case8 balanceOps: {case8BalanceOps}")  # should be 2
