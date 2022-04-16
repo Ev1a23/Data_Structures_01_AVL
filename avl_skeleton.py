@@ -1007,14 +1007,6 @@ class AVLTreeList(object):
 
 		x = self.get_Last()
 
-		# if self.getRoot() is x and self.length() == 1: # TODO: omit this after join handles empty lists
-		# 	self.delete(self.getRoot().getSize() - 1)
-		# 	lst.insert(0, x.getValue())
-		# 	self.root = lst.getRoot()
-		# 	self.set_First(lst.get_First())
-		# 	self.set_Last(lst.get_Last())
-		# 	return absHeightDiff
-
 		# TODO - check with Or regarding the treatment of previous lists, etc.
 
 		self.delete(self.getRoot().getSize() - 1)
