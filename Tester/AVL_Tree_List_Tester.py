@@ -1566,8 +1566,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         T2 = createTreeFromList(["3"])
         tst = createTreeFromList(["2"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T1, node_x, T2)[0]
-        num = AVLTreeList.join(T1, node_x, T2)[1]
+        T = AVLTreeList.join(T1, node_x, T2, 'split')[0]
+        num = AVLTreeList.join(T1, node_x, T2, 'split')[1]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3"])))
         self.assertEqual(num, 1)
@@ -1579,7 +1579,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("T2: \n" + printTreeString(T4))
         tst = createTreeFromList(["4"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T3, node_x, T4)[0]
+        T = AVLTreeList.join(T3, node_x, T4, 'split')[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["8", "4", "10", "2", "6", "9", "11", "1", "3", "5", "7", None, None, None, None])))
 
@@ -1590,7 +1590,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("T6: \n"+printTreeString(T6))
         tst = createTreeFromList(["16"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T5, node_x, T6)[0]
+        T = AVLTreeList.join(T5, node_x, T6, 'split')[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         expected = createTreeFromList(
             ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
@@ -1605,7 +1605,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         Tr = AVLTreeList()
         tst = createTreeFromList(["4"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        T = AVLTreeList.join(Tl, node_x, Tr, 'split')[0]
         logger.debug("Joined tree: \n" + printTreeString(T))
         expected = createTreeFromList(["2", "1", "3", None, None, None, "4"])
         logger.debug("Expected: \n"+printTreeString(expected)+"\n")
@@ -1616,7 +1616,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         Tr = createTreeFromListInsert(["2", "3", "4"])
         tst = createTreeFromList(["1"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(Tl, node_x, Tr)[0]
+        T = AVLTreeList.join(Tl, node_x, Tr, 'split')[0]
         logger.debug("Joined tree: \n" + printTreeString(T))
         expected = createTreeFromList(["3", "2", "4", "1", None, None, None])
         logger.debug("Expected: \n"+printTreeString(expected))
@@ -1627,7 +1627,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         TrE = AVLTreeList()
         tst = createTreeFromList(["1"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(TlE, node_x, TrE)[0]
+        T = AVLTreeList.join(TlE, node_x, TrE, 'split')[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["1"])))
 

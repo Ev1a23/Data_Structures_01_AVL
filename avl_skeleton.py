@@ -843,34 +843,51 @@ class AVLTreeList(object):
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
-	def find_left_subtree_heightH(self, h):
+	def find_left_subtree_heightH(self, h, op):
 		if self.getRoot().getHeight() == h:
 			return self.getRoot()
 		node = self.getRoot()
 		help = node
-		while h<help.getHeight():
-			if help.getLeft().isRealNode():
-				help = help.getLeft()
-			else:
-				help = help.getRight()
-		return help
+		if op == 'split':
+			while h<help.getHeight():
+				if help.getLeft().isRealNode():
+					help = help.getLeft()
+				else:
+					help = help.getRight()
+			return help
+		else:
+			while h<help.getHeight():
+				if help.getLeft().isRealNode():
+					help = help.getLeft()
+				else:
+					return help.getLeft()
+			return help
+
 	"""
 	find right subtree with height h or height h-1
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
-	def find_right_subtree_heightH(self, h):
+	def find_right_subtree_heightH(self, h, op):
 		if self.getRoot().getHeight() == h:
 			return self
 		node = self.getRoot()
 		help = node
-		while h<help.getHeight():
-			if help.getRight().isRealNode():
-				help = help.getRight()
-			else:
-				help = help.getLeft()
-		return help
+		if op == 'split':
+			while h<help.getHeight():
+				if help.getRight().isRealNode():
+					help = help.getRight()
+				else:
+					help = help.getLeft()
+			return help
+		else:
+			while h<help.getHeight():
+				if help.getRight().isRealNode():
+					help = help.getRight()
+				else:
+					return help.getRight()
+			return help
 
 	"""
 	Join 2 trees T1,T2 with a connector node x
@@ -880,7 +897,7 @@ class AVLTreeList(object):
 	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
 	"""
 	@staticmethod
-	def join(T1, x, T2):
+	def join(T1, x, T2, op):
 		new_tree = AVLTreeList()
 		new_tree.root = x
 		new_tree.set_First(x)
@@ -911,7 +928,7 @@ class AVLTreeList(object):
 			new_tree.set_Last(T2.get_Last())
 			return new_tree, 1 #TODO
 		elif t1h<t2h:
-			node = T2.find_left_subtree_heightH(t1h)
+			node = T2.find_left_subtree_heightH(t1h,op)
 			x.setLeft(T1.getRoot())
 			x.setRight(node)
 			help = node.getParent()
@@ -927,7 +944,7 @@ class AVLTreeList(object):
 			rebalances = new_tree.reBalance(help, 'delete') #TODO
 			return new_tree, rebalances
 		else:
-			node = T1.find_right_subtree_heightH(t2h)
+			node = T1.find_right_subtree_heightH(t2h,op)
 			x.setLeft(node)
 			x.setRight(T2.getRoot())
 			help = node.getParent()
@@ -996,7 +1013,7 @@ class AVLTreeList(object):
 		# TODO - check with Or regarding the treatment of previous lists, etc.
 
 		self.delete(self.getRoot().getSize() - 1)
-		joinedTree = AVLTreeList.join(self, x, lst)[0]
+		joinedTree = AVLTreeList.join(self, x, lst, 'concat')[0]
 
 		self.root = joinedTree.getRoot()
 		self.set_First(joinedTree.get_First())
