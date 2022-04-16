@@ -1432,8 +1432,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("tree before insert:\n" + printTreeString(case7tree))
         case7BalanceOps = case7tree.insert(3, "d")
         logger.debug("tree after insertion:\n" + printTreeString(case7tree))
-        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3 TODO
-        self.assertEqual(4, case7BalanceOps)
+        logger.debug(f"case7 balanceOps: {case7BalanceOps}")  # should be 3
+        self.assertEqual(3, case7BalanceOps)
         # Undependent check
         self.assertTrue(treesEqual(case7tree, createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
 

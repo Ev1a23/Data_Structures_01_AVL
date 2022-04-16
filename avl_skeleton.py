@@ -651,7 +651,7 @@ class AVLTreeList(object):
 				height = nodeToCheckBF.getHeight()
 				if abs(balanceFactor) == 2:
 					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
-					# break
+					nodeToCheckBF = nodeToCheckBF.getParent()
 				elif abs(balanceFactor) < 2:
 					nodeToCheckBF.recomputeHeight()
 					nodeToCheckBF.recomputeSize()
@@ -665,6 +665,7 @@ class AVLTreeList(object):
 				height = nodeToCheckBF.getHeight()
 				if abs(balanceFactor) == 2:
 					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
+					nodeToCheckBF = nodeToCheckBF.getParent()
 				elif abs(balanceFactor) < 2:
 					nodeToCheckBF.recomputeHeight()
 					nodeToCheckBF.recomputeSize()
@@ -698,10 +699,10 @@ class AVLTreeList(object):
 				balanceOps += 2
 
 		elif balanceFactor == -2:
-			if BFcriminal.getLeft().getBalanceFactor() in [-1, 0]:
+			if BFcriminal.getRight().getBalanceFactor() in [-1, 0]:
 				self.leftRotation(BFcriminal)
 				balanceOps += 1
-			elif BFcriminal.getLeft().getBalanceFactor() == 1:
+			elif BFcriminal.getRight().getBalanceFactor() == 1:
 				self.rightThenLeftRotation(BFcriminal)
 				balanceOps += 2
 		return balanceOps
@@ -1005,14 +1006,6 @@ class AVLTreeList(object):
 			return absHeightDiff
 
 		x = self.get_Last()
-
-		# if self.getRoot() is x and self.length() == 1: # TODO: omit this after join handles empty lists
-		# 	self.delete(self.getRoot().getSize() - 1)
-		# 	lst.insert(0, x.getValue())
-		# 	self.root = lst.getRoot()
-		# 	self.set_First(lst.get_First())
-		# 	self.set_Last(lst.get_Last())
-		# 	return absHeightDiff
 
 		# TODO - check with Or regarding the treatment of previous lists, etc.
 
