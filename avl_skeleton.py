@@ -651,7 +651,7 @@ class AVLTreeList(object):
 				height = nodeToCheckBF.getHeight()
 				if abs(balanceFactor) == 2:
 					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
-					# break
+					nodeToCheckBF = nodeToCheckBF.getParent()
 				elif abs(balanceFactor) < 2:
 					nodeToCheckBF.recomputeHeight()
 					nodeToCheckBF.recomputeSize()
@@ -665,6 +665,7 @@ class AVLTreeList(object):
 				height = nodeToCheckBF.getHeight()
 				if abs(balanceFactor) == 2:
 					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
+					nodeToCheckBF = nodeToCheckBF.getParent()
 				elif abs(balanceFactor) < 2:
 					nodeToCheckBF.recomputeHeight()
 					nodeToCheckBF.recomputeSize()
@@ -698,10 +699,10 @@ class AVLTreeList(object):
 				balanceOps += 2
 
 		elif balanceFactor == -2:
-			if BFcriminal.getLeft().getBalanceFactor() in [-1, 0]:
+			if BFcriminal.getRight().getBalanceFactor() in [-1, 0]:
 				self.leftRotation(BFcriminal)
 				balanceOps += 1
-			elif BFcriminal.getLeft().getBalanceFactor() == 1:
+			elif BFcriminal.getRight().getBalanceFactor() == 1:
 				self.rightThenLeftRotation(BFcriminal)
 				balanceOps += 2
 		return balanceOps
