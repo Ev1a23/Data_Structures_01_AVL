@@ -842,31 +842,30 @@ class AVLTreeList(object):
 		while minNode.getLeft().isRealNode():
 			minNode = minNode.getLeft()
 		return minNode
+
+	def maximum(self, node):
+		maxNode = node
+		while maxNode.getRight().isRealNode():
+			maxNode = maxNode.getRight()
+		return maxNode
+
 	"""
 	find left subtree with height h or height h-1
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
-	def find_left_subtree_heightH(self, h, op):
+	def find_left_subtree_heightH(self, h):
 		if self.getRoot().getHeight() == h:
 			return self.getRoot()
 		node = self.getRoot()
 		help = node
-		if op == 'split':
-			while h<help.getHeight():
-				if help.getLeft().isRealNode():
-					help = help.getLeft()
-				else:
-					help = help.getRight()
-			return help
-		else:
-			while h<help.getHeight():
-				if help.getLeft().isRealNode():
-					help = help.getLeft()
-				else:
-					return help.getLeft()
-			return help
+		while h<help.getHeight():
+			if help.getLeft().isRealNode():
+				help = help.getLeft()
+			else:
+				return help.getLeft()
+		return help
 
 	"""
 	find right subtree with height h or height h-1
@@ -874,25 +873,17 @@ class AVLTreeList(object):
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
 	"""
-	def find_right_subtree_heightH(self, h, op):
+	def find_right_subtree_heightH(self, h):
 		if self.getRoot().getHeight() == h:
 			return self
 		node = self.getRoot()
 		help = node
-		if op == 'split':
-			while h<help.getHeight():
-				if help.getRight().isRealNode():
-					help = help.getRight()
-				else:
-					help = help.getLeft()
-			return help
-		else:
-			while h<help.getHeight():
-				if help.getRight().isRealNode():
-					help = help.getRight()
-				else:
-					return help.getRight()
-			return help
+		while h<help.getHeight():
+			if help.getRight().isRealNode():
+				help = help.getRight()
+			else:
+				return help.getRight()
+		return help
 
 	"""
 	Join 2 trees T1,T2 with a connector node x
@@ -902,7 +893,7 @@ class AVLTreeList(object):
 	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
 	"""
 	@staticmethod
-	def join(T1, x, T2, op):
+	def join(T1, x, T2):
 		new_tree = AVLTreeList()
 		new_tree.root = x
 		new_tree.set_First(x)
@@ -933,7 +924,7 @@ class AVLTreeList(object):
 			new_tree.set_Last(T2.get_Last())
 			return new_tree, 1 #TODO
 		elif t1h<t2h:
-			node = T2.find_left_subtree_heightH(t1h,op)
+			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
 			x.setRight(node)
 			help = node.getParent()
@@ -949,7 +940,7 @@ class AVLTreeList(object):
 			rebalances = new_tree.reBalance(help, 'delete') #TODO
 			return new_tree, rebalances
 		else:
-			node = T1.find_right_subtree_heightH(t2h,op)
+			node = T1.find_right_subtree_heightH(t2h)
 			x.setLeft(node)
 			x.setRight(T2.getRoot())
 			help = node.getParent()
@@ -975,7 +966,69 @@ class AVLTreeList(object):
 	right is an AVLTreeList representing the list from index i+1, and val is the value at the i'th index.
 	"""
 	def split(self, i):
-		return None
+		balances = 0
+		node = self.retrieveNode(i)
+		val = node.getValue()
+		L = AVLTreeList()
+		L.root =node.getLeft()
+
+		R = AVLTreeList()
+		R.root = node.getRight()
+
+		help = node.getParent()
+		while help is not None:
+			if help.getLeft() == node:
+				lSon, rSon = True, False
+			else:
+				lSon, rSon = False, True
+			save = help.getParent()
+			if rSon:
+				L, tmp = AVLTreeList.join(self.create_tree_from_node(help.getLeft()), help, L)
+			else:
+				R, tmp = AVLTreeList.join(R, help, self.create_tree_from_node(help.getRight()))
+			node = help
+			help = save
+			balances +=tmp
+
+		if L.getRoot() is not None and L.getRoot().isRealNode():
+			L.getRoot().setParent(None)
+			if L.getRoot().getLeft() is not None and L.getRoot().getLeft().isRealNode():
+				L.set_First(L.minimum(L.getRoot()))
+			else:
+				L.set_First(L.getRoot())
+				L.getRoot().setLeft(AVLNode(None))
+				L.getRoot().getLeft().setParent(L.getRoot())
+			if L.getRoot().getRight() is not None and L.getRoot().getRight().isRealNode():
+				L.set_Last(L.maximum(L.getRoot()))
+			else:
+				L.set_Last(L.getRoot())
+				L.getRoot().setRight(AVLNode(None))
+				L.getRoot().getRight().setParent(L.getRoot())
+		else:
+			L = AVLTreeList()
+		if R.getRoot() is not None and R.getRoot().isRealNode():
+			R.getRoot().setParent(None)
+			if R.getRoot().getLeft() is not None and R.getRoot().getLeft().isRealNode():
+				R.set_First(R.minimum(R.getRoot()))
+			else:
+				R.set_First(R.getRoot())
+				R.getRoot().setLeft(AVLNode(None))
+				R.getRoot().getLeft().setParent(R.getRoot())
+			if R.getRoot().getRight() is not None and R.getRoot().getRight().isRealNode():
+				R.set_Last(R.maximum(R.getRoot()))
+			else:
+				R.set_Last(R.getRoot())
+				R.getRoot().setRight(AVLNode(None))
+				R.getRoot().getRight().setParent(R.getRoot())
+		else:
+			R = AVLTreeList()
+		return L, val, R
+
+	def create_tree_from_node(self, node):
+		node.setParent(None)
+		t = AVLTreeList()
+		t.root = node
+		return t
 
 	"""concatenates lst to self
 
@@ -1010,7 +1063,7 @@ class AVLTreeList(object):
 		# TODO - check with Or regarding the treatment of previous lists, etc.
 
 		self.delete(self.getRoot().getSize() - 1)
-		joinedTree = AVLTreeList.join(self, x, lst, 'concat')[0]
+		joinedTree = AVLTreeList.join(self, x, lst)[0]
 
 		self.root = joinedTree.getRoot()
 		self.set_First(joinedTree.get_First())

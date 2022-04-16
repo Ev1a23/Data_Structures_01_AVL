@@ -5,6 +5,7 @@ from avl_skeleton import AVLTreeList
 from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields, createTreeFromListInsert
 from utils.print_tree import printTreeString
 import logging
+import random
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -1566,8 +1567,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         T2 = createTreeFromList(["3"])
         tst = createTreeFromList(["2"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T1, node_x, T2, 'split')[0]
-        num = AVLTreeList.join(T1, node_x, T2, 'split')[1]
+        T = AVLTreeList.join(T1, node_x, T2)[0]
+        num = AVLTreeList.join(T1, node_x, T2)[1]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3"])))
         self.assertEqual(num, 1)
@@ -1579,7 +1580,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("T2: \n" + printTreeString(T4))
         tst = createTreeFromList(["4"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T3, node_x, T4, 'split')[0]
+        T = AVLTreeList.join(T3, node_x, T4)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["8", "4", "10", "2", "6", "9", "11", "1", "3", "5", "7", None, None, None, None])))
 
@@ -1590,7 +1591,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         logger.debug("T6: \n"+printTreeString(T6))
         tst = createTreeFromList(["16"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(T5, node_x, T6, 'split')[0]
+        T = AVLTreeList.join(T5, node_x, T6,)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         expected = createTreeFromList(
             ["8", "4", "12", "2", "6", "10", "16", "1", "3", "5", "7", "9", "11", "14", "18"])
@@ -1605,7 +1606,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         Tr = AVLTreeList()
         tst = createTreeFromList(["4"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(Tl, node_x, Tr, 'split')[0]
+        T = AVLTreeList.join(Tl, node_x, Tr,)[0]
         logger.debug("Joined tree: \n" + printTreeString(T))
         expected = createTreeFromList(["2", "1", "3", None, None, None, "4"])
         logger.debug("Expected: \n"+printTreeString(expected)+"\n")
@@ -1616,7 +1617,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         Tr = createTreeFromListInsert(["2", "3", "4"])
         tst = createTreeFromList(["1"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(Tl, node_x, Tr, 'split')[0]
+        T = AVLTreeList.join(Tl, node_x, Tr,)[0]
         logger.debug("Joined tree: \n" + printTreeString(T))
         expected = createTreeFromList(["3", "2", "4", "1", None, None, None])
         logger.debug("Expected: \n"+printTreeString(expected))
@@ -1627,9 +1628,205 @@ class Test_AVL_Tree_list(unittest.TestCase):
         TrE = AVLTreeList()
         tst = createTreeFromList(["1"])
         node_x = tst.getRoot()
-        T = AVLTreeList.join(TlE, node_x, TrE, 'split')[0]
+        T = AVLTreeList.join(TlE, node_x, TrE,)[0]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["1"])))
+
+    def test_split(self):
+        ########################
+        # Case 1: Edge Cases:
+        ########################
+        # Testcase1: [a], 0 - expceted: [[],a,[]]
+        tree = createTreeFromList(["a"])
+        result = tree.split(0)
+        expected = createTreeFromList([])
+        self.assertTrue(treesEqual(result[0], expected))
+        self.assertEqual(result[1], "a")
+        self.assertTrue(treesEqual(result[2], expected))
+
+        # Testcase2: [a,b], 0 - expected: [[], a, [b]]
+        tree = createTreeFromList(["a", None, "b"])
+        logger.debug("tree: \n"+printTreeString(tree))
+        result = tree.split(0)
+        self.assertTrue(treesEqual(result[0], createTreeFromList([])))
+        self.assertEqual(result[1], "a")
+        logger.debug("r tree: \n"+ printTreeString(result[2]))
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["b"])))
+
+        #Another option:
+        tree = createTreeFromList(["b", "a", None])
+        logger.debug("tree: \n"+printTreeString(tree))
+        result = tree.split(0)
+        self.assertTrue(treesEqual(result[0], createTreeFromList([])))
+        self.assertEqual(result[1], "a")
+        logger.debug("right tree: \n"+printTreeString(result[2]))
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["b"])))
+
+        # Testcase4: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 7 - expected: [[a,b,c,d,e,f,g], h, [i,j,k,l,m,n,o]]
+        tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
+        result = tree.split(7)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(["d", "b", "f", "a", "c", "e", "g"])))
+        self.assertEqual(result[1], "h")
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["l", "j", "n", "i", "k", "m", "o"])))
+
+        # Testcase5: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 14 - expected: [[a,b,c,d,e,f,g,h,i,j,k,l,m,n], o, []]
+        tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
+        result = tree.split(14)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(
+            ["h", "d", "l", "b", "f", "j", "m", "a", "c", "e", "g", "i", "k", None, "n"])), True)
+        self.assertEqual(result[1], "o")
+        self.assertTrue(treesEqual(result[2], createTreeFromList([])))
+
+        # Testcase6: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 0 - expected: [[], a, [b,c,d,e,f,g,h,i,j,k,l,m,n,o]]
+        tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
+        logger.debug("checked tree: \n"+ printTreeString(tree))
+        result = tree.split(0)
+        self.assertTrue(treesEqual(result[0], createTreeFromList([])))
+        self.assertEqual(result[1], "a")
+        logger.debug("Tree 2: \n"+ printTreeString(result[2]))
+        self.assertTrue(treesEqual(result[2], createTreeFromList(
+            ["h", "d", "l", "c", "f", "j", "n", "b", None, "e", "g", "i", "k", "m", "o"])))
+
+        #############################
+        # Case 2: Splitter Node State
+        #############################
+        # Testcase1: splitter is a leaf
+        tree = createTreeFromList(["d", "b", "f", "a", "c", "e", "g"])
+        logger.debug("tree before join: \n" + printTreeString(tree))
+        result = tree.split(2)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(["a", None, "b"])))
+        self.assertEqual(result[1], "c")
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["f", "e", "g", "d", None, None, None])))
+
+        # Testcase2: splitter is an inner node
+        tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
+        logger.debug("tree before split at 5: \n"+ printTreeString(tree))
+        result = tree.split(5)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
+        self.assertEqual(result[1], "f")
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["h", "g", "i"])))
+
+        # Testcase3: splitter is the root
+        tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
+        result = tree.split(3)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(["b", "a", "c"])))
+        self.assertEqual(result[1], "d")
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["g", "f", "h", "e", None, None, "i"])))
+
+        # Testcase4: splitter has only right child
+        tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
+        result = tree.split(7)
+        self.assertTrue(treesEqual(result[0], createTreeFromList(["d", "b", "f", "a", "c", "e", "g"])))
+        self.assertEqual(result[1], "h")
+        self.assertTrue(treesEqual(result[2], createTreeFromList(["i"])))
+
+        ####################################
+        # Case 3: Random
+        ####################################
+        # Testcase1: splitter index is randomly chosen
+        for k in range(100):
+            lst = ["B", "A", "C"]
+            for i in range(10):
+                lst += ["x1"] * (2 ** i) + ["x2"] * (2 ** i) + ["x3"] * (2 ** i) + ["x4"] * (2 ** i)
+            tree = createTreeFromList(lst)
+            tree_list = tree.listToArray()
+            i = random.randint(0, tree.length() - 1)
+            result = tree.split(i)
+            self.assertEqual(tree_list[:i], result[0].listToArray())
+            self.assertEqual(tree_list[i], result[1])
+            self.assertEqual(tree_list[i + 1:len(tree_list)], result[2].listToArray())
+
+        ####################################
+        # Case 4: Chain of Splits
+        ####################################
+        # Testcase1: create a list and split it by half, then split each result by half and so on
+        lst = ["B","A","C"]
+        for i in range (10):
+            lst += ["x1"]*(2**i) + ["x2"]*(2**i) + ["x3"]*(2**i) + ["x4"]*(2**i)
+        tree = createTreeFromList(lst)
+        while tree.length()>0:
+            tree_list = tree.listToArray()
+            k = tree.length()//2
+            result = tree.split(k)
+            self.assertEqual(result[0].listToArray(), tree_list[:k])
+            self.assertEqual(result[1], tree_list[k])
+            self.assertEqual(result[2].listToArray(), tree_list[k+1:])
+            tree = result[0]
+
+        ####################################
+        # Case 5: Large list
+        ####################################
+        # Testcase1: [x1]*1023 + [A] + [x2]*1023 + [B] + [x3]*1023 + [C] + [x4]*1023 split by index 1000
+        lst = ["B","A","C"]
+        for i in range (10):
+            lst += ["x1"]*(2**i) + ["x2"]*(2**i) + ["x3"]*(2**i) + ["x4"]*(2**i)
+        tree = createTreeFromList(lst)
+        result = tree.split(1000)
+        exp1 = ["x1"]*1000
+        exp2 = ["x1"]*22 + ["A"] + ["x2"]*1023 + ["B"] + ["x3"]*1023 + ["C"] + ["x4"]*1023
+        self.assertEqual(result[0].listToArray(), exp1)
+        self.assertEqual(result[1], "x1")
+        self.assertEqual(result[2].listToArray(), exp2)
+
+        # Testcase2: [x1]*1023 + [A] + [x2]*1023 + [B] + [x3]*1023 + [C] + [x4]*1023 split by index 1023
+        lst = ["B","A","C"]
+        for i in range (10):
+            lst += ["x1"]*(2**i) + ["x2"]*(2**i) + ["x3"]*(2**i) + ["x4"]*(2**i)
+        tree = createTreeFromList(lst)
+        result = tree.split(1023)
+        exp1 = ["x1"]*1023
+        exp2 = ["x2"]*1023 + ["B"] + ["x3"]*1023 + ["C"] + ["x4"]*1023
+        self.assertEqual(result[0].listToArray(), exp1)
+        self.assertEqual(result[1], "A")
+        self.assertEqual(result[2].listToArray(), exp2)
+
+        # Testcase3: [x1]*1023 + [A] + [x2]*1023 + [B] + [x3]*1023 + [C] + [x4]*1023 split by index 3000
+        lst = ["B", "A", "C"]
+        for i in range(10):
+            lst += ["x1"] * (2 ** i) + ["x2"] * (2 ** i) + ["x3"] * (2 ** i) + ["x4"] * (2 ** i)
+        tree = createTreeFromList(lst)
+        result = tree.split(3000)
+        exp1 = ["x1"] * 1023 + ["A"] + ["x2"] * 1023 + ["B"] + ["x3"] * 952
+        exp2 = ["x3"] * 70 + ["C"] + ["x4"] * 1023
+        self.assertEqual(result[0].listToArray(), exp1)
+        self.assertEqual(result[1], "x3")
+        self.assertEqual(result[2].listToArray(), exp2)
+
+        # Testcase4: [x1]*1023 + [A] + [x2]*1023 + [B] + [x3]*1023 + [C] + [x4]*1023 split by index 4094
+        lst = ["B", "A", "C"]
+        for i in range(10):
+            lst += ["x1"] * (2 ** i) + ["x2"] * (2 ** i) + ["x3"] * (2 ** i) + ["x4"] * (2 ** i)
+        tree = createTreeFromList(lst)
+        result = tree.split(4094)
+        exp1 = ["x1"] * 1023 + ["A"] + ["x2"] * 1023 + ["B"] + ["x3"] * 1023 + ["C"] + ["x4"] * 1022
+        exp2 = []
+        self.assertEqual(result[0].listToArray(), exp1)
+        self.assertEqual(result[1], "x4")
+        self.assertEqual(result[2].listToArray(), exp2)
+
+        # Testcase5: [x1]*1023 + [A] + [x2]*1023 + [B] + [x3]*1023 + [C] + [x4]*1023 split by index 0
+        lst = ["B", "A", "C"]
+        for i in range(10):
+            lst += ["x1"] * (2 ** i) + ["x2"] * (2 ** i) + ["x3"] * (2 ** i) + ["x4"] * (2 ** i)
+        tree = createTreeFromList(lst)
+        result = tree.split(0)
+        exp1 = []
+        exp2 = ["x1"] * 1022 + ["A"] + ["x2"] * 1023 + ["B"] + ["x3"] * 1023 + ["C"] + ["x4"] * 1023
+        self.assertEqual(result[0].listToArray(), exp1)
+        self.assertEqual(result[1], "x1")
+        self.assertEqual(result[2].listToArray(), exp2)
+
+        ######################
+        # Case 7: General
+        ######################
+
+        tree = createTreeFromList(['a','b','c',None,'d','e','f',None,None,None,None,None,'g',None,None])
+        result = tree.split(4)
+        self.assertEqual(result[1], 'g')
+        self.assertEqual(result[0].listToArray(), ['b','d','a','e'])
+        self.assertEqual(result[2].listToArray(),['c','f'])
+        left_lst=result[0]
+        right_lst=result[2]
 
 
     def test_delete(self):
