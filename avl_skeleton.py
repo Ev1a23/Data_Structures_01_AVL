@@ -911,7 +911,7 @@ class AVLTreeList(object):
 			x.recomputeSize()
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
-			return new_tree, 1
+			return new_tree, 1 #TODO
 		elif t1h<t2h:
 			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
@@ -926,7 +926,7 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T2.getRoot()
-			rebalances = new_tree.reBalance(help, 'delete')
+			rebalances = new_tree.reBalance(help, 'delete') #TODO
 			return new_tree, rebalances
 		else:
 			node = T1.find_right_subtree_heightH(t2h)
@@ -942,7 +942,7 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T1.getRoot()
-			rebalances = new_tree.reBalance(help, 'delete')
+			rebalances = new_tree.reBalance(help, 'delete') #TODO
 			return new_tree, rebalances
 
 	"""splits the list at the i'th index
