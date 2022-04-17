@@ -1640,9 +1640,14 @@ class Test_AVL_Tree_list(unittest.TestCase):
         tree = createTreeFromList(["a"])
         result = tree.split(0)
         expected = createTreeFromList([])
+        logger.debug("tree: \n"+printTreeString(tree))
         self.assertTrue(treesEqual(result[0], expected))
+        logger.debug("lTree: \n"+ printTreeString(result[0]))
+        logger.debug("rTree: \n"+ printTreeString(result[2]))
         self.assertEqual(result[1], "a")
         self.assertTrue(treesEqual(result[2], expected))
+
+
 
         # Testcase2: [a,b], 0 - expected: [[], a, [b]]
         tree = createTreeFromList(["a", None, "b"])
@@ -1650,7 +1655,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         result = tree.split(0)
         self.assertTrue(treesEqual(result[0], createTreeFromList([])))
         self.assertEqual(result[1], "a")
-        logger.debug("r tree: \n"+ printTreeString(result[2]))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
         self.assertTrue(treesEqual(result[2], createTreeFromList(["b"])))
 
         #Another option:
@@ -1659,23 +1665,30 @@ class Test_AVL_Tree_list(unittest.TestCase):
         result = tree.split(0)
         self.assertTrue(treesEqual(result[0], createTreeFromList([])))
         self.assertEqual(result[1], "a")
-        logger.debug("right tree: \n"+printTreeString(result[2]))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
         self.assertTrue(treesEqual(result[2], createTreeFromList(["b"])))
 
         # Testcase4: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 7 - expected: [[a,b,c,d,e,f,g], h, [i,j,k,l,m,n,o]]
         tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
+        logger.debug("tree: \n" + printTreeString(tree))
         result = tree.split(7)
         self.assertTrue(treesEqual(result[0], createTreeFromList(["d", "b", "f", "a", "c", "e", "g"])))
         self.assertEqual(result[1], "h")
         self.assertTrue(treesEqual(result[2], createTreeFromList(["l", "j", "n", "i", "k", "m", "o"])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         # Testcase5: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 14 - expected: [[a,b,c,d,e,f,g,h,i,j,k,l,m,n], o, []]
         tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
+        logger.debug("tree: \n" + printTreeString(tree))
         result = tree.split(14)
         self.assertTrue(treesEqual(result[0], createTreeFromList(
             ["h", "d", "l", "b", "f", "j", "m", "a", "c", "e", "g", "i", "k", None, "n"])), True)
         self.assertEqual(result[1], "o")
         self.assertTrue(treesEqual(result[2], createTreeFromList([])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         # Testcase6: [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o], 0 - expected: [[], a, [b,c,d,e,f,g,h,i,j,k,l,m,n,o]]
         tree = createTreeFromList(["h", "d", "l", "b", "f", "j", "n", "a", "c", "e", "g", "i", "k", "m", "o"])
@@ -1683,9 +1696,10 @@ class Test_AVL_Tree_list(unittest.TestCase):
         result = tree.split(0)
         self.assertTrue(treesEqual(result[0], createTreeFromList([])))
         self.assertEqual(result[1], "a")
-        logger.debug("Tree 2: \n"+ printTreeString(result[2]))
         self.assertTrue(treesEqual(result[2], createTreeFromList(
             ["h", "d", "l", "c", "f", "j", "n", "b", None, "e", "g", "i", "k", "m", "o"])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         #############################
         # Case 2: Splitter Node State
@@ -1697,6 +1711,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertTrue(treesEqual(result[0], createTreeFromList(["a", None, "b"])))
         self.assertEqual(result[1], "c")
         self.assertTrue(treesEqual(result[2], createTreeFromList(["f", "e", "g", "d", None, None, None])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         # Testcase2: splitter is an inner node
         tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
@@ -1705,21 +1721,28 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertTrue(treesEqual(result[0], createTreeFromList(["b", "a", "d", None, None, "c", "e"])))
         self.assertEqual(result[1], "f")
         self.assertTrue(treesEqual(result[2], createTreeFromList(["h", "g", "i"])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         # Testcase3: splitter is the root
         tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
+        logger.debug("tree: \n"+printTreeString(tree))
         result = tree.split(3)
         self.assertTrue(treesEqual(result[0], createTreeFromList(["b", "a", "c"])))
         self.assertEqual(result[1], "d")
         self.assertTrue(treesEqual(result[2], createTreeFromList(["g", "f", "h", "e", None, None, "i"])))
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
         # Testcase4: splitter has only right child
         tree = createTreeFromList(["d", "b", "g", "a", "c", "f", "h"] + [None] * 4 + ["e"] + [None] * 2 + ["i"])
+        logger.debug("tree: \n" + printTreeString(tree))
         result = tree.split(7)
         self.assertTrue(treesEqual(result[0], createTreeFromList(["d", "b", "f", "a", "c", "e", "g"])))
         self.assertEqual(result[1], "h")
         self.assertTrue(treesEqual(result[2], createTreeFromList(["i"])))
-
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
         ####################################
         # Case 3: Random
         ####################################
@@ -1735,6 +1758,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             self.assertEqual(tree_list[:i], result[0].listToArray())
             self.assertEqual(tree_list[i], result[1])
             self.assertEqual(tree_list[i + 1:len(tree_list)], result[2].listToArray())
+
 
         ####################################
         # Case 4: Chain of Splits
@@ -1821,12 +1845,15 @@ class Test_AVL_Tree_list(unittest.TestCase):
         ######################
 
         tree = createTreeFromList(['a','b','c',None,'d','e','f',None,None,None,None,None,'g',None,None])
+        logger.debug("tree: \n"+printTreeString(tree))
         result = tree.split(4)
         self.assertEqual(result[1], 'g')
         self.assertEqual(result[0].listToArray(), ['b','d','a','e'])
         self.assertEqual(result[2].listToArray(),['c','f'])
         left_lst=result[0]
         right_lst=result[2]
+        logger.debug("lTree: \n" + printTreeString(result[0]))
+        logger.debug("rTree: \n" + printTreeString(result[2]))
 
 
     def test_delete(self):
