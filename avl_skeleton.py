@@ -1022,7 +1022,7 @@ class AVLTreeList(object):
 				R.getRoot().getRight().setParent(R.getRoot())
 		else:
 			R = AVLTreeList()
-		return L, val, R
+		return [L, val, R]
 
 	def create_tree_from_node(self, node):
 		node.setParent(None)
