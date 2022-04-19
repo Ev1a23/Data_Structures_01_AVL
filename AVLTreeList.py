@@ -929,7 +929,7 @@ class AVLTreeList(object):
 			x.recomputeSize()
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
-			return new_tree
+			return new_tree, 1
 		elif t1h<t2h:
 			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
