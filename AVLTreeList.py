@@ -174,7 +174,8 @@ class AVLNode(object):
 	""" returns true whether self is a leaf
 	
 		@rtype: bool
-		@returns: False if self is not a leaf (has a right/left son such that they are not virtual nodes), True otherwise
+		@returns: False if self is not a leaf (has a right/left son such that they are not virtual nodes), 
+		True otherwise
 		@Time complexity: O(1)
 		"""
 
@@ -770,7 +771,8 @@ class AVLTreeList(object):
 	Initiliazing an empty list - O(1)
 	get_First() - returns an attribute of self, without any calculations - O(1)
 	
-	Conclusion from recitation 3 ex 3 - starting at the minimal element of a tree and calling n-1 times to successor
+	Conclusion from recitation 3 ex 3 - starting at the minimal element of a tree and calling 
+	n-1 times to successor
 	is O(n) work since we go through every edge (there are n-1 edges) at most 2 times.
 	Plus,
 		node is not None - O(1), n times -> O(n)
@@ -843,6 +845,21 @@ class AVLTreeList(object):
 			minNode = minNode.getLeft()
 		return minNode
 
+	"""returns the maximum of a given sub tree that node is its root
+	i.e. the deepest node that is on the `\` branch that starts from node
+
+	@pre: node.isRealNode() == True
+	@type node: AVLNode
+	@param node: the node of which we will return the maximum of his subtree
+	@rtype: AVLNode
+	@returns: The maximum of node's subtree, if it is a leaf, returns itself
+
+	Time complexity:
+	maximum = node - O(1)
+	(*) maximum.getRight() is not None && maximum = maximum.getRight() are O(1) each
+	(*) is executed at most as many times as the height of the tree.
+	Therefore, the total time complexity is O(h) = O(logn).
+	"""
 	def maximum(self, node):
 		maxNode = node
 		while maxNode.getRight().isRealNode():
@@ -850,7 +867,7 @@ class AVLTreeList(object):
 		return maxNode
 
 	"""
-	find left subtree with height h or height h-1
+	find left subtree with height h
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
@@ -868,7 +885,7 @@ class AVLTreeList(object):
 		return help
 
 	"""
-	find right subtree with height h or height h-1
+	find right subtree with height h
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
@@ -889,7 +906,7 @@ class AVLTreeList(object):
 	Join 2 trees T1,T2 with a connector node x
 	@pre: T1<x<T2
 	@pre: x.isRealNode() == True
-	Time complexity: O(abs(height(T2)-Height(T1)+1)
+	Time complexity: O(abs(height(T2)-Height(T1))+1)
 	@returns: tuple, index 0 is the joined tree, index 1 is the number of rebalances
 	"""
 	@staticmethod
@@ -1030,6 +1047,14 @@ class AVLTreeList(object):
 		else:
 			R = AVLTreeList()
 		return [L, val, R]
+	"""
+	Create a tree that his root is a given node
+	@param: AVLnode
+	@pre - node.isRealNode() == True
+	@returns: a tree t which t.getRoot() == node
+	Time complexity: O(1)
+	"""
+
 
 	def create_tree_from_node(self, node):
 		node.setParent(None)
@@ -1193,7 +1218,8 @@ class AVLTreeList(object):
 	@pre: called from reBalance function (due to a tree operation)
 	
 	@type BFcriminal: AVLNode
-	@pre: BFcriminal's BF is +2 (i.e. it has a real left son) and left son BF is -1 (i.e. it has a real right son)
+	@pre: BFcriminal's BF is +2 (i.e. it has a real left son) and left son BF is -1 
+	(i.e. it has a real right son)
 	@param BFcriminal: node that violates the balance rules of an AVL tree
 	@post BFcriminal: node won't violate the balance rules of an AVL tree anymore
 	
@@ -1209,7 +1235,8 @@ class AVLTreeList(object):
 	@pre: called from reBalance function (due to a tree operation)
 
 	@type BFcriminal: AVLNode
-	@pre: BFcriminal's BF is -2 (i.e. it has a real right son) and right son BF is +1 (i.e. it has a real left son)
+	@pre: BFcriminal's BF is -2 (i.e. it has a real right son) and right son BF is +1 
+	(i.e. it has a real left son)
 	@param BFcriminal: node that violates the balance rules of an AVL tree
 	@post BFcriminal: node won't violate the balance rules of an AVL tree anymore
 	
@@ -1234,7 +1261,8 @@ class AVLTreeList(object):
 	""" find the predecessor of a given node
 	@param - AVLNode
 	@return - AVLNode, the predecessor of the node. if it's the first node, return null
-	@Time complexity: O(logn) worst case, go through the height of the tree(logn), each move O(1) work(pointers switch)
+	@Time complexity: O(logn) worst case, go through the height of the tree(logn), 
+	each move O(1) work(pointers switch)
 	if our node is the first node of the tree, O(1) time complexity 
 	"""
 	def predecessor(self, node):
