@@ -895,6 +895,13 @@ class AVLTreeList(object):
 	@staticmethod
 	def join(T1, x, T2):
 		new_tree = AVLTreeList()
+		x.setParent(None)
+		vlNode = AVLNode("")
+		vlNode.setParent(x)
+		vrNode = AVLNode("")
+		vrNode.setParent(x)
+		x.setRight(vrNode)
+		x.setLeft(vlNode)
 		new_tree.root = x
 		new_tree.set_First(x)
 		new_tree.set_Last(x)
