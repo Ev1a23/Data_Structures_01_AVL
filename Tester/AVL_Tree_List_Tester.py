@@ -2252,5 +2252,12 @@ class Test_AVL_Tree_list(unittest.TestCase):
         case4tree.swapNodes(node1beforeSwap, node2beforeSwap)
         logger.debug(f"Case 4 - tree after swap:\n{printTreeString(case4tree)}")
 
+    def test_insert_at_0(self):
+        t = AVLTreeList()
+        for i in range(100):
+            t.insert(0,str(100-i))
+            logger.debug("\n" + printTreeString(t))
+        logger.debug(printTreeString(t))
+
     if __name__ == "__main__":
         unittest.main()
