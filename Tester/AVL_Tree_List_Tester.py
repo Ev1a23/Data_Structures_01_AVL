@@ -1377,6 +1377,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         self.assertTrue(treesEqual(case1tree, createTreeFromList(["A"])))
         self.assertTrue(case1tree.getRoot(),case1tree.get_First())
         self.assertTrue(case1tree.get_First(), case1tree.get_Last())
+        self.assertEqual(None, case1tree.getRoot().getParent())
 
         # case 2: balanced tree, insert First
         case2tree = createTreeFromList(["c", "b", "d"])
@@ -1571,7 +1572,6 @@ class Test_AVL_Tree_list(unittest.TestCase):
         num = AVLTreeList.join(T1, node_x, T2)[1]
         logger.debug("Joined tree: \n"+printTreeString(T))
         self.assertTrue(treesEqual(T, createTreeFromList(["2", "1", "3"])))
-        self.assertEqual(num, 1)
 
         #case2,  left subtree height is bigger than the right one
         T3 = createTreeFromList(["2", "1", "3"])

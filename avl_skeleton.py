@@ -964,6 +964,7 @@ class AVLTreeList(object):
 	@rtype: list
 	@returns: a list [left, val, right], where left is an AVLTreeList representing the list until index i-1,
 	right is an AVLTreeList representing the list from index i+1, and val is the value at the i'th index.
+	From Lecture 03, Time complexity of split is O(logn)
 	"""
 	def split(self, i):
 		balances = 0
