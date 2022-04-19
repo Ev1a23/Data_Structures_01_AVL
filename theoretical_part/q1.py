@@ -1,4 +1,4 @@
-from avl_skeleton import AVLTreeList as AVLTreeList
+from AVLTreeList import AVLTreeList as AVLTreeList
 import random
 import sys
 

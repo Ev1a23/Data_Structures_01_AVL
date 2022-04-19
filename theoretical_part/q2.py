@@ -1,4 +1,4 @@
-from avl_skeleton import AVLTreeList as Balanced
+from AVLTreeList import AVLTreeList as Balanced
 import unbalancedTree as Unbalanced
 import random
 

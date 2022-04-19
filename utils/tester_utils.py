@@ -1,6 +1,6 @@
 import math
 
-from avl_skeleton import AVLNode, AVLTreeList
+from AVLTreeList import AVLNode, AVLTreeList
 from utils.print_tree import printTreefinal
 
 

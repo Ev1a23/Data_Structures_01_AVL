@@ -1,7 +1,7 @@
 import sys
 import unittest
-from avl_skeleton import AVLNode
-from avl_skeleton import AVLTreeList
+from AVLTreeList import AVLNode
+from AVLTreeList import AVLTreeList
 from utils.tester_utils import createTreeFromList, treesEqual, nodesEqual, setFields, createTreeFromListInsert
 from utils.print_tree import printTreeString
 import logging

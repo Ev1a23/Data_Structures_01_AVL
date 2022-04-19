@@ -1,6 +1,6 @@
 import unittest
-import avl_skeleton as file
-from avl_skeleton import AVLNode
+import AVLTreeList as file
+from AVLTreeList import AVLNode
 
 class Test_Node_AVL(unittest.TestCase):
     def test_getHeight_setHeight(self):

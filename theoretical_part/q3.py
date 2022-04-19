@@ -1,7 +1,7 @@
 ########################################
 ## Question 2 in the theoretical part ##
 ########################################
-from avl_skeleton import AVLTreeList as AVLTreeList
+from AVLTreeList import AVLTreeList as AVLTreeList
 import math
 import random
 print("Results of the analysis:")
