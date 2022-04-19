@@ -8,7 +8,7 @@ def exp1():
     ###### First Exp - Insertions ########
     print("---------------First Exp--------------")
     for i in range (1, 11):
-        experimental = AVLTreeList.AVLTreeList()
+        experimental = AVLTreeList()
         cnt = experimental.insert(0, "0")
     # Insert 1000*2^i nodes randomly
         for j in range (1000*(2**i)-1):
@@ -24,7 +24,7 @@ def exp2():
     print("---------------Second Exp--------------")
     ####### Second Exp - Deletions ########
     for i in range (1, 11):
-        experimental = AVLTreeList.AVLTreeList()
+        experimental = AVLTreeList()
         experimental.insert(0, "0")
     # Insert 1000*2^i nodes randomly
         for j in range (1000*(2**i)-1):
@@ -45,7 +45,7 @@ def exp3():
     results= []
     print("------------Third Exp-------------")
     for i in range (1, 11):
-        experimental = AVLTreeList.AVLTreeList()
+        experimental = AVLTreeList()
         experimental.insert(0, "0")
     # Insert 1000*2^i nodes randomly
         for j in range (1000*(2**(i-1))-1):
@@ -67,13 +67,13 @@ def exp3():
         results.append(cnt)
     return results
 
-f = open("/Users/orshemesh/DS_projects/resultsQ1.txt", 'w')
-
-res1 = exp1()
-res2 = exp2()
+# f = open("/Users/orshemesh/DS_projects/resultsQ1.txt", 'w')
+#
+#res1 = exp1()
+#res2 = exp2()
 res3 = exp3()
-for i in range(10):
-    f.write(str(res1[i])+","+str(res2[i])+","+str(res3[i])+"\n")
-
-f.close()
+# for i in range(10):
+#     f.write(str(res1[i])+","+str(res2[i])+","+str(res3[i])+"\n")
+#
+# f.close()
 

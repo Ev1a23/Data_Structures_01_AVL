@@ -906,10 +906,10 @@ class AVLTreeList(object):
 		elif T1.empty() or T2.empty():
 			if T1.empty():
 				balances = T2.insert(0, x.getValue())
-				return T2, balances
+				return T2, abs(-1-T2.getRoot().getHeight())
 			else:
 				balances = T1.insert(T1.length(), x.getValue())
-				return T1, balances
+				return T1, abs(-1-T1.getRoot().getHeight())
 		t1h = T1.getRoot().getHeight()
 		t2h = T2.getRoot().getHeight()
 
@@ -922,7 +922,7 @@ class AVLTreeList(object):
 			x.recomputeSize()
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
-			return new_tree, 1 #TODO
+			return new_tree, abs(T1.getRoot().getHeight()-T2.getRoot().getHeight())
 		elif t1h<t2h:
 			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
@@ -938,7 +938,7 @@ class AVLTreeList(object):
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T2.getRoot()
 			rebalances = new_tree.reBalance(help, 'delete') #TODO
-			return new_tree, rebalances
+			return new_tree, abs(T1.getRoot().getHeight()-T2.getRoot().getHeight())
 		else:
 			node = T1.find_right_subtree_heightH(t2h)
 			x.setLeft(node)
@@ -954,7 +954,7 @@ class AVLTreeList(object):
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T1.getRoot()
 			rebalances = new_tree.reBalance(help, 'delete') #TODO
-			return new_tree, rebalances
+			return new_tree, abs(T1.getRoot().getHeight()-T2.getRoot().getHeight())
 
 	"""splits the list at the i'th index
 
@@ -974,8 +974,9 @@ class AVLTreeList(object):
 
 		R = AVLTreeList()
 		R.root = node.getRight()
-
+		maxdif = 0
 		help = node.getParent()
+		cnt = 0
 		while help is not None:
 			if help.getLeft() == node:
 				lSon, rSon = True, False
@@ -986,6 +987,10 @@ class AVLTreeList(object):
 				L, tmp = AVLTreeList.join(self.create_tree_from_node(help.getLeft()), help, L)
 			else:
 				R, tmp = AVLTreeList.join(R, help, self.create_tree_from_node(help.getRight()))
+
+			if(maxdif<tmp):
+				maxdif = tmp
+			cnt+=1
 			node = help
 			help = save
 			balances +=tmp
@@ -1022,7 +1027,8 @@ class AVLTreeList(object):
 				R.getRoot().getRight().setParent(R.getRoot())
 		else:
 			R = AVLTreeList()
-		return [L, val, R, balances] #todo when finishing with theretical part remove return of balances
+		avg_cost_of_join = balances / cnt if cnt != 0 else 0
+		return [L, val, R, balances, maxdif, cnt, balances, avg_cost_of_join] #TODO balances is total height dif of this split, maxdif is the maximal height differential join
 
 	def create_tree_from_node(self, node):
 		node.setParent(None)
