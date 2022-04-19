@@ -145,7 +145,7 @@ class AVLNode(object):
 	def setValue(self, value):
 		self.value = value
 
-	"""sets the balance factor of the node
+	"""sets the height of the node
 
 	@type h: int
 	@param h: the height
