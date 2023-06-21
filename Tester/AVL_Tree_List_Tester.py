@@ -311,8 +311,8 @@ class Test_AVL_Tree_list(unittest.TestCase):
         #        /    \
         #       ---   ---
         self.assertEqual(["3"], tree.listToArray())
-        root.setValue("kk")
-        self.assertEqual(["kk"], tree.listToArray())
+        root.setValue("k")
+        self.assertEqual(["k"], tree.listToArray())
         root.setValue("3")
 
         # Test Case 2: tree has a root and a left node which is a leaf.
@@ -1042,7 +1042,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
 
         # Test case 3: left rotation when some node is the criminal (BF of criminal.right == 0)
         test3Tree = createTreeFromList(["a", "b", "c", "d", "e", None, "f", "g", "h", "i", "j", None, None, "k", "l"])
-        logger.debug(f"Test case 3 - node 'b' is BF criminal\n{printTreeString(test3Tree)}")
+        logger.debug(f"Test case 3 - node 'c' is BF criminal\n{printTreeString(test3Tree)}")
         criminal = test3Tree.getRoot().getRight()
         parentSon = self.determineParentSon(criminal)
         nodesToCheck = self.getAboutToChangeNodes(criminal, 'left')
@@ -1255,7 +1255,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case3tree1ltr + case3tree2ltr, case3tree1.listToArray())
 
-        # Case 4: self has only a root, other has only a root TODO: check after evia's insert
+        # Case 4: self has only a root, other has only a root
         case4tree1 = createTreeFromList(["a"])
         case4tree2 = createTreeFromList(["b"])
         case4tree1ltr = case4tree1.listToArray()
@@ -1273,7 +1273,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case4tree1ltr + case4tree2ltr, case4tree1.listToArray())
 
-        # Case 5: self has only a root, other is a larger tree TODO: check after evia's insert
+        # Case 5: self has only a root, other is a larger tree
         case5tree1 = createTreeFromList(["a"])
         case5tree2 = createTreeFromList(["b", "c", "d"])
         case5tree1ltr = case5tree1.listToArray()
@@ -1291,7 +1291,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case5tree1ltr + case5tree2ltr, case5tree1.listToArray())
 
-        # Case 6: self's size is larger than 1 and other is a larger tree TODO: check after evia's join
+        # Case 6: self's size is larger than 1 and other is a larger tree
         case6tree1 = createTreeFromList(["a", "b", "c"])
         case6tree2 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
         case6tree1ltr = case6tree1.listToArray()
@@ -1309,7 +1309,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case6tree1ltr + case6tree2ltr, case6tree1.listToArray())
 
-        # Case 7: self's size is larger than 1 and other is a smaller tree TODO: check after evia's join
+        # Case 7: self's size is larger than 1 and other is a smaller tree
         case7tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
         case7tree2 = createTreeFromList(["a", "b", "c"])
         case7tree1ltr = case7tree1.listToArray()
@@ -1327,7 +1327,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case7tree1ltr + case7tree2ltr, case7tree1.listToArray())
 
-        # Case 8: self's size is larger than 1 and other has only a root TODO: check after evia's join
+        # Case 8: self's size is larger than 1 and other has only a root
         case8tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
         case8tree2 = createTreeFromList(["a"])
         case8tree1ltr = case8tree1.listToArray()
@@ -1345,7 +1345,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
         # Undependent check
         self.assertEqual(case8tree1ltr + case8tree2ltr, case8tree1.listToArray())
 
-        # Case 9: self's size is larger than 1 and other is equal in size to self TODO: check after evia's join
+        # Case 9: self's size is larger than 1 and other is equal in size to self
         case9tree1 = createTreeFromList(["d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r"])
         case9tree2 = createTreeFromList(
             ["d'", "e'", "f'", "g'", "h'", "i'", "j'", "k'", "l'", "m'", "n'", "o'", "p'", "q'", "r'"])
@@ -2058,7 +2058,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, "3", None, None, None, "10", "13", "15", "17", None, None, None, None, None, None, None
         ])))
 
-        # Case 15: delete 25 - leaf + maximum (includes right rotation & left then right rotation, 3 ops + 24 changes height - total 4) # TODO: check after evia's rotations
+        # Case 15: delete 25 - leaf + maximum (includes right rotation & left then right rotation, 3 ops + 24 changes height - total 4) #
         cases14to19tree = createTreeFromList([
             "16",
             "8", "22",
@@ -2089,7 +2089,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, "3", None, None, None, None, None, None, None, "13", None, None, "17", None, "21", "24"
         ])))
 
-        # Case 16: delete 16 - 2 childed that successor is a leaf + root (18 height, 20 height, 22 height, + leftThenRight - total 5) #TODO: check after evia's rotations
+        # Case 16: delete 16 - 2 childed that successor is a leaf + root (18 height, 20 height, 22 height, + leftThenRight - total 5) #
         cases14to19tree = createTreeFromList([
             "16",
             "8", "22",
@@ -2120,7 +2120,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, "3", None, None, None, None, None, None, None, "13", None, None, "18", "21", None, "25"
         ])))
 
-        # Case 17: delete 24 - one childed node rightSon (rightRotation, leftThenRight - total 3) # TODO: check after evia's rotations
+        # Case 17: delete 24 - one childed node rightSon (rightRotation, leftThenRight - total 3) #
         cases14to19tree = createTreeFromList([
             "16",
             "8", "22",
@@ -2151,7 +2151,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, "3", None, None, None, None, None, None, None, "13", None, None, "17", None, "21", "25"
         ])))
 
-        # Case 18: delete 18 - one childed node leftSon (20 height, 22 height, leftThenRight - total 4) #TODO: check after evia's rotations
+        # Case 18: delete 18 - one childed node leftSon (20 height, 22 height, leftThenRight - total 4) #
         cases14to19tree = createTreeFromList([
             "16",
             "8", "22",
@@ -2182,7 +2182,7 @@ class Test_AVL_Tree_list(unittest.TestCase):
             None, "3", None, None, None, None, None, None, None, "13", None, None, "17", "21", None, "25"
         ])))
 
-        # Case 19: delete 2 - minimum (new minimum should be 3) (4 height, leftRotation, 16 height - total 3) #TODO: check after evia's rotations
+        # Case 19: delete 2 - minimum (new minimum should be 3) (4 height, leftRotation, 16 height - total 3) #
         cases14to19tree = createTreeFromList([
             "16",
             "8", "22",

@@ -191,7 +191,7 @@ A class implementing the ADT list, using an AVL tree.
 class AVLTreeList(object):
 
 	"""
-	Constructor, you are allowed to add more fields.  
+	Constructor
 
 	"""
 	def __init__(self):
@@ -276,7 +276,7 @@ class AVLTreeList(object):
 	@pre: 0 <= i <= self.length()
 	@param i: The intended index in the list to which we insert val
 	@type val: str
-	@param val: the value we inserts
+	@param val: the value we insert
 	@rtype: list
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
@@ -292,6 +292,7 @@ class AVLTreeList(object):
 		virtualL.setParent(inserted)
 		virtualR.setParent(inserted)
 
+		#insterted node will be root
 		if(self.empty()):
 			self.root = inserted
 			self.set_First(inserted)
@@ -300,31 +301,38 @@ class AVLTreeList(object):
 			inserted.recomputeSize()
 			return 0
 
+		#insert at the begin of list
 		if i == 0:
 			node = self.get_First()
 			node.setLeft(inserted)
 			inserted.setParent(node)
 			self.set_First(inserted)
-			return self.reBalance(node, 'insert')
+			return self.reBalance(node)
 
+
+		#insert at end of list
 		elif i == self.length():
 			node = self.get_Last()
 			node.setRight(inserted)
 			inserted.setParent(node)
 			self.set_Last(inserted)
-			return self.reBalance(node, 'insert')
+			return self.reBalance(node)
 
+		#get current i'th node
 		node = self.retrieveNode(i)
+
+		#has left son, need to insert right of the predecessor, has no right son
 		if node.getLeft().isRealNode():
 			node = self.predecessor(node)
 			node.setRight(inserted)
 			inserted.setParent(node)
-			return self.reBalance(node, 'insert')
+			return self.reBalance(node)
 
+		#insert as left son of i'th node
 		else:
 			node.setLeft(inserted)
 			inserted.setParent(node)
-			return self.reBalance(node, 'insert')
+			return self.reBalance(node)
 
 	"""deletes the i'th item in the list
 
@@ -345,20 +353,19 @@ class AVLTreeList(object):
 	def delete(self, i):
 		nodeToDelete = self.retrieveNode(i)
 		if nodeToDelete.isLeaf(): # case 1 - lecture 2 slide 51
-			balanceOps = self.deleteLeaf(nodeToDelete, '1')
+			return self.deleteLeaf(nodeToDelete, '1')
 		elif nodeToDelete.getLeft().isRealNode() and not nodeToDelete.getRight().isRealNode(): # case 2.1 - lecture 2 slide 51
-			balanceOps = self.deleteOneChildedNode(nodeToDelete, 'left')
+			return self.deleteOneChildedNode(nodeToDelete, 'left')
 		elif nodeToDelete.getRight().isRealNode() and not nodeToDelete.getLeft().isRealNode(): # case 2.2 - lecture 2 slide 51
-			balanceOps = self.deleteOneChildedNode(nodeToDelete, 'right')
+			return self.deleteOneChildedNode(nodeToDelete, 'right')
 		else: # case 3 - lecture 2 slide 51
 			nodeToDeleteSuccessor = self.successor(nodeToDelete)
 			if not nodeToDeleteSuccessor.isLeaf(): # i.e. it has 1 right child only (if 2 then it wasn't the successor)
 				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
-				balanceOps = self.deleteOneChildedNode(nodeToDelete, 'right')
+				return self.deleteOneChildedNode(nodeToDelete, 'right')
 			else:
 				self.swapNodes(nodeToDelete, nodeToDeleteSuccessor)
-				balanceOps = self.deleteLeaf(nodeToDelete, '3')
-		return balanceOps
+				return self.deleteLeaf(nodeToDelete, '3')
 
 	""" deletes a node that has one child (bypass)
 	
@@ -385,7 +392,7 @@ class AVLTreeList(object):
 				self.set_Last(self.predecessor(nodeToDelete))
 			nodeToDeleteLeftSon.setParent(nodeToDeleteParent)
 			nodeToDelete.setLeft(AVLNode(None))
-			nodeToDelete.getLeft().setParent(nodeToDelete)
+			nodeToDelete.getLeft().setParent(nodeToDeleteLeftSon)
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteLeftSon
@@ -394,7 +401,8 @@ class AVLTreeList(object):
 					nodeToDeleteParent.setLeft(nodeToDeleteLeftSon)
 				elif nodeToDeleteParent.getRight() is nodeToDelete:
 					nodeToDeleteParent.setRight(nodeToDeleteLeftSon)
-			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+			balanceOps = self.reBalance(nodeToDeleteParent)
+
 		elif childSide == 'right':
 			nodeToDeleteParent = nodeToDelete.getParent()
 			nodeToDeleteRightSon = nodeToDelete.getRight()
@@ -402,7 +410,7 @@ class AVLTreeList(object):
 				self.set_First(self.successor(nodeToDelete))
 			nodeToDeleteRightSon.setParent(nodeToDeleteParent)
 			nodeToDelete.setRight(AVLNode(None))
-			nodeToDelete.getRight().setParent(nodeToDelete)
+			nodeToDelete.getRight().setParent(nodeToDeleteRightSon)
 			nodeToDelete.setParent(None)
 			if self.getRoot() is nodeToDelete:  # i.e. nodeToDeleteParent is None
 				self.root = nodeToDeleteRightSon
@@ -411,7 +419,7 @@ class AVLTreeList(object):
 					nodeToDeleteParent.setLeft(nodeToDeleteRightSon)
 				elif nodeToDeleteParent.getRight() is nodeToDelete:
 					nodeToDeleteParent.setRight(nodeToDeleteRightSon)
-			balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+			balanceOps = self.reBalance(nodeToDeleteParent)
 
 		return balanceOps
 
@@ -455,7 +463,7 @@ class AVLTreeList(object):
 		elif nodeToDeleteParent.getRight() is nodeToDelete:
 			nodeToDeleteParent.setRight(AVLNode(None))
 			nodeToDeleteParent.getRight().setParent(nodeToDeleteParent)
-		balanceOps = self.reBalance(nodeToDeleteParent, 'delete')
+		balanceOps = self.reBalance(nodeToDeleteParent)
 		return balanceOps
 
 
@@ -471,6 +479,7 @@ class AVLTreeList(object):
 	
 	@rtype: None
 	"""
+
 	def swapNodes(self, node1, node2):
 		node1Parent = node1.getParent()
 		node1Left = node1.getLeft()
@@ -629,10 +638,6 @@ class AVLTreeList(object):
 
 	"""Re balancing the Tree inplace
 	
-	@type treeOp: str
-	@pre: treeOp in ['insert', 'delete']
-	@param treeOp: The tree operation that called reBalance ('insert'/'delete')
-	
 	@type nodeToCheckBF: AVLNode
 	@param nodeToCheckBF: The start node in which we'll start to rebalance the tree up to the root (if needed)
 	
@@ -644,35 +649,21 @@ class AVLTreeList(object):
 	In every node in that route, O(1) work is executed in the worst case (rotation + arithmetic operation)
 	Total: O(logn) * O(1) = O(logn) work
 	"""
-	def reBalance(self, nodeToCheckBF, treeOp):
+	def reBalance(self, nodeToCheckBF):
 		balanceOps = 0
-		if treeOp == 'insert':
-			while nodeToCheckBF is not None:
-				balanceFactor = nodeToCheckBF.getBalanceFactor()
-				height = nodeToCheckBF.getHeight()
-				if abs(balanceFactor) == 2:
-					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
-					nodeToCheckBF = nodeToCheckBF.getParent()
-				elif abs(balanceFactor) < 2:
-					nodeToCheckBF.recomputeHeight()
-					nodeToCheckBF.recomputeSize()
-					if nodeToCheckBF.getHeight() != height:
-						balanceOps += 1
+		while nodeToCheckBF is not None:
+			balanceFactor = nodeToCheckBF.getBalanceFactor()
+			height = nodeToCheckBF.getHeight()
+			if abs(balanceFactor) == 2:
+				balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
 				nodeToCheckBF = nodeToCheckBF.getParent()
+			elif abs(balanceFactor) < 2:
+				nodeToCheckBF.recomputeHeight()
+				nodeToCheckBF.recomputeSize()
+				if nodeToCheckBF.getHeight() != height:
+					balanceOps += 1
+			nodeToCheckBF = nodeToCheckBF.getParent()
 
-		elif treeOp == 'delete':
-			while nodeToCheckBF is not None:
-				balanceFactor = nodeToCheckBF.getBalanceFactor()
-				height = nodeToCheckBF.getHeight()
-				if abs(balanceFactor) == 2:
-					balanceOps += self.rotate(nodeToCheckBF, balanceFactor)
-					nodeToCheckBF = nodeToCheckBF.getParent()
-				elif abs(balanceFactor) < 2:
-					nodeToCheckBF.recomputeHeight()
-					nodeToCheckBF.recomputeSize()
-					if nodeToCheckBF.getHeight() != height:
-						balanceOps += 1
-				nodeToCheckBF = nodeToCheckBF.getParent()
 
 		return balanceOps
 
@@ -868,6 +859,7 @@ class AVLTreeList(object):
 
 	"""
 	find left subtree with height h
+	help function for join
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
@@ -886,6 +878,7 @@ class AVLTreeList(object):
 
 	"""
 	find right subtree with height h
+	help function for join
 	@pre - h>=0
 	@rtype: AVLNode
 	Time complexity: O(self.getRoot().getHeight()-h)
@@ -937,6 +930,7 @@ class AVLTreeList(object):
 		t1h = T1.getRoot().getHeight()
 		t2h = T2.getRoot().getHeight()
 
+		#heights are equal
 		if t1h == t2h:
 			x.setLeft(T1.getRoot())
 			x.setRight(T2.getRoot())
@@ -947,6 +941,8 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			return new_tree, 1
+
+		#t1 height < t2 height
 		elif t1h<t2h:
 			node = T2.find_left_subtree_heightH(t1h)
 			x.setLeft(T1.getRoot())
@@ -961,8 +957,10 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T2.getRoot()
-			rebalances = new_tree.reBalance(help, 'delete')
+			rebalances = new_tree.reBalance(help)
 			return new_tree, rebalances
+
+		#t2 height < t1 height
 		else:
 			node = T1.find_right_subtree_heightH(t2h)
 			x.setLeft(node)
@@ -977,7 +975,7 @@ class AVLTreeList(object):
 			new_tree.set_First(T1.get_First())
 			new_tree.set_Last(T2.get_Last())
 			new_tree.root = T1.getRoot()
-			rebalances = new_tree.reBalance(help, 'delete')
+			rebalances = new_tree.reBalance(help)
 			return new_tree, rebalances
 
 	"""splits the list at the i'th index
@@ -988,6 +986,7 @@ class AVLTreeList(object):
 	@rtype: list
 	@returns: a list [left, val, right], where left is an AVLTreeList representing the list until index i-1,
 	right is an AVLTreeList representing the list from index i+1, and val is the value at the i'th index.
+	Time comlexity: O(logn) with efficient joins as in L03S107
 	"""
 	def split(self, i):
 		balances = 0
@@ -1047,6 +1046,8 @@ class AVLTreeList(object):
 		else:
 			R = AVLTreeList()
 		return [L, val, R]
+
+
 	"""
 	Create a tree that his root is a given node
 	@param: AVLnode
